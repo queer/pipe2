@@ -1,0 +1,3 @@
+Premain-Class: me.curlpipesh.mod.Main
+Can-Redefine-Classes: true
+Can-Retransform-Classes: true
