@@ -43,7 +43,8 @@ public class ObfusClass {
         try {
             clazz = Class.forName(obfName);
         } catch(ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException("You asked me to find a class named \"" + obfName + "\", but the " +
+                    "JVM is telling me that there's no class with that name.");
         }
     }
 

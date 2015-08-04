@@ -28,7 +28,7 @@ public class GuiIngameInjector extends Injector {
                 .filter(m -> m.name.equals("a") && m.desc.equals("(F)V") && isVoid(m.desc) && isPublic(m.access))
                 .forEach(m -> {
                     InsnList list = new InsnList();
-                    list.add(new FieldInsnNode(GETSTATIC, "me/curlpipesh/pipe/event/Render2D", "instance", "Lme/curlpipesh/pipe/event/Render2D;"));
+                    list.add(new FieldInsnNode(GETSTATIC, "me/curlpipesh/pipe/event/events/Render2D", "instance", "Lme/curlpipesh/pipe/event/events/Render2D;"));
                     list.add(new MethodInsnNode(INVOKESTATIC, "pw/aria/event/EventManager", "push", "(Ljava/lang/Object;)Ljava/lang/Object;", false));
                     Iterator<AbstractInsnNode> i = m.instructions.iterator();
                     AbstractInsnNode node = null;

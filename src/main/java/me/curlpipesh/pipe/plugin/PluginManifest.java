@@ -1,6 +1,7 @@
 package me.curlpipesh.pipe.plugin;
 
 import lombok.Data;
+import lombok.NonNull;
 import me.curlpipesh.pipe.plugin.module.Module;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class PluginManifest {
      */
     private final Plugin plugin;
 
-    public PluginManifest(Plugin plugin) {
+    public PluginManifest(@NonNull Plugin plugin) {
         this.name = plugin.getName();
         this.author = plugin.getAuthor();
         this.description = plugin.getDescription();

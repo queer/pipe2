@@ -2,6 +2,7 @@ package me.curlpipesh.pipe;
 
 import me.curlpipesh.pipe.bytecode.definers.HelperRedefiner;
 import me.curlpipesh.pipe.bytecode.injectors.*;
+import me.curlpipesh.pipe.util.ClassMapper;
 
 import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
@@ -16,6 +17,8 @@ import java.lang.instrument.UnmodifiableClassException;
  */
 public class Agent {
     public static void premain(String agentArgs, Instrumentation inst) {
+        Pipe.getLogger().info("Mapping classes!");
+        ClassMapper.map();
         Pipe.getLogger().info("Adding transformers!");
         inst.addTransformer(new BlockEntityInjector());
         inst.addTransformer(new EntityRendererInjector());
@@ -29,7 +32,7 @@ public class Agent {
         try {
             inst.redefineClasses(new HelperRedefiner().redefine());
         } catch(ClassNotFoundException | UnmodifiableClassException e) {
-            Pipe.getLogger().severe("Class redefinition failed!");
+            Pipe.getLogger().severe("Class redefinition failed! Not much you can do about this one.");
             e.printStackTrace();
             throw new RuntimeException(e);
         }

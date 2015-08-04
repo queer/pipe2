@@ -1,7 +1,11 @@
 package me.curlpipesh.pipe.plugin;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
+import me.curlpipesh.pipe.Pipe;
+import me.curlpipesh.pipe.event.Listener;
+import me.curlpipesh.pipe.event.events.*;
 import me.curlpipesh.pipe.plugin.module.Module;
 import me.curlpipesh.pipe.plugin.router.BasicRouter;
 import me.curlpipesh.pipe.plugin.router.Router;
@@ -18,7 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public abstract class BasicPlugin implements Plugin {
     @Getter
-    private PluginManifest manifest = new PluginManifest(this);
+    private PluginManifest manifest;
 
     @Getter
     private String name;
@@ -33,23 +37,95 @@ public abstract class BasicPlugin implements Plugin {
     @Setter
     private Router router;
 
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     @Getter
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private List<Module> providedModules;
 
-    public BasicPlugin(String name) {
+    public BasicPlugin(@NonNull String name) {
         this(name, "This plugin still needs a description!");
     }
 
-    public BasicPlugin(String name, String desc) {
+    public BasicPlugin(@NonNull String name, @NonNull String desc) {
         this(name, desc, "skirts");
     }
 
-    public BasicPlugin(String name, String desc, String author) {
+    public BasicPlugin(@NonNull String name, @NonNull String desc, @NonNull String author) {
         this.name = name;
         this.description = desc;
         this.author = author;
         router = new BasicRouter();
         providedModules = new CopyOnWriteArrayList<>();
+        manifest = new PluginManifest(this);
     }
+
+    @Override
+    public void registerModule(@NonNull Module module) {
+        if(providedModules.contains(module)) {
+            if(!providedModules.add(module)) {
+                Pipe.getLogger().warning(String.format("[%s] Unable to register module \"%s\"!", name, module.getName()));
+            } else {
+                Pipe.getLogger().info(String.format("[%s] Registered module \"%s\"", name, module.getName()));
+            }
+        } else {
+            Pipe.getLogger().warning(String.format("[%s] Ignoring register for registered module \"%s\"!", name, module.getName()));
+        }
+    }
+
+    @Override
+    public void unregisterModule(@NonNull Module module) {
+        if(providedModules.contains(module)) {
+            if(!providedModules.remove(module)) {
+                Pipe.getLogger().warning(String.format("[%s] Unable to unregister module \"%s\"!", name, module.getName()));
+            } else {
+                Pipe.getLogger().info(String.format("[%s] Unregistered module \"%s\"", name, module.getName()));
+            }
+        } else {
+            Pipe.getLogger().warning(String.format("[%s] Ignoring unregister for non-registered module \"%s\"!", name, module.getName()));
+        }
+    }
+
+    @Override
+    public final void init() {
+        registerModules();
+        providedModules.forEach(Module::registerRoutes);
+        providedModules.forEach(Module::init);
+        Pipe.getInstance().getEventBus().register(new Listener<Tick>() {
+            @Override
+            public void event(Tick event) {
+                router.route(event);
+            }
+        });
+        Pipe.getInstance().getEventBus().register(new Listener<Render2D>() {
+            @Override
+            public void event(Render2D event) {
+                router.route(event);
+            }
+        });
+        Pipe.getInstance().getEventBus().register(new Listener<Render3D>() {
+            @Override
+            public void event(Render3D event) {
+                router.route(event);
+            }
+        });
+        Pipe.getInstance().getEventBus().register(new Listener<Keypress>() {
+            @Override
+            public void event(Keypress event) {
+                router.route(event);
+            }
+        });
+        Pipe.getInstance().getEventBus().register(new Listener<ChatSend>() {
+            @Override
+            public void event(ChatSend event) {
+                router.route(event);
+            }
+        });
+    }
+
+    /**
+     * THis method is responsible for registration of all modules that this
+     * plugin uses. If this plugin registers no modules, then the
+     * {@link PluginManager} will unregister it, due to the fact that said
+     * plugin would effectively be useless.
+     */
+    protected abstract void registerModules();
 }

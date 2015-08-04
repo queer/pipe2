@@ -24,7 +24,8 @@ public abstract class Route<T> {
         if(type instanceof ParameterizedType) {
             this.type = (Class<T>) (((ParameterizedType)type).getActualTypeArguments()[0]);
         } else {
-            throw new IllegalStateException("Unable to set type of route!");
+            throw new IllegalStateException("Unable to set type of route! There's not much you can do about " +
+                    "this error.");
         }
     }
 

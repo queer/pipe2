@@ -1,5 +1,6 @@
 package me.curlpipesh.pipe.event;
 
+import lombok.NonNull;
 import me.curlpipesh.pipe.Pipe;
 
 import java.util.List;
@@ -15,11 +16,7 @@ public class PipeEventBus implements EventBus {
     private final List<Listener<?>> listeners = new CopyOnWriteArrayList<>();
 
     @Override
-    public void register(Listener<?> listener) {
-        if(listener == null) {
-            Pipe.getLogger().warning("Was asked to register a null listener, ignoring!");
-            return;
-        }
+    public void register(@NonNull Listener<?> listener) {
         if(listeners.contains(listener)) {
             Pipe.getLogger().warning("Was asked to register a listener that is already registered, ignoring!");
         } else {
@@ -30,11 +27,7 @@ public class PipeEventBus implements EventBus {
     }
 
     @Override
-    public void unregister(Listener<?> listener) {
-        if(listener == null) {
-            Pipe.getLogger().warning("Was asked to register a null listener, ignoring!");
-            return;
-        }
+    public void unregister(@NonNull Listener<?> listener) {
         if(!listeners.contains(listener)) {
             Pipe.getLogger().warning("Was asked to register a listener that is not registered, ignoring!");
         } else {
@@ -46,7 +39,7 @@ public class PipeEventBus implements EventBus {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T push(T event) {
+    public <T> T push(@NonNull T event) {
         // The typecast being performed here is actually safe, due to the fact
         // that a listener is looking for an event of type T if its class is
         // equal to event.getClass(), because that's essentially T.class.

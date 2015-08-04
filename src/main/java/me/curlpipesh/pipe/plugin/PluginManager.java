@@ -1,9 +1,13 @@
 package me.curlpipesh.pipe.plugin;
 
 import lombok.Getter;
+import me.curlpipesh.pipe.util.ClassMapper;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 /**
  * @author c
@@ -15,7 +19,7 @@ public class PluginManager {
      * instance.
      */
     @Getter
-    private final List<? extends Plugin> plugins = new CopyOnWriteArrayList<>();
+    private final List<Plugin> plugins = new CopyOnWriteArrayList<>();
 
     /**
      * The singleton instance of PluginManager. Guaranteed to never change.
@@ -26,10 +30,19 @@ public class PluginManager {
     }
 
     public void init() {
-        // Find and register plugins.
-        for(Plugin p : plugins) {
-            // init();
+        List<Class<?>> pluginClasses = ClassMapper.getMappedClasses().stream()
+                .filter(c -> Plugin.class.isAssignableFrom(c) && !Modifier.isInterface(c.getModifiers()))
+                .filter(c -> !Modifier.isAbstract(c.getModifiers()))
+                .collect(Collectors.toList());
+        for(Class<?> c : pluginClasses) {
+            try {
+                plugins.add((Plugin)c.getDeclaredConstructor().newInstance());
+            } catch(InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
+
+        plugins.forEach(Plugin::init);
     }
 
     /**

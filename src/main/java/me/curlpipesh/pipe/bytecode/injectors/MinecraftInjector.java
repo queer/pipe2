@@ -46,16 +46,16 @@ public class MinecraftInjector extends Injector {
             } else if(m.name.equals("s") && m.desc.equals("()V") && isVoid(m.desc) && isPublic(m.access)) {
                 // Tick event
                 InsnList list = new InsnList();
-                list.add(new FieldInsnNode(GETSTATIC, "me/curlpipesh/pipe/event/Tick", "instance", "Lme/curlpipesh/pipe/event/Tick;"));
+                list.add(new FieldInsnNode(GETSTATIC, "me/curlpipesh/pipe/event/events/Tick", "instance", "Lme/curlpipesh/pipe/event/events/Tick;"));
                 list.add(new MethodInsnNode(INVOKESTATIC, "pw/aria/event/EventManager", "push", "(Ljava/lang/Object;)Ljava/lang/Object;", false));
                 m.instructions.insert(list);
 
                 // Key press event
                 list.clear();
-                list.add(new TypeInsnNode(NEW, "me/curlpipesh/pipe/event/Keypress"));
+                list.add(new TypeInsnNode(NEW, "me/curlpipesh/pipe/event/events/Keypress"));
                 list.add(new InsnNode(DUP));
                 list.add(new MethodInsnNode(INVOKESTATIC, "org/lwjgl/input/Keyboard", "getEventKey", "()I", false));
-                list.add(new MethodInsnNode(INVOKESPECIAL, "me/curlpipesh/pipe/event/Keypress", "<init>", "(I)V", false));
+                list.add(new MethodInsnNode(INVOKESPECIAL, "me/curlpipesh/pipe/event/events/Keypress", "<init>", "(I)V", false));
                 list.add(new MethodInsnNode(INVOKESTATIC, "pw/aria/event/EventManager", "push", "(Ljava/lang/Object;)Ljava/lang/Object;", false));
                 list.add(new InsnNode(POP));
 

@@ -5,6 +5,7 @@ import me.curlpipesh.pipe.gui.GuiModule;
 import me.curlpipesh.pipe.gui.GuiScreen;
 import me.curlpipesh.pipe.util.Vec3;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -369,5 +370,15 @@ public class Helper {
      */
     public static int getCurrentSlot() {
         return 0;
+    }
+
+    /**
+     * Returns the file that represents the directory where game data is
+     * stored.
+     *
+     * @return The Minecraft data directory
+     */
+    public static File getMinecraftDataDir() {
+        return null;
     }
 }

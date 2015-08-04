@@ -25,7 +25,7 @@ public class EntityRendererInjector extends Injector {
         for(MethodNode m : (List<MethodNode>) classNode.methods) {
             if(m.name.equals("a") && m.desc.equals("(IFJ)V")) {
                 InsnList list = new InsnList();
-                list.add(new FieldInsnNode(GETSTATIC, "me/curlpipesh/pipe/event/Render3D", "instance", "Lme/curlpipesh/pipe/event/Render3D;"));
+                list.add(new FieldInsnNode(GETSTATIC, "me/curlpipesh/pipe/event/events/Render3D", "instance", "Lme/curlpipesh/pipe/event/events/Render3D;"));
                 list.add(new MethodInsnNode(INVOKESTATIC, "pw/aria/event/EventManager", "push", "(Ljava/lang/Object;)Ljava/lang/Object;", false));
                 list.add(new InsnNode(POP));
                 Iterator<AbstractInsnNode> i = m.instructions.iterator();

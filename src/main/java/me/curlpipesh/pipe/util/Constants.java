@@ -25,287 +25,64 @@ public class Constants {
              * correctly. ;-;
              */
             DUMMY = "WHATEVER",
-    /**
-     * Name of the Minecraft class
-     */
     MINECRAFT = "ave",
-
-    /**
-     * Name of the GuiIngame class
-     */
     GUIINGAME = "avo",
-
-    /**
-     * Name of the FontRenderer class
-     */
     FONTRENDERER = "avn",
-
-    /**
-     * Name of the GameSettings class
-     */
     GAMESETTINGS = "avh",
-
-    /**
-     * Name of the World class
-     */
     WORLD = "bdb",
-
-    /**
-     * Name of the AbstractWorld class
-     */
     ABSTRACTWORLD = "adm",
-
-    /**
-     * Name of the WorldProvider class
-     */
     WORLDPROVIDER = "anm",
-
-    /**
-     * Name of the Entity class
-     */
     ENTITY = "pk",
-
-    /**
-     * Name of the EntityClientPlayer class
-     */
     ENTITYTHEPLAYER = "bew",
-
-    /**
-     * Name of the ScaledResolution class
-     */
     SCALEDRESOLUTION = "avr",
-
-    /**
-     * Name of the EntityRenderer class
-     */
     ENTITYRENDERER = "bfk",
-
-    /**
-     * Name of the EntityLiving class
-     */
     ENTITYLIVING = "ps",
-
-    /**
-     * Name of the EntityLivingBase class
-     */
     ENTITYLIVINGBASE = "pr",
-
-    /**
-     * Name of the EntityCreature class
-     */
     ENTITYCREATURE = "py",
-
-    /**
-     * Name of the EntityAgeable class
-     */
     ENTITYAGEABLE = "ph",
-
-    /**
-     * Name of the EntityAnimal class
-     */
     ENTITYANIMAL = "tm",
-
-    /**
-     * Name of the EntityMonster class
-     */
     ENTITYMONSTER = "vv",
-
-    /**
-     * Name of the BlockEntity class (formerly TileEntity)
-     */
     BLOCKENTITY = "akw",
-
-    /**
-     * Name of the BlockEntityChest class
-     */
     BLOCKENTITYCHEST = "aky",
-
-    /**
-     * Name of the BlockEntityEnderChest class
-     */
     BLOCKENTITYENDERCHEST = "alf",
-
-    /**
-     * Name of the BlockPos class
-     */
     BLOCKPOS = "cj",
-
-    /**
-     * Name of the Vec3i class
-     */
     VEC3I = "df",
-
-    /**
-     * Name of the Gui class
-     */
     GUI = "avp",
-
-    /**
-     * Name of the GuiScreen class
-     */
     GUISCREEN = "axu",
-
-    /**
-     * Name of the GuiMainMenu class
-     */
     GUIMAINMENU = "aya",
-
-    /**
-     * Name of the IChatComponent class
-     */
     ICHATCOMPONENT = "eu",
-
-    /**
-     * Name of the ChatComponentStyle class
-     */
     CHATCOMPONENTSTYLE = "es",
-
-    /**
-     * Name of the ChatComponentText class
-     */
     CHATCOMPONENTTEXT = "fa",
-
-    /**
-     * Name of the InventoryPlayer class
-     */
     INVENTORYPLAYER = "wm",
-
-    /**
-     * Name of the IInventory class
-     */
     IINVENTORY = "og",
-
-    /**
-     * Name of the ItemStack class
-     */
     ITEMSTACK = "zx",
-
-    /**
-     * Name of the Container class. Used for some inventory stuff
-     */
     CONTAINER = "xi",
-
-    /**
-     * Name of the ContainerPlayer class
-     */
     CONTAINERPLAYER = "xy",
-
-    /**
-     * Name of the EntityPlayer class
-     */
     ENTITYPLAYER = "wn",
-
-    /**
-     * Name of the Slot class. Used for some inventory stuff
-     */
     SLOT = "yg",
-
-    /**
-     * Name of the NetworkManager class
-     */
     NETWORKMANAGER = "ek",
-
-    /**
-     * Name of the Packet class
-     */
     PACKET = "ff",
-
-    /**
-     * Name of the PacketClientWindowClick class
-     */
     PACKETWINDOWCLICK_CLIENT = "ik",
-
-    /**
-     * Name of the NetHandlerPlayClient class
-     */
     NETHANDLERPLAYCLIENT = "bcy",
-
-    /**
-     * Name of the Item class
-     */
     ITEM = "zw",
-
-    /**
-     * Name of the PacketClientChatMessage class
-     */
     PACKETCHATMESSAGE_CLIENT = "ie",
-
-    /**
-     * Name of the GuiChatBox class
-     */
     GUICHAT = "awv",
-
-    /**
-     * Name of the GuiOptions class
-     */
     GUIOPTIONS = "axn",
-
-    /**
-     * Name of the GuiSingleplayer class
-     */
     GUISINGLEPLAYER = "axv",
-
-    /**
-     * Name of the GuiMultiplayer class
-     */
     GUIMULTIPLAYER = "azh",
-
-    /**
-     * Name of the DamageSource class
-     */
     DAMAGESOURCE = "ow",
-
-    /**
-     * Name of the NBTBase class
-     */
     NBTBASE = "eb",
-    /**
-     * Name of the NBTTagString class
-     */
     NBTTAGSTRING = "ea",
-    /**
-     * Name of the NBTTagShort class
-     */
     NBTTAGSHORT = "dz",
-    /**
-     * Name of the NBTTagLong class
-     */
     NBTTAGLONG = "dv",
-    /**
-     * Name of the NBTTagList class
-     */
     NBTTAGLIST = "du",
-    /**
-     * Name of the NBTTagInt class
-     */
     NBTTAGINT = "dt",
-    /**
-     * Name of the NBTTagIntArray class
-     */
     NBTTAGINTARRAY = "ds",
-    /**
-     * Name of the NBTTagFloat class
-     */
     NBTTAGFLOAT = "dr",
-    /**
-     * Name of the NBTTagEnd class
-     */
     NBTTAGEND = "dq",
-    /**
-     * Name of the NBTTagDouble class
-     */
     NBTTAGDOUBLE = "dp",
-    /**
-     * Name of the NBTTagCompound class
-     */
     NBTTAGCOMPOUND = "dn",
-    /**
-     * Name of the NBTTagByte class
-     */
     NBTTAGBYTE = "dm",
-    /**
-     * Name of the NBTTagByteArray class
-     */
     NBTTAGBYTEARRAY = "dl";
 
     /**
@@ -321,7 +98,15 @@ public class Constants {
         if(o.isPresent()) {
             return o.get();
         } else {
-            throw new IllegalArgumentException("No such class found: " + name);
+            String message = "No such class found: \"" + name + "\". ";
+            if(name.length() > 3) {
+                message += "The class name specified is longer than three letters. This probably means that you're " +
+                        "trying to use the wrong deobfuscated name.";
+            } else {
+                message += "The class name specified was short enough to be an obfuscated name, but you can't use " +
+                        "the obfuscated class names for this method.";
+            }
+            throw new IllegalArgumentException(message);
         }
     }
 

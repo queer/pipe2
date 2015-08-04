@@ -4,7 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import me.curlpipesh.pipe.event.EventBus;
 import me.curlpipesh.pipe.event.PipeEventBus;
+import me.curlpipesh.pipe.plugin.PluginManager;
+import me.curlpipesh.pipe.util.helpers.Helper;
 
+import java.io.File;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
@@ -37,6 +40,16 @@ public final class Pipe {
     @Setter
     private EventBus eventBus = new PipeEventBus();
 
+    @Getter
+    private File pipeDataDir;
+
+    // TODO Better way to reference the two directories below?
+    @Getter
+    private File pipePluginDir;
+
+    @Getter
+    private File pipeConfigDir;
+
     private Pipe() {
     }
 
@@ -46,6 +59,17 @@ public final class Pipe {
      */
     public void init() {
         logger.info("Starting up Pipe...");
+        pipeDataDir = new File(Helper.getMinecraftDataDir() + File.separator + "pipe");
+        pipePluginDir = new File(pipeDataDir + File.separator + "plugins");
+        pipeConfigDir = new File(pipeDataDir + File.separator + "config");
+        if(!pipeDataDir.exists()) {
+            if(!pipeDataDir.mkdirs()) {
+                throw new IllegalStateException("Unable to create directories required for the client to function. " +
+                        "Do you have permission to write in the directory? Is the disk full? If running out of a RAMDISK, " +
+                        "do you have enough space?");
+            }
+        }
+        PluginManager.getInstance().init();
     }
 
     /**

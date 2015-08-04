@@ -504,6 +504,16 @@ public class HelperGenerator {
             mv.visitMaxs(1, 0);
             mv.visitEnd();
         }
+        {
+            mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "getMinecraftDataDir", "()Ljava/io/File;", null, null);
+            mv.visitCode();
+            mv.visitMethodInsn(INVOKESTATIC, "Lme/curlpipesh/pipe/util/helpers/Helper", "getMinecraft", "()Ljava/lang/Object;", false);
+            mv.visitTypeInsn(CHECKCAST, getByName("Minecraft").getName());
+            mv.visitFieldInsn(GETFIELD, getByName("Minecraft").getDesc(), "v", "Ljava/io/File;");
+            mv.visitInsn(ARETURN);
+            mv.visitMaxs(1, 0);
+            mv.visitEnd();
+        }
 
         cw.visitEnd();
 

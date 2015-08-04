@@ -66,12 +66,35 @@ public interface Plugin {
     List<Module> getProvidedModules();
 
     /**
+     * Registers a new module for this plugin.
+     *
+     * @param module The module to register. May not be null.
+     */
+    void registerModule(Module module);
+
+    /**
+     * Unregisters a module from this plugin.
+     *
+     * @param module The plugin to unregister. May not be null.
+     */
+    void unregisterModule(Module module);
+
+    /**
      * Returns the {@link PluginManifest} for this plugin. The manifest must
      * contain as much information as a given plugin is able to supply.
      *
      * @return The {@link PluginManifest} for this plugin
      */
     PluginManifest getManifest();
+
+    /**
+     * Returns a <tt>String</tt> containing the contents of the plugin's
+     * manifest file.
+     *
+     * @return A String containing the contents of the plugin's manifest file.
+     *         May not be null. May not be empty. May not be invalid JSON.
+     */
+    String getManifestFileContents();
 
     /**
      * Initializes this plugin. This method is mainly responsible for setting up
