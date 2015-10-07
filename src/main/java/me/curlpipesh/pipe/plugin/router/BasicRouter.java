@@ -1,6 +1,7 @@
 package me.curlpipesh.pipe.plugin.router;
 
 import me.curlpipesh.pipe.Pipe;
+import me.curlpipesh.pipe.event.IgnoreEnable;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -45,7 +46,9 @@ public class BasicRouter implements Router {
     @Override
     @SuppressWarnings("unchecked")
     public <T> T route(T event) {
-        routes.stream().filter(r -> r.getType().equals(event.getClass())).forEach(r -> ((Route<T>) r).route(event));
+        routes.stream().filter(r -> r.getType().equals(event.getClass()))
+                .filter(r -> r.getModule().isEnabled() || event.getClass().isAnnotationPresent(IgnoreEnable.class))
+                .forEach(r -> ((Route<T>) r).route(event));
         return event;
     }
 }

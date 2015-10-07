@@ -1,5 +1,8 @@
 package me.curlpipesh.pipe.plugin.module;
 
+import lombok.NonNull;
+import me.curlpipesh.pipe.plugin.Plugin;
+import me.curlpipesh.pipe.plugin.router.Route;
 import me.curlpipesh.pipe.plugin.router.Router;
 import me.curlpipesh.pipe.util.Keybind;
 
@@ -43,7 +46,7 @@ public interface Module {
      *
      * @param keybind The new keybind to set. May be null.
      */
-    void setKeybind(Keybind keybind);
+    void setKeybind(@NonNull Keybind keybind);
 
     /**
      * Registers the event routes with the parent plugin. This method does not
@@ -62,4 +65,52 @@ public interface Module {
      * it may become necessary to do said invocation in this method.
      */
     void init();
+
+    /**
+     * Returns a String that represents the status of this module. This status
+     * may be anything, from "Ok" to "47 potatoes eaten."
+     *
+     * @return The current status. May be null
+     */
+    String getStatus();
+
+    /**
+     * Sets the status for this module.
+     *
+     * @param status The status to set. May be null
+     */
+    void setStatus(@NonNull String status);
+
+    /**
+     * Intended to return the plugin that registered this module.
+     *
+     * @return The plugin that registered this module
+     */
+    Plugin getPlugin();
+
+    /**
+     * Whether or not this module is currently accepting events. With the
+     * default implementation in {@link BasicModule}, this will always be true.
+     *
+     * @return Whether or not this module is currently accepting events.
+     */
+    boolean isEnabled();
+
+    /**
+     * Sets whether or not this module is currently accepting events. In the
+     * default implementation in {@link BasicModule}, this will do nothing.
+     *
+     * @param enabled Whether or not the module should be accepting events.
+     */
+    void setEnabled(boolean enabled);
+
+    /**
+     * Convenience method. Equivalent to
+     * <tt>getPlugin().getRouter().register(Route)</tt>.
+     *
+     * @param route
+     */
+    default void registerRoute(@NonNull Route<?> route) {
+        getPlugin().getRouter().register(route);
+    }
 }

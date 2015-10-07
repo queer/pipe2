@@ -76,7 +76,7 @@ public abstract class BasicPlugin implements Plugin {
 
     @Override
     public void registerModule(@NonNull Module module) {
-        if(providedModules.contains(module)) {
+        if(!providedModules.contains(module)) {
             if(!providedModules.add(module)) {
                 Pipe.getLogger().warning(String.format("[%s] Unable to register module \"%s\"!", name, module.getName()));
             } else {

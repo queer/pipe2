@@ -1,5 +1,7 @@
 package me.curlpipesh.pipe.plugin.router;
 
+import me.curlpipesh.pipe.plugin.module.Module;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
@@ -15,11 +17,14 @@ public abstract class Route<T> {
      */
     private final Class<T> type;
 
+    private final Module module;
+
     /**
      * Creates the new route.
      */
     @SuppressWarnings("unchecked")
-    public Route() {
+    public Route(Module module) {
+        this.module = module;
         Type type = getClass().getGenericSuperclass();
         if(type instanceof ParameterizedType) {
             this.type = (Class<T>) (((ParameterizedType)type).getActualTypeArguments()[0]);
@@ -45,5 +50,14 @@ public abstract class Route<T> {
     @SuppressWarnings("unchecked")
     public final Class<T> getType() {
         return type;
+    }
+
+    /**
+     * Literally only exists to make the IntelliJ Lombok plugin mess up less.
+     *
+     * @return The module that registered this route.
+     */
+    public Module getModule() {
+        return module;
     }
 }

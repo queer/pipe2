@@ -30,7 +30,7 @@ public final class Pipe {
     /**
      * The logger for the entire mod.
      */
-    private static final Logger logger = Logger.getLogger("Pipe");
+    private static final Logger logger = Logger.getLogger("PipeConsole");
 
     /**
      * The singleton instance of Pipe. Guaranteed to never change.

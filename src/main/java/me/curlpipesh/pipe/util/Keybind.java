@@ -26,15 +26,11 @@ public class Keybind {
     private final List<Integer> modifiers = new ArrayList<>();
 
     /**
-     * Creates a new keybind with the given key and optional vararg of modifier keys to add
+     * Creates a new keybind with the given key
      * @param key The main key of the key binding
-     * @param mods Vararg of modifier keys
      */
-    public Keybind(int key, int... mods) {
+    public Keybind(int key) {
         this.key = key;
-        for(int mod : mods) {
-            modifiers.add(mod);
-        }
     }
 
     /**
@@ -42,10 +38,11 @@ public class Keybind {
      *
      * @param mod The modifier key to add
      */
-    public void addModifier(int mod) {
+    public Keybind withModifier(int mod) {
         if(!modifiers.contains(mod)) {
             modifiers.add(mod);
         }
+        return this;
     }
 
     /**
@@ -53,10 +50,11 @@ public class Keybind {
      *
      * @param mod The modifier key to remove
      */
-    public void removeModifier(int mod) {
+    public Keybind removeModifier(int mod) {
         if(modifiers.contains(mod)) {
             modifiers.remove(mod);
         }
+        return this;
     }
 
     /**

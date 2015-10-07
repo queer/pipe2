@@ -3,6 +3,7 @@ package me.curlpipesh.pipe.plugin.module;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import me.curlpipesh.pipe.plugin.Plugin;
 import me.curlpipesh.pipe.util.Keybind;
 
 /**
@@ -15,10 +16,26 @@ public abstract class BasicModule implements Module {
 
     @Getter
     @Setter
+    private String status = "Ok";
+
+    @Getter
+    @Setter
     private Keybind keybind = null;
 
-    public BasicModule(@NonNull String name, @NonNull String description) {
+    @Getter
+    private final Plugin plugin;
+
+    public BasicModule(@NonNull Plugin plugin, @NonNull String name, @NonNull String description) {
         this.name = name;
         this.description = description;
+        this.plugin = plugin;
     }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {}
 }

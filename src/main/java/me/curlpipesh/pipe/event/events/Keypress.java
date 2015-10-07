@@ -1,6 +1,7 @@
 package me.curlpipesh.pipe.event.events;
 
 import lombok.Getter;
+import me.curlpipesh.pipe.event.IgnoreEnable;
 
 /**
  * Event that represents a keypress
@@ -8,6 +9,7 @@ import lombok.Getter;
  * @author c
  * @since 5/2/15
  */
+@IgnoreEnable
 public class Keypress {
     /**
      * The key that was pressed. Uses the keycodes in

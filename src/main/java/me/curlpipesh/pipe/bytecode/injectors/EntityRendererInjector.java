@@ -27,7 +27,10 @@ public class EntityRendererInjector extends Injector {
                 InsnList list = new InsnList();
                 list.add(new MethodInsnNode(INVOKESTATIC, "me/curlpipesh/pipe/Pipe", "getInstance", "()Lme/curlpipesh/pipe/Pipe;", false));
                 list.add(new MethodInsnNode(INVOKEVIRTUAL, "me/curlpipesh/pipe/Pipe", "getEventBus", "()Lme/curlpipesh/pipe/event/EventBus;", false));
-                list.add(new FieldInsnNode(GETSTATIC, "me/curlpipesh/pipe/event/events/Render3D", "instance", "Lme/curlpipesh/pipe/event/events/Render3D;"));
+                list.add(new TypeInsnNode(NEW, "me/curlpipesh/pipe/event/events/Render3D"));
+                list.add(new InsnNode(DUP));
+                list.add(new VarInsnNode(FLOAD, 2));
+                list.add(new MethodInsnNode(INVOKESPECIAL, "me/curlpipesh/pipe/event/events/Render3D", "<init>", "(F)V", false));
                 list.add(new MethodInsnNode(INVOKEINTERFACE, "me/curlpipesh/pipe/event/EventBus", "push", "(Ljava/lang/Object;)Ljava/lang/Object;", true));
                 list.add(new InsnNode(POP));
                 Iterator<AbstractInsnNode> i = m.instructions.iterator();

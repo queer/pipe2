@@ -1,6 +1,7 @@
 package me.curlpipesh.pipe.plugin;
 
 import lombok.Getter;
+import lombok.NonNull;
 import me.curlpipesh.bytecodetools.util.ClassEnumerator;
 import me.curlpipesh.pipe.Pipe;
 
@@ -28,7 +29,7 @@ public class PluginManager {
 
     private final Pipe pipe;
 
-    public PluginManager(Pipe pipe) {
+    public PluginManager(@NonNull Pipe pipe) {
         this.pipe = pipe;
     }
 
@@ -38,9 +39,8 @@ public class PluginManager {
             Pipe.getLogger().warning("Couldn't get files from plugin directory! Skipping loading...");
             return;
         }
-        for(File file : files) {
+        for(File file : files)
             if(file.getName().toLowerCase().endsWith(".jar")) {
-                Pipe.getLogger().info("Attempting to load JAR: " + file.getName());
                 List<Class<?>> classes;
                 try {
                     classes = ClassEnumerator.getClassesFromJar(file, URLClassLoader.newInstance(new URL[]{
@@ -82,8 +82,6 @@ public class PluginManager {
                         if(!Plugin.class.isAssignableFrom(clazz) || !isInstantiable(clazz)) {
                             Pipe.getLogger().warning("Unable to load plugin \"" + pluginManifest.getName()
                                     + "\": No main class found");
-                        } else {
-                            System.out.println("Found plugin main class: " + clazz.getName());
                         }
                         Plugin plugin = (Plugin) clazz.getDeclaredConstructor().newInstance();
                         plugin.setManifest(pluginManifest);
@@ -101,7 +99,6 @@ public class PluginManager {
                     }
                 });
             }
-        }
         Pipe.getLogger().info("Done!");
 
         plugins.forEach(p -> {
@@ -110,7 +107,7 @@ public class PluginManager {
                 p.onEnable();
                 p.finishEnabling();
                 p.setEnabled(true);
-                System.out.println("Enabled plugin: " + p.getName());
+                Pipe.getLogger().info("Enabled plugin: " + p.getName());
             } catch(Exception e) {
                 Pipe.getLogger().warning("Error enabling plugin (" + p.getClass().getName() + "):");
                 e.printStackTrace();
@@ -118,12 +115,12 @@ public class PluginManager {
         });
     }
 
-    private boolean isInstantiable(Class<?> clazz) {
+    private boolean isInstantiable(@NonNull Class<?> clazz) {
         return !Modifier.isInterface(clazz.getModifiers())
                 && !Modifier.isAbstract(clazz.getModifiers());
     }
 
-    private String readFromInputStream(InputStream in) {
+    private String readFromInputStream(@NonNull InputStream in) {
         char[] buffer = new char[4096];
         Reader reader = new InputStreamReader(in);
         StringBuilder out = new StringBuilder();

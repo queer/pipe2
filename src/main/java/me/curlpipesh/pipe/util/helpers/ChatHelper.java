@@ -24,7 +24,7 @@ public class ChatHelper {
      * The {@link Logger} implementation for this class. Uses a custom
      * {@link Handler} to log messages to the in-game chat.
      */
-    private static final Logger logger = Logger.getLogger("Pipe");
+    private static final Logger logger = Logger.getLogger("PipeChat");
 
     /**
      * Handles the "redirection" of chat messages. Method is "unused" because
