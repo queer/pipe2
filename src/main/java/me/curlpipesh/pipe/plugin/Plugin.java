@@ -18,7 +18,7 @@ import java.util.List;
  * @author c
  * @since 7/10/15
  */
-public interface Plugin {
+public interface Plugin extends Loadable {
     /**
      * Returns the name of this plugin. May not be null
      *
@@ -88,17 +88,30 @@ public interface Plugin {
     PluginManifest getManifest();
 
     /**
-     * Returns a <tt>String</tt> containing the contents of the plugin's
-     * manifest file.
+     * Sets the {@link PluginManifest} for this plugin. This is intended to
+     * be called only from {@link PluginManager#init()}. Note that after
+     * invocation of this method, it is necessary to call
+     * {@link #loadManifestData()} in order to update the stored data.
      *
-     * @return A String containing the contents of the plugin's manifest file.
-     *         May not be null. May not be empty. May not be invalid JSON.
+     * @param manifest The new manifest for the plugin.
      */
-    String getManifestFileContents();
+    void setManifest(PluginManifest manifest);
 
     /**
-     * Initializes this plugin. This method is mainly responsible for setting up
-     * the {@link Module}s that this plugin provides.
+     * Loads data from the {@link PluginManifest}. Intended to only be called
+     * once.
      */
-    void init();
+    void loadManifestData();
+
+    /**
+     * Finishes up whatever the plugin needs to do after onEnable(). This may
+     * include anything from registering routes to adding event handlers. Note
+     * that {@link BasicPlugin} uses this for:
+     * <pre>
+     *     Registering {@link Module} routes
+     *     Initializting Modules
+     *     Setting up all event listeners
+     * </pre>
+     */
+    void finishEnabling();
 }

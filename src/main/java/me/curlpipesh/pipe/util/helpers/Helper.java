@@ -131,6 +131,17 @@ public class Helper {
     }
 
     /**
+     * A {@link Vec3} representing the previous position of an entity in the
+     * world
+     *
+     * @param entity The entity whose position is needed
+     * @return A Vec3 containing the entity's position
+     */
+    public static Vec3 getEntityPrevVec(Object entity) {
+        return null;
+    }
+
+    /**
      * Returns the light brightness table for the current world. Note that any
      * changes to this must not be done without a backup of the initial state
      * thereof.
@@ -174,6 +185,18 @@ public class Helper {
      *         otherwise
      */
     public static boolean isEntityMonster(Object entity) {
+        return false;
+    }
+
+    /**
+     * Returns whether or not the supplied entity is an instance of
+     * EntityPlayer
+     *
+     * @param entity The entity to check
+     * @return True if the entity is an instance of EntityPlayer, false
+     *         otherwise
+     */
+    public static boolean isEntityPlayer(Object entity) {
         return false;
     }
 

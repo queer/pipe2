@@ -1,8 +1,8 @@
 package me.curlpipesh.pipe.util.helpers;
 
+import me.curlpipesh.pipe.Pipe;
 import me.curlpipesh.pipe.bytecode.injectors.GuiChatInjector;
 import me.curlpipesh.pipe.event.events.ChatSend;
-import me.curlpipesh.event.EventManager;
 
 import java.util.Arrays;
 import java.util.logging.Handler;
@@ -33,8 +33,9 @@ public class ChatHelper {
      * @param message The message to tinker with.
      */
     public static void handle(String message) {
-        if(!EventManager.push(new ChatSend(message)).isCancelled()) {
+        if(!Pipe.getInstance().getEventBus().push(new ChatSend(message)).isCancelled()) {
             Helper._sendChatMessage(message);
+            // TODO: Add to sent chat messages
         }
     }
 
@@ -53,7 +54,7 @@ public class ChatHelper {
      * @param messages The messages to log
      */
     public static void debug(String... messages) {
-        Arrays.stream(messages).forEach(m -> logger.info("§0[§4Debug§0]§r " + m));
+        Arrays.stream(messages).forEach(m -> logger.info("§8[§cDebug§8]§r " + m));
     }
 
     /**
@@ -74,7 +75,7 @@ public class ChatHelper {
                                 logRecord.getLevel().equals(Level.WARNING) ? "§c" :
                                         logRecord.getLevel().equals(Level.INFO) ? "§e" : "§b";
 
-                Helper.addChatMessage(String.format("§7[§aPipe§7]§r §7[%s%s§7]§r %s", levelColor, logRecord.getLevel(),
+                Helper.addChatMessage(String.format("§8[§dPipe§8]§r §7[%s%s§7]§r %s", levelColor, logRecord.getLevel(),
                         logRecord.getMessage()));
             }
 

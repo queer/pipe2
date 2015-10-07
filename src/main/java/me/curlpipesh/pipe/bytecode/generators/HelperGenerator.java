@@ -165,6 +165,33 @@ public class HelperGenerator {
             mv.visitInsn(DUP);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(CHECKCAST, getByName("Entity").getName());
+            mv.visitFieldInsn(GETFIELD, getByName("Entity").getDesc(), "s", "D");
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitTypeInsn(CHECKCAST, getByName("Entity").getName());
+            mv.visitFieldInsn(GETFIELD, getByName("Entity").getDesc(), "t", "D");
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitTypeInsn(CHECKCAST, getByName("Entity").getName());
+            mv.visitFieldInsn(GETFIELD, getByName("Entity").getDesc(), "u", "D");
+            mv.visitMethodInsn(INVOKESPECIAL, "me/curlpipesh/pipe/util/Vec3", "<init>", "(DDD)V", false);
+            mv.visitInsn(ARETURN);
+            mv.visitLabel(l1);
+            mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+            mv.visitInsn(ACONST_NULL);
+            mv.visitInsn(ARETURN);
+            mv.visitMaxs(8, 2);
+            mv.visitEnd();
+        }
+        {
+            mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "getEntityPrevVec", "(Ljava/lang/Object;)Lme/curlpipesh/pipe/util/Vec3;", null, null);
+            mv.visitCode();
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitTypeInsn(INSTANCEOF, "me/curlpipesh/pipe/util/Vec3");
+            Label l1 = new Label();
+            mv.visitJumpInsn(IFNE, l1);
+            mv.visitTypeInsn(NEW, "me/curlpipesh/pipe/util/Vec3");
+            mv.visitInsn(DUP);
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitTypeInsn(CHECKCAST, getByName("Entity").getName());
             mv.visitFieldInsn(GETFIELD, getByName("Entity").getDesc(), "p", "D");
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(CHECKCAST, getByName("Entity").getName());
@@ -215,6 +242,15 @@ public class HelperGenerator {
             mv.visitCode();
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(INSTANCEOF, getByName("EntityMonster").getName());
+            mv.visitInsn(IRETURN);
+            mv.visitMaxs(1, 0);
+            mv.visitEnd();
+        }
+        {
+            mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "isEntityPlayer", "(Ljava/lang/Object;)Z", null, null);
+            mv.visitCode();
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitTypeInsn(INSTANCEOF, getByName("EntityPlayer").getName());
             mv.visitInsn(IRETURN);
             mv.visitMaxs(1, 0);
             mv.visitEnd();
@@ -507,7 +543,7 @@ public class HelperGenerator {
         {
             mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "getMinecraftDataDir", "()Ljava/io/File;", null, null);
             mv.visitCode();
-            mv.visitMethodInsn(INVOKESTATIC, "Lme/curlpipesh/pipe/util/helpers/Helper", "getMinecraft", "()Ljava/lang/Object;", false);
+            mv.visitMethodInsn(INVOKESTATIC, "Lme/curlpipesh/pipe/util/helpers/Helper;", "getMinecraft", "()Ljava/lang/Object;", false);
             mv.visitTypeInsn(CHECKCAST, getByName("Minecraft").getName());
             mv.visitFieldInsn(GETFIELD, getByName("Minecraft").getDesc(), "v", "Ljava/io/File;");
             mv.visitInsn(ARETURN);

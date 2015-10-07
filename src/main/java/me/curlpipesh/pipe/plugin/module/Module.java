@@ -39,6 +39,13 @@ public interface Module {
     Keybind getKeybind();
 
     /**
+     * Sets the keybinding for this module. Is not necessary to invoke.
+     *
+     * @param keybind The new keybind to set. May be null.
+     */
+    void setKeybind(Keybind keybind);
+
+    /**
      * Registers the event routes with the parent plugin. This method does not
      * have to actually register any routes, but all routes must be registered
      * from this method in order to ensure that things such as

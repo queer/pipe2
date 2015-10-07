@@ -22,6 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public abstract class BasicPlugin implements Plugin {
     @Getter
+    @Setter
     private PluginManifest manifest;
 
     @Getter
@@ -38,24 +39,39 @@ public abstract class BasicPlugin implements Plugin {
     private Router router;
 
     @Getter
+    @Setter
+    private boolean loaded = false;
+
+    @Getter
+    @Setter
+    private boolean enabled = false;
+
+    @Getter
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private List<Module> providedModules;
 
-    public BasicPlugin(@NonNull String name) {
-        this(name, "This plugin still needs a description!");
-    }
-
-    public BasicPlugin(@NonNull String name, @NonNull String desc) {
-        this(name, desc, "skirts");
-    }
-
-    public BasicPlugin(@NonNull String name, @NonNull String desc, @NonNull String author) {
-        this.name = name;
-        this.description = desc;
-        this.author = author;
+    public BasicPlugin() {
         router = new BasicRouter();
         providedModules = new CopyOnWriteArrayList<>();
-        manifest = new PluginManifest(this);
+    }
+
+    @Override
+    public void onEnable() {}
+
+    @Override
+    public void onDisable() {}
+
+    @Override
+    public void onLoad() {}
+
+    @Override
+    public void onUnload() {}
+
+    @Override
+    public void loadManifestData() {
+        this.name = manifest.getName();
+        this.description = manifest.getDescription();
+        this.author = manifest.getAuthor();
     }
 
     @Override
@@ -85,8 +101,7 @@ public abstract class BasicPlugin implements Plugin {
     }
 
     @Override
-    public final void init() {
-        registerModules();
+    public final void finishEnabling() {
         providedModules.forEach(Module::registerRoutes);
         providedModules.forEach(Module::init);
         Pipe.getInstance().getEventBus().register(new Listener<Tick>() {
@@ -119,13 +134,11 @@ public abstract class BasicPlugin implements Plugin {
                 router.route(event);
             }
         });
+        Pipe.getInstance().getEventBus().register(new Listener<ModFinishedLoading>() {
+            @Override
+            public void event(ModFinishedLoading event) {
+                router.route(event);
+            }
+        });
     }
-
-    /**
-     * THis method is responsible for registration of all modules that this
-     * plugin uses. If this plugin registers no modules, then the
-     * {@link PluginManager} will unregister it, due to the fact that said
-     * plugin would effectively be useless.
-     */
-    protected abstract void registerModules();
 }

@@ -1,10 +1,15 @@
 package me.curlpipesh.pipe;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import me.curlpipesh.pipe.event.EventBus;
 import me.curlpipesh.pipe.event.PipeEventBus;
+import me.curlpipesh.pipe.event.events.ModFinishedLoading;
 import me.curlpipesh.pipe.plugin.PluginManager;
+import me.curlpipesh.pipe.plugin.PluginManifest;
+import me.curlpipesh.pipe.plugin.serialization.ManifestDeserializer;
 import me.curlpipesh.pipe.util.helpers.Helper;
 
 import java.io.File;
@@ -50,7 +55,17 @@ public final class Pipe {
     @Getter
     private File pipeConfigDir;
 
+    @Getter
+    private final PluginManager pluginManager;
+
+    @Getter
+    private final Gson gson;
+
     private Pipe() {
+        pluginManager = new PluginManager(this);
+        gson = new GsonBuilder()
+                .registerTypeAdapter(PluginManifest.class, new ManifestDeserializer())
+                .setPrettyPrinting().create();
     }
 
     /**
@@ -58,18 +73,36 @@ public final class Pipe {
      * like plugin initialization, file structure creation, and so on.
      */
     public void init() {
+        final String exceptionMessage = "Unable to create directories required for the client to function. " +
+                "Do you have permission to write in the directory? Is the disk full? If running out of a RAMDISK, " +
+                "do you have enough space?";
         logger.info("Starting up Pipe...");
         pipeDataDir = new File(Helper.getMinecraftDataDir() + File.separator + "pipe");
         pipePluginDir = new File(pipeDataDir + File.separator + "plugins");
         pipeConfigDir = new File(pipeDataDir + File.separator + "config");
         if(!pipeDataDir.exists()) {
-            if(!pipeDataDir.mkdirs()) {
-                throw new IllegalStateException("Unable to create directories required for the client to function. " +
-                        "Do you have permission to write in the directory? Is the disk full? If running out of a RAMDISK, " +
-                        "do you have enough space?");
+            if(!pipeDataDir.mkdir()) {
+                throw new IllegalStateException(exceptionMessage);
+            } else {
+                logger.info("Created Pipe data dir!");
             }
         }
-        PluginManager.getInstance().init();
+        if(!pipeConfigDir.exists()) {
+            if(!pipeConfigDir.mkdir()) {
+                throw new IllegalStateException(exceptionMessage);
+            } else {
+                logger.info("Created Pipe config dir!");
+            }
+        }
+        if(!pipePluginDir.exists()) {
+            if(!pipePluginDir.mkdir()) {
+                throw new IllegalStateException(exceptionMessage);
+            } else {
+                logger.info("Created Pipe plugin dir!");
+            }
+        }
+        pluginManager.init();
+        eventBus.push(new ModFinishedLoading());
     }
 
     /**

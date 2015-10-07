@@ -1,15 +1,20 @@
 package me.curlpipesh.pipe.plugin;
 
 import lombok.Data;
-import lombok.NonNull;
-import me.curlpipesh.pipe.plugin.module.Module;
-
-import java.util.List;
 
 /**
- * An automatically-generated manifest that contains information about the
- * plugin that generated it. Information such as name, modules, author (if
- * given), and anything else that can be gathered may be present.
+ * JSON manifest that contains information about the plugin. Loaded from a file
+ * in the root directory of the plugin's JAR.
+ *
+ * For now:
+ * <pre>
+ *     {
+ *       "name": "plugin",
+ *       "author": "plugin",
+ *       "description": "plugin",
+ *       "main": "me.plugin.Plugin"
+ *     }
+ * </pre>
  *
  * @author c
  * @since 7/10/15
@@ -19,34 +24,21 @@ public class PluginManifest {
     /**
      * The name of the plugin
      */
-    private final String name;
+    private String name;
 
     /**
      * The author of the plugin
      */
-    private final String author;
+    private String author;
 
     /**
      * The description of the plugin
      */
-    private final String description;
+    private String description;
 
     /**
-     * A {@link List} of all {@link Module}s that the plugin for this manifest
-     * provides.
+     * The main class of the plugin. Will be the class loaded by
+     * {@link PluginManager#init()}.
      */
-    private final List<Module> providedModules;
-
-    /**
-     * The actual plugin for which this is the manifest.
-     */
-    private final Plugin plugin;
-
-    public PluginManifest(@NonNull Plugin plugin) {
-        this.name = plugin.getName();
-        this.author = plugin.getAuthor();
-        this.description = plugin.getDescription();
-        this.providedModules = plugin.getProvidedModules();
-        this.plugin = plugin;
-    }
+    private String mainClass;
 }
