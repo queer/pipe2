@@ -16,7 +16,7 @@ public abstract class BasicModule implements Module {
 
     @Getter
     @Setter
-    private String status = "Ok";
+    private String status = "§aOk§r";
 
     @Getter
     @Setter

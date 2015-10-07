@@ -102,7 +102,6 @@ public abstract class BasicPlugin implements Plugin {
 
     @Override
     public final void finishEnabling() {
-        providedModules.forEach(Module::registerRoutes);
         providedModules.forEach(Module::init);
         Pipe.getInstance().getEventBus().register(new Listener<Tick>() {
             @Override

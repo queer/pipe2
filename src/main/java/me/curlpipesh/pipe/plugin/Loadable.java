@@ -9,15 +9,7 @@ public interface Loadable {
 
     void onUnload();
 
-    void onEnable();
-
-    void onDisable();
-
     boolean isLoaded();
 
     void setLoaded(boolean loaded);
-
-    boolean isEnabled();
-
-    void setEnabled(boolean enabled);
 }

@@ -18,7 +18,7 @@ import java.util.List;
  * @author c
  * @since 7/10/15
  */
-public interface Plugin extends Loadable {
+public interface Plugin extends Loadable, Toggleable {
     /**
      * Returns the name of this plugin. May not be null
      *

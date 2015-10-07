@@ -59,6 +59,10 @@ public class PluginManager {
                     continue;
                 }
                 ZipEntry entry = jarFile.getEntry("plugin.json");
+                if(entry == null) {
+                    Pipe.getLogger().warning("No plugin.json in " + file.getName() + ", skipping.");
+                    continue;
+                }
                 InputStream manifestInputStream;
                 try {
                     manifestInputStream = jarFile.getInputStream(entry);

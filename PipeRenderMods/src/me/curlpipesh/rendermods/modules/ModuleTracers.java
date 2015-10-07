@@ -23,7 +23,8 @@ public class ModuleTracers extends ToggleModule {
     }
     
     @Override
-    public void registerRoutes() {
+    public void init() {
+        setKeybind(new Keybind(Keyboard.KEY_M));
         registerRoute(new Route<Render3D>(this) {
             @Override
             @SuppressWarnings("ConstantConditions")
@@ -71,10 +72,5 @@ public class ModuleTracers extends ToggleModule {
                 setStatus(count > 0 ? "§a" + count : "§cNot rendering");
             }
         });
-    }
-    
-    @Override
-    public void init() {
-        setKeybind(new Keybind(Keyboard.KEY_M));
     }
 }

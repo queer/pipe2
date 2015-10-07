@@ -21,7 +21,8 @@ public class ModuleStorageESP extends ToggleModule {
     }
 
     @Override
-    public void registerRoutes() {
+    public void init() {
+        setKeybind(new Keybind(Keyboard.KEY_C));
         registerRoute(new Route<Render3D>(this) {
             @SuppressWarnings("ConstantConditions")
             @Override
@@ -55,10 +56,5 @@ public class ModuleStorageESP extends ToggleModule {
                 setStatus(count > 0 ? "§a" + count : "§cNot rendering");
             }
         });
-    }
-
-    @Override
-    public void init() {
-        setKeybind(new Keybind(Keyboard.KEY_C));
     }
 }

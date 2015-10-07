@@ -24,7 +24,7 @@ public class ModuleOverlay extends BasicModule {
     }
 
     @Override
-    public void registerRoutes() {
+    public void init() {
         registerRoute(new Route<Render2D>(this) {
             @Override
             public void route(Render2D render2D) {
@@ -33,6 +33,7 @@ public class ModuleOverlay extends BasicModule {
                 for(@NonNull Plugin plugin : plugins) {
                     enabledModules.addAll(plugin.getProvidedModules().stream()
                             .filter(Module::isEnabled)
+                            .filter(Module::isStatusShown)
                             .map(module -> module.getName() + " (" + module.getStatus() + "§r)")
                             .collect(Collectors.toList()));
                 }
@@ -56,6 +57,7 @@ public class ModuleOverlay extends BasicModule {
     }
 
     @Override
-    public void init() {
+    public boolean isStatusShown() {
+        return false;
     }
 }
