@@ -4,11 +4,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import me.curlpipesh.pipe.Pipe;
-import me.curlpipesh.pipe.event.Listener;
-import me.curlpipesh.pipe.event.events.*;
 import me.curlpipesh.pipe.plugin.module.Module;
-import me.curlpipesh.pipe.plugin.router.BasicRouter;
-import me.curlpipesh.pipe.plugin.router.Router;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -36,10 +32,6 @@ public abstract class BasicPlugin implements Plugin {
 
     @Getter
     @Setter
-    private Router router;
-
-    @Getter
-    @Setter
     private boolean loaded = false;
 
     @Getter
@@ -51,7 +43,6 @@ public abstract class BasicPlugin implements Plugin {
     private List<Module> providedModules;
 
     public BasicPlugin() {
-        router = new BasicRouter();
         providedModules = new CopyOnWriteArrayList<>();
     }
 
@@ -103,41 +94,5 @@ public abstract class BasicPlugin implements Plugin {
     @Override
     public final void finishEnabling() {
         providedModules.forEach(Module::init);
-        Pipe.getInstance().getEventBus().register(new Listener<Tick>() {
-            @Override
-            public void event(Tick event) {
-                router.route(event);
-            }
-        });
-        Pipe.getInstance().getEventBus().register(new Listener<Render2D>() {
-            @Override
-            public void event(Render2D event) {
-                router.route(event);
-            }
-        });
-        Pipe.getInstance().getEventBus().register(new Listener<Render3D>() {
-            @Override
-            public void event(Render3D event) {
-                router.route(event);
-            }
-        });
-        Pipe.getInstance().getEventBus().register(new Listener<Keypress>() {
-            @Override
-            public void event(Keypress event) {
-                router.route(event);
-            }
-        });
-        Pipe.getInstance().getEventBus().register(new Listener<ChatSend>() {
-            @Override
-            public void event(ChatSend event) {
-                router.route(event);
-            }
-        });
-        Pipe.getInstance().getEventBus().register(new Listener<ModFinishedLoading>() {
-            @Override
-            public void event(ModFinishedLoading event) {
-                router.route(event);
-            }
-        });
     }
 }

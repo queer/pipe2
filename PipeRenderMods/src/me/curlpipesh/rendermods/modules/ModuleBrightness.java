@@ -1,9 +1,10 @@
 package me.curlpipesh.rendermods.modules;
 
+import me.curlpipesh.pipe.Pipe;
+import me.curlpipesh.pipe.event.Listener;
 import me.curlpipesh.pipe.event.events.Tick;
 import me.curlpipesh.pipe.plugin.Plugin;
 import me.curlpipesh.pipe.plugin.module.ToggleModule;
-import me.curlpipesh.pipe.plugin.router.Route;
 import me.curlpipesh.pipe.util.Keybind;
 import me.curlpipesh.pipe.util.helpers.Helper;
 import org.lwjgl.input.Keyboard;
@@ -26,9 +27,9 @@ public class ModuleBrightness extends ToggleModule {
     @Override
     public void init() {
         setKeybind(new Keybind(Keyboard.KEY_F));
-        registerRoute(new Route<Tick>(this) {
+        Pipe.getInstance().getEventBus().register(new Listener<Tick>() {
             @Override
-            public void route(Tick tick) {
+            public void event(Tick tick) {
                 if(ModuleBrightness.this.isEnabled()) {
                     if(!Helper.isWorldNull()) {
                         for(int i = 0; i < 16; i++) {

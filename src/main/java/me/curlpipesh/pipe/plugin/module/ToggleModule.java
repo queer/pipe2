@@ -4,10 +4,10 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import me.curlpipesh.pipe.Pipe;
+import me.curlpipesh.pipe.event.Listener;
 import me.curlpipesh.pipe.event.events.Keypress;
 import me.curlpipesh.pipe.plugin.Plugin;
 import me.curlpipesh.pipe.plugin.Toggleable;
-import me.curlpipesh.pipe.plugin.router.Route;
 import me.curlpipesh.pipe.util.helpers.KeypressHelper;
 
 /**
@@ -21,9 +21,9 @@ public abstract class ToggleModule extends BasicModule implements Toggleable {
 
     public ToggleModule(@NonNull Plugin plugin, @NonNull String name, @NonNull String description) {
         super(plugin, name, description);
-        registerRoute(new Route<Keypress>(this) {
+        Pipe.getInstance().getEventBus().register(new Listener<Keypress>() {
             @Override
-            public void route(@NonNull Keypress event) {
+            public void event(@NonNull Keypress event) {
                 if(KeypressHelper.isKeyPlusModifiersDown(getKeybind(), event)) {
                     Pipe.getLogger().info(String.format("[%s] Toggled module %s.", plugin.getName(), name));
                     setEnabled(!isEnabled());

@@ -2,11 +2,12 @@ package me.curlpipesh.rendermods.modules;
 
 import lombok.NonNull;
 import me.curlpipesh.pipe.Pipe;
+import me.curlpipesh.pipe.event.Listener;
+import me.curlpipesh.pipe.event.events.PacketSend;
 import me.curlpipesh.pipe.event.events.Render2D;
 import me.curlpipesh.pipe.plugin.Plugin;
 import me.curlpipesh.pipe.plugin.module.BasicModule;
 import me.curlpipesh.pipe.plugin.module.Module;
-import me.curlpipesh.pipe.plugin.router.Route;
 import me.curlpipesh.pipe.util.GLRenderer;
 import me.curlpipesh.pipe.util.helpers.Helper;
 
@@ -25,9 +26,10 @@ public class ModuleOverlay extends BasicModule {
 
     @Override
     public void init() {
-        registerRoute(new Route<Render2D>(this) {
+        Pipe.eventBus().register(new Listener<Render2D>() {
             @Override
-            public void route(Render2D render2D) {
+            public void event(Render2D render2D) {
+                final String statusLine = "Pipe";
                 final List<String> enabledModules = new ArrayList<>();
                 final List<Plugin> plugins = Pipe.getInstance().getPluginManager().getPlugins();
                 for(@NonNull Plugin plugin : plugins) {
@@ -37,7 +39,7 @@ public class ModuleOverlay extends BasicModule {
                             .map(module -> module.getName() + " (" + module.getStatus() + "§r)")
                             .collect(Collectors.toList()));
                 }
-                int width = -1;
+                int width = Helper.getStringWidth(statusLine);
                 for(String string : enabledModules) {
                     int w = Helper.getStringWidth(string);
                     if(w > width) {
@@ -46,11 +48,20 @@ public class ModuleOverlay extends BasicModule {
                 }
                 width += 4;
                 final int OFFSET = Helper.getFontHeight() + 2;
-                int y = -OFFSET + 2;
-                int height = OFFSET * enabledModules.size();
+                int y = 2;
+                int height = OFFSET * (enabledModules.size() + 1);
                 GLRenderer.drawRect(0, 0, width, height, 0x77000000);
+                Helper.drawString(statusLine, 2, 2, 0xFFFFFFFF, false);
                 for(String e : enabledModules) {
                     Helper.drawString(e, 2, y += OFFSET, 0xFFFFFFFF, false);
+                }
+            }
+        });
+        Pipe.eventBus().register(new Listener<PacketSend>() {
+            @Override
+            public void event(PacketSend packetSend) {
+                if(packetSend.getPacket().toString().contains("jc")) {
+                    Pipe.getLogger().info("Packet: " + packetSend.getPacket());
                 }
             }
         });

@@ -2,16 +2,12 @@ package me.curlpipesh.pipe.plugin.module;
 
 import lombok.NonNull;
 import me.curlpipesh.pipe.plugin.Plugin;
-import me.curlpipesh.pipe.plugin.router.Route;
 import me.curlpipesh.pipe.util.Keybind;
 
 /**
  * The base of all modules. A module is not intended to be used in a standalone
  * context, but is instead intended to be parented by a
- * {@link me.curlpipesh.pipe.plugin.Plugin}. Because of this, modules are not
- * intended to register event listeners directly, but to instead register
- * {@link me.curlpipesh.pipe.plugin.router.Route}s with their parent plugin so
- * that events will be routed correctly.
+ * {@link me.curlpipesh.pipe.plugin.Plugin}.
  *
  * @author c
  * @since 7/10/15
@@ -94,14 +90,4 @@ public interface Module {
      * @param enabled Whether or not the module should be accepting events.
      */
     void setEnabled(boolean enabled);
-
-    /**
-     * Convenience method. Equivalent to
-     * <tt>getPlugin().getRouter().register(Route)</tt>.
-     *
-     * @param route
-     */
-    default void registerRoute(@NonNull Route<?> route) {
-        getPlugin().getRouter().register(route);
-    }
 }

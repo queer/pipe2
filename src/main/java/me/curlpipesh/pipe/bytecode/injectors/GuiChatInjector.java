@@ -13,7 +13,7 @@ import java.util.List;
  * @author c
  * @since 5/27/15
  */
-@Inject(Constants.GUICHAT)
+//@Inject(Constants.GUICHAT)
 public class GuiChatInjector extends Injector {
     @Override
     @SuppressWarnings("unchecked")

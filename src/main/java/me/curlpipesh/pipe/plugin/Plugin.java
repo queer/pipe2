@@ -1,7 +1,6 @@
 package me.curlpipesh.pipe.plugin;
 
 import me.curlpipesh.pipe.plugin.module.Module;
-import me.curlpipesh.pipe.plugin.router.Router;
 
 import java.util.List;
 
@@ -39,23 +38,6 @@ public interface Plugin extends Loadable, Toggleable {
      * @return The description of this plugin
      */
     String getDescription();
-
-    /**
-     * Returns the router used by this plugin. May not be null. Used for
-     * registering and unregistering routes, as well as routing events.
-     *
-     * @return The router used by this plugin.
-     */
-    Router getRouter();
-
-    /**
-     * Sets the router used by this plugin to the specified router. Note that
-     * invocations of this method must also re-register all routes that modules
-     * have previously registered
-     *
-     * @param router The new router to use. May not be null
-     */
-    void setRouter(Router router);
 
     /**
      * Returns the list of all modules that this plugin provides. May not be

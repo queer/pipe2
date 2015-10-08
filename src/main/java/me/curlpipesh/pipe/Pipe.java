@@ -124,6 +124,30 @@ public final class Pipe {
         return logger;
     }
 
+    public static EventBus eventBus() {
+        return getInstance().getEventBus();
+    }
+
+    public static PluginManager pluginManager() {
+        return getInstance().getPluginManager();
+    }
+
+    public static File configDir() {
+        return getInstance().getPipeConfigDir();
+    }
+
+    public static File pluginDir() {
+        return getInstance().getPipePluginDir();
+    }
+
+    public static File dataDir() {
+        return getInstance().getPipeDataDir();
+    }
+
+    public static Gson gson() {
+        return getInstance().getGson();
+    }
+
     static {
         logger.setUseParentHandlers(false);
         logger.addHandler(new Handler() {
