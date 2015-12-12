@@ -3,7 +3,6 @@ package me.curlpipesh.rendermods.modules;
 import lombok.NonNull;
 import me.curlpipesh.pipe.Pipe;
 import me.curlpipesh.pipe.event.Listener;
-import me.curlpipesh.pipe.event.events.PacketSend;
 import me.curlpipesh.pipe.event.events.Render2D;
 import me.curlpipesh.pipe.plugin.Plugin;
 import me.curlpipesh.pipe.plugin.module.BasicModule;
@@ -26,9 +25,12 @@ public class ModuleOverlay extends BasicModule {
 
     @Override
     public void init() {
-        Pipe.eventBus().register(new Listener<Render2D>() {
+        Pipe.eventBus().register(getPlugin(), new Listener<Render2D>() {
             @Override
             public void event(Render2D render2D) {
+                if(Helper.isIngameGuiInDebugMode()) {
+                    return;
+                }
                 final String statusLine = "Pipe";
                 final List<String> enabledModules = new ArrayList<>();
                 final List<Plugin> plugins = Pipe.getInstance().getPluginManager().getPlugins();
@@ -54,14 +56,6 @@ public class ModuleOverlay extends BasicModule {
                 Helper.drawString(statusLine, 2, 2, 0xFFFFFFFF, false);
                 for(String e : enabledModules) {
                     Helper.drawString(e, 2, y += OFFSET, 0xFFFFFFFF, false);
-                }
-            }
-        });
-        Pipe.eventBus().register(new Listener<PacketSend>() {
-            @Override
-            public void event(PacketSend packetSend) {
-                if(packetSend.getPacket().toString().contains("jc")) {
-                    Pipe.getLogger().info("Packet: " + packetSend.getPacket());
                 }
             }
         });

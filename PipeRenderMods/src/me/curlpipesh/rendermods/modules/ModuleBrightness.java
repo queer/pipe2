@@ -27,7 +27,7 @@ public class ModuleBrightness extends ToggleModule {
     @Override
     public void init() {
         setKeybind(new Keybind(Keyboard.KEY_F));
-        Pipe.getInstance().getEventBus().register(new Listener<Tick>() {
+        Pipe.getInstance().getEventBus().register(getPlugin(), new Listener<Tick>() {
             @Override
             public void event(Tick tick) {
                 if(ModuleBrightness.this.isEnabled()) {

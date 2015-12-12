@@ -1,10 +1,12 @@
 package me.curlpipesh.pipe.event;
 
+import me.curlpipesh.pipe.plugin.Plugin;
+
 /**
  * An <tt>EventBus</tt> is responsible for exactly what it sounds like:
  * "events" - really any {@link Object} - are {@link #push(Object)}ed across
  * the bus, sent to the various {@link Listener}s that have been
- * {@link #register(Listener)}ed with the given <tt>EventBus</tt> instance.
+ * {@link #register(Plugin, Listener)}ed with the given <tt>EventBus</tt> instance.
  *
  * @author c
  * @since 7/11/15
@@ -14,17 +16,27 @@ public interface EventBus {
      * Registers the specified listener with this <tt>EventBus</tt>. If the
      * supplied listener is already registered, it will be ignored.
      *
+     * @param plugin The plugin the listener is registered to. May not be null
      * @param listener The listener to register. May not be null.
      */
-    void register(Listener<?> listener);
+    void register(Plugin plugin, Listener<?> listener);
 
     /**
      * Unregisters the specified listener from this <tt>EventBus</tt>. If the
      * supplied listener is not registered, this method will do nothing.
      *
+     * @param plugin The plugin the listener is registered to. May not be null
      * @param listener The listener to unregister. May not be null.
      */
-    void unregister(Listener<?> listener);
+    void unregister(Plugin plugin, Listener<?> listener);
+
+    /**
+     * Unregisters all event listeners for the given plugin.
+     *
+     *
+     * @param plugin The plugin to unregister
+     */
+    void unregister(Plugin plugin);
 
     /**
      * Pushes an event across the bus. When this method is invoked, the

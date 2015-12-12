@@ -85,7 +85,8 @@ public class Constants {
     NBTTAGBYTE = "dm",
     NBTTAGBYTEARRAY = "dl",
     PACKETHANDSHAKE_CLIENT = "jc",
-    ENUMCONNECTIONSTATE = "el";
+    ENUMCONNECTIONSTATE = "el",
+    SESSION = "avm";
 
     /**
      * Gets an {@link ObfusClass} representation of a class based on a

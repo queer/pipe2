@@ -79,7 +79,14 @@ public class PluginManager {
                     e.printStackTrace();
                     continue;
                 }
-                PluginManifest pluginManifest = pipe.getGson().fromJson(manifestContents, PluginManifest.class);
+                PluginManifest pluginManifest;
+                try {
+                    pluginManifest = pipe.getGson().fromJson(manifestContents, PluginManifest.class);
+                } catch(IllegalArgumentException e) {
+                    Pipe.getLogger().warning("Error loading manifest from JAR (" + file.getName() + "):");
+                    e.printStackTrace();
+                    continue;
+                }
 
                 classes.stream().filter(p -> p.getName().equalsIgnoreCase(pluginManifest.getMainClass())).forEach(clazz -> {
                     try {
@@ -140,5 +147,20 @@ public class PluginManager {
             e.printStackTrace();
         }
         return out.toString();
+    }
+
+    public void shutdown() {
+        plugins.forEach(this::disablePlugin);
+        plugins.forEach(this::unloadPlugin);
+    }
+
+    private void disablePlugin(Plugin plugin) {
+        plugin.onDisable();
+        pipe.getEventBus().unregister(plugin);
+    }
+
+    private void unloadPlugin(Plugin plugin) {
+        plugin.onUnload();
+        plugins.remove(plugin);
     }
 }

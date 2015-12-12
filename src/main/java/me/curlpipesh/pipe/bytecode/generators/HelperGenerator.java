@@ -13,7 +13,7 @@ import static org.objectweb.asm.Opcodes.*;
  * @author c
  * @since 5/20/15
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "Duplicates"})
 public class HelperGenerator {
     public static byte[] generate() {
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);

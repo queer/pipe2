@@ -24,7 +24,7 @@ public class ModuleStorageESP extends ToggleModule {
     @Override
     public void init() {
         setKeybind(new Keybind(Keyboard.KEY_C));
-        Pipe.getInstance().getEventBus().register(new Listener<Render3D>() {
+        Pipe.getInstance().getEventBus().register(getPlugin(), new Listener<Render3D>() {
             @Override
             @SuppressWarnings("ConstantConditions")
             public void event(Render3D render3D) {

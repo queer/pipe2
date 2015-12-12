@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import me.curlpipesh.pipe.Pipe;
+import me.curlpipesh.pipe.command.Command;
 import me.curlpipesh.pipe.plugin.module.Module;
 
 import java.util.List;
@@ -40,11 +41,10 @@ public abstract class BasicPlugin implements Plugin {
 
     @Getter
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-    private List<Module> providedModules;
+    private List<Module> providedModules = new CopyOnWriteArrayList<>();
 
-    public BasicPlugin() {
-        providedModules = new CopyOnWriteArrayList<>();
-    }
+    @Getter
+    private List<Command> registeredCommands = new CopyOnWriteArrayList<>();
 
     @Override
     public void onEnable() {}

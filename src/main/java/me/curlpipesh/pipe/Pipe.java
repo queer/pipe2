@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import lombok.Setter;
+import me.curlpipesh.pipe.command.CommandManager;
 import me.curlpipesh.pipe.event.EventBus;
 import me.curlpipesh.pipe.event.PipeEventBus;
 import me.curlpipesh.pipe.event.events.ModFinishedLoading;
@@ -26,6 +27,7 @@ import java.util.logging.Logger;
  * @author c
  * @since 7/10/15
  */
+@SuppressWarnings("unused")
 public final class Pipe {
     /**
      * The logger for the entire mod.
@@ -56,6 +58,10 @@ public final class Pipe {
     private File pipeConfigDir;
 
     @Getter
+    @Setter
+    private CommandManager commandManager;
+
+    @Getter
     private final PluginManager pluginManager;
 
     @Getter
@@ -73,10 +79,24 @@ public final class Pipe {
      * like plugin initialization, file structure creation, and so on.
      */
     public void init() {
+        logger.info("Starting up Pipe...");
+        setupDirectories();
+        pluginManager.init();
+        setupChatInterceptor();
+        eventBus.push(new ModFinishedLoading());
+    }
+
+    public void setupChatInterceptor() {
+
+    }
+
+    /**
+     * Creates the directories required for the client to function
+     */
+    private void setupDirectories() {
         final String exceptionMessage = "Unable to create directories required for the client to function. " +
                 "Do you have permission to write in the directory? Is the disk full? If running out of a RAMDISK, " +
                 "do you have enough space?";
-        logger.info("Starting up Pipe...");
         pipeDataDir = new File(Helper.getMinecraftDataDir() + File.separator + "pipe");
         pipePluginDir = new File(pipeDataDir + File.separator + "plugins");
         pipeConfigDir = new File(pipeDataDir + File.separator + "config");
@@ -101,8 +121,6 @@ public final class Pipe {
                 logger.info("Created Pipe plugin dir!");
             }
         }
-        pluginManager.init();
-        eventBus.push(new ModFinishedLoading());
     }
 
     /**
@@ -124,26 +142,56 @@ public final class Pipe {
         return logger;
     }
 
+    /**
+     * Alias of <tt>getInstance().getEventBus()</tt>
+     *
+     * @return The event bus
+     */
     public static EventBus eventBus() {
         return getInstance().getEventBus();
     }
 
+    /**
+     * Alias of <tt>getInstance().getPluginManager()</tt>
+     *
+     * @return The plugin manager
+     */
     public static PluginManager pluginManager() {
         return getInstance().getPluginManager();
     }
 
+    /**
+     * Alias of <tt>getInstance().getPipeConfigDir()</tt>
+     *
+     * @return The config dir
+     */
     public static File configDir() {
         return getInstance().getPipeConfigDir();
     }
 
+    /**
+     * Alias of <tt>getInstance().getPluginDir()</tt>
+     *
+     * @return The plugin dir
+     */
     public static File pluginDir() {
         return getInstance().getPipePluginDir();
     }
 
+    /**
+     * Alias of <tt>getInstance().getDataDir()</tt>
+     *
+     * @return The data dir
+     */
     public static File dataDir() {
         return getInstance().getPipeDataDir();
     }
 
+    /**
+     * Alias of <tt>getInstance().getGson()</tt>
+     *
+     * @return The Gson instance
+     */
     public static Gson gson() {
         return getInstance().getGson();
     }

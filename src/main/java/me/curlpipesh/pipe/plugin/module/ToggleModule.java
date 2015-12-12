@@ -21,7 +21,7 @@ public abstract class ToggleModule extends BasicModule implements Toggleable {
 
     public ToggleModule(@NonNull Plugin plugin, @NonNull String name, @NonNull String description) {
         super(plugin, name, description);
-        Pipe.getInstance().getEventBus().register(new Listener<Keypress>() {
+        Pipe.getInstance().getEventBus().register(this.getPlugin(), new Listener<Keypress>() {
             @Override
             public void event(@NonNull Keypress event) {
                 if(KeypressHelper.isKeyPlusModifiersDown(getKeybind(), event)) {

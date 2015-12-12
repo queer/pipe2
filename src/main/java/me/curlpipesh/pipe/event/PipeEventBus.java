@@ -1,9 +1,11 @@
 package me.curlpipesh.pipe.event;
 
 import lombok.NonNull;
-import me.curlpipesh.pipe.Pipe;
+import me.curlpipesh.pipe.plugin.Plugin;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -13,28 +15,27 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @since 7/11/15
  */
 public class PipeEventBus implements EventBus {
-    private final List<Listener<?>> listeners = new CopyOnWriteArrayList<>();
+    private final Map<Plugin, List<Listener<?>>> listeners = new ConcurrentHashMap<>();
 
     @Override
-    public void register(@NonNull Listener<?> listener) {
-        if(listeners.contains(listener)) {
-            Pipe.getLogger().warning("Was asked to register a listener that is already registered, ignoring!");
-        } else {
-            if(!listeners.add(listener)) {
-                Pipe.getLogger().warning("Error registering the specified listener!");
-            }
+    public void register(@NonNull Plugin plugin, @NonNull Listener<?> listener) {
+        if(!listeners.containsKey(plugin)) {
+            listeners.put(plugin, new CopyOnWriteArrayList<>());
         }
+        listeners.get(plugin).add(listener);
     }
 
     @Override
-    public void unregister(@NonNull Listener<?> listener) {
-        if(!listeners.contains(listener)) {
-            Pipe.getLogger().warning("Was asked to register a listener that is not registered, ignoring!");
-        } else {
-            if(!listeners.remove(listener)) {
-                Pipe.getLogger().warning("Error unregistering the specified listener!");
-            }
+    public void unregister(@NonNull Plugin plugin, @NonNull Listener<?> listener) {
+        if(!listeners.containsKey(plugin)) {
+            return;
         }
+        listeners.get(plugin).remove(listener);
+    }
+
+    @Override
+    public void unregister(Plugin plugin) {
+        listeners.remove(plugin);
     }
 
     @Override
@@ -43,7 +44,10 @@ public class PipeEventBus implements EventBus {
         // The typecast being performed here is actually safe, due to the fact
         // that a listener is looking for an event of type T if its class is
         // equal to event.getClass(), because that's essentially T.class.
-        listeners.stream().filter(l -> l.getType().equals(event.getClass())).forEach(l -> ((Listener<T>)l).event(event));
+        // listeners.stream().filter(l -> l.getType().equals(event.getClass())).forEach(l -> ((Listener<T>) l).event(event));
+        listeners.entrySet().stream()
+                .forEach(l -> l.getValue().stream().filter(i -> i.getType().equals(event.getClass()))
+                        .forEach(i -> ((Listener<T>) i).event(event)));
         return event;
     }
 

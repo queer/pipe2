@@ -1,5 +1,6 @@
 package me.curlpipesh.pipe.plugin;
 
+import me.curlpipesh.pipe.command.Command;
 import me.curlpipesh.pipe.plugin.module.Module;
 
 import java.util.List;
@@ -96,4 +97,12 @@ public interface Plugin extends Loadable, Toggleable {
      * </pre>
      */
     void finishEnabling();
+
+    /**
+     * Gets the list of all {@link Command}s registered by this plugin. The
+     * list returned by this method may be empty.
+     *
+     * @return All commands that this plugin has registered
+     */
+    List<Command> getRegisteredCommands();
 }
