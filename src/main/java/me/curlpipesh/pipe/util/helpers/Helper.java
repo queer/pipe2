@@ -358,14 +358,6 @@ public class Helper {
     static void _sendChatMessage(String message) {}
 
     /**
-     * Changes the name of the supplied item stack to the new name given.
-     *
-     * @param stack The item stack whose name is to be changed
-     * @param name The new name to apply to the item stack
-     */
-    public static void setItemStackDisplayName(Object stack, String name) {}
-
-    /**
      * Returns the <tt>Container</tt> object representing the player's
      * inventory.
      *

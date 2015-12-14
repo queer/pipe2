@@ -495,17 +495,6 @@ public class HelperGenerator {
             mv.visitEnd();
         }
         {
-            mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "setItemStackDisplayName", "(Ljava/lang/Object;Ljava/lang/String;)V", null, null);
-            mv.visitCode();
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitTypeInsn(CHECKCAST, getByName("ItemStack").getName());
-            mv.visitVarInsn(ALOAD, 1);
-            mv.visitMethodInsn(INVOKEVIRTUAL, getByName("ItemStack").getName(), "c", "(Ljava/lang/String;)" + getByName("ItemStack").getDesc(), false);
-            mv.visitInsn(RETURN);
-            mv.visitMaxs(5, 5);
-            mv.visitEnd();
-        }
-        {
             mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "getInventoryContainer", "()Ljava/lang/Object;", null, null);
             mv.visitCode();
             mv.visitMethodInsn(INVOKESTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "getPlayer", "()Ljava/lang/Object;", false);
