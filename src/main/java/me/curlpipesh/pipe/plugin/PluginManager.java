@@ -2,8 +2,8 @@ package me.curlpipesh.pipe.plugin;
 
 import lombok.Getter;
 import lombok.NonNull;
-import me.curlpipesh.bytecodetools.util.ClassEnumerator;
 import me.curlpipesh.pipe.Pipe;
+import me.curlpipesh.pipe.bytecode.ClassEnumerator;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -149,6 +149,7 @@ public class PluginManager {
         return out.toString();
     }
 
+    @SuppressWarnings("unused")
     public void shutdown() {
         plugins.forEach(this::disablePlugin);
         plugins.forEach(this::unloadPlugin);

@@ -1,16 +1,13 @@
 package me.curlpipesh.pipe.bytecode.injectors;
 
-import me.curlpipesh.bytecodetools.inject.Inject;
-import me.curlpipesh.bytecodetools.inject.Injector;
+import me.curlpipesh.pipe.bytecode.Injector;
+import me.curlpipesh.pipe.bytecode.map.MappedClass;
 import me.curlpipesh.pipe.event.events.Keypress;
-import me.curlpipesh.pipe.util.Constants;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.*;
 
 import java.util.Iterator;
 import java.util.List;
-
-import static me.curlpipesh.bytecodetools.util.AccessHelper.*;
 
 /**
  * Adds the instructions necessary for starting the client. Also adds the
@@ -19,14 +16,20 @@ import static me.curlpipesh.bytecodetools.util.AccessHelper.*;
  * @author c
  * @since 4/30/15
  */
-@Inject(Constants.MINECRAFT)
 @SuppressWarnings("unused")
 public class MinecraftInjector extends Injector {
+    public MinecraftInjector(final MappedClass classToInject) {
+        super(classToInject);
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     protected void inject(ClassReader cr, ClassNode cn) {
+        MappedClass.MethodDef startGame = getClassToInject().getMethod("startGame").get();
+        MappedClass.MethodDef runGame = getClassToInject().getMethod("runGame").get();
+
         for(MethodNode m : (List<MethodNode>)cn.methods) {
-            if(m.name.equals("am") && m.desc.equals("()V") && isVoid(m.desc) && isPrivate(m.access)) {
+            if(m.name.equals(startGame.getName()) && m.desc.equals(startGame.getDesc())) {
                 InsnList list = new InsnList();
                 list.add(new MethodInsnNode(INVOKESTATIC, "me/curlpipesh/pipe/Pipe", "getInstance", "()Lme/curlpipesh/pipe/Pipe;", false));
                 list.add(new MethodInsnNode(INVOKEVIRTUAL, "me/curlpipesh/pipe/Pipe", "init", "()V", false));
@@ -43,7 +46,7 @@ public class MinecraftInjector extends Injector {
                     throw new IllegalStateException("RETURN insn node was null?!");
                 }
                 m.instructions.insertBefore(node, list);
-            } else if(m.name.equals("s") && m.desc.equals("()V") && isVoid(m.desc) && isPublic(m.access)) {
+            } else if(m.name.equals(runGame.getName()) && m.desc.equals(runGame.getDesc())) {
                 // Tick event
                 InsnList list = new InsnList();
                 list.add(new MethodInsnNode(INVOKESTATIC, "me/curlpipesh/pipe/Pipe", "getInstance", "()Lme/curlpipesh/pipe/Pipe;", false));

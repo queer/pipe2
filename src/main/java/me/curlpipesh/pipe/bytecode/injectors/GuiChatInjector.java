@@ -1,8 +1,7 @@
 package me.curlpipesh.pipe.bytecode.injectors;
 
-import me.curlpipesh.bytecodetools.inject.Inject;
-import me.curlpipesh.bytecodetools.inject.Injector;
-import me.curlpipesh.pipe.util.Constants;
+import me.curlpipesh.pipe.bytecode.Injector;
+import me.curlpipesh.pipe.bytecode.map.MappedClass;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.*;
 
@@ -13,8 +12,11 @@ import java.util.List;
  * @author c
  * @since 5/27/15
  */
-//@Inject(Constants.GUICHAT)
 public class GuiChatInjector extends Injector {
+    public GuiChatInjector(final MappedClass classToInject) {
+        super(classToInject);
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     protected void inject(ClassReader classReader, ClassNode classNode) {

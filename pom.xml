@@ -130,11 +130,6 @@
         </dependency>
 
         <dependency>
-            <groupId>me.curlpipesh.bytecodetools</groupId>
-            <artifactId>BytecodeTools</artifactId>
-            <version>0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>me.curlpipesh.gl</groupId>
             <artifactId>pipe-gl</artifactId>
             <version>0.2a</version>

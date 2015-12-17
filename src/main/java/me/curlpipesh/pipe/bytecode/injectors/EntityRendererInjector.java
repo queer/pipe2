@@ -1,10 +1,9 @@
 package me.curlpipesh.pipe.bytecode.injectors;
 
-import me.curlpipesh.bytecodetools.inject.Inject;
-import me.curlpipesh.bytecodetools.inject.Injector;
-import me.curlpipesh.bytecodetools.util.AccessHelper;
+import me.curlpipesh.pipe.bytecode.Injector;
+import me.curlpipesh.pipe.bytecode.AccessHelper;
+import me.curlpipesh.pipe.bytecode.map.MappedClass;
 import me.curlpipesh.pipe.event.events.Render3D;
-import me.curlpipesh.pipe.util.Constants;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.*;
 
@@ -17,13 +16,19 @@ import java.util.List;
  * @author c
  * @since 5/21/15
  */
-@Inject(Constants.ENTITYRENDERER)
 public class EntityRendererInjector extends Injector {
+    public EntityRendererInjector(final MappedClass classToInject) {
+        super(classToInject);
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     protected void inject(ClassReader classReader, ClassNode classNode) {
+        MappedClass.MethodDef doWorldRender = getClassToInject().getMethod("doWorldRender").get();
+        MappedClass.MethodDef applyViewBobbing = getClassToInject().getMethod("applyViewBobbing").get();
+
         for(MethodNode m : (List<MethodNode>) classNode.methods) {
-            if(m.name.equals("a") && m.desc.equals("(IFJ)V")) {
+            if(m.name.equals(doWorldRender.getName()) && m.desc.equals(doWorldRender.getDesc())) {
                 InsnList list = new InsnList();
                 list.add(new MethodInsnNode(INVOKESTATIC, "me/curlpipesh/pipe/Pipe", "getInstance", "()Lme/curlpipesh/pipe/Pipe;", false));
                 list.add(new MethodInsnNode(INVOKEVIRTUAL, "me/curlpipesh/pipe/Pipe", "getEventBus", "()Lme/curlpipesh/pipe/event/EventBus;", false));
@@ -49,7 +54,7 @@ public class EntityRendererInjector extends Injector {
                     throw new IllegalStateException("Instruction was null?!");
                 }
                 m.instructions.insertBefore(injectInsn, list);
-            } else if(m.name.equals("e") && m.desc.equals("(F)V") && AccessHelper.isPrivate(m.access)) {
+            } else if(m.name.equals(applyViewBobbing.getName()) && m.desc.equals(applyViewBobbing.getDesc()) && AccessHelper.isPrivate(m.access)) {
                 m.instructions.clear();
                 m.instructions.insert(new InsnNode(RETURN));
             }

@@ -16,16 +16,15 @@ public class Constants {
     /**
      * Mappings of obfuscated classes to usable names
      */
-    private static final List<ObfusClass> OBFUSCATED_CLASSES = new CopyOnWriteArrayList<>();
-
-    @SuppressWarnings("SpellCheckingInspection")
-    public static final String
+    /*private static final List<ObfusClass> OBFUSCATED_CLASSES = new CopyOnWriteArrayList<>();*/
+    /*@SuppressWarnings("SpellCheckingInspection")*/
+    /*public static final String*/
             /**
              * Dummy field to make sure that IntelliJ's formatter does it's job
              * correctly. ;-;
              */
-            DUMMY = "WHATEVER",
-    MINECRAFT = "ave",
+            /*DUMMY = "WHATEVER",*/
+    /*MINECRAFT = "ave",
     GUIINGAME = "avo",
     FONTRENDERER = "avn",
     GAMESETTINGS = "avh",
@@ -88,7 +87,6 @@ public class Constants {
     PACKETHANDSHAKE_CLIENT = "jc",
     ENUMCONNECTIONSTATE = "el",
     SESSION = "avm",
-    // TODO: Add to autodeobf
     PACKETCHATMESSAGE_SERVER = "fy",
     PACKETBUFFER = "em";
 
@@ -99,7 +97,7 @@ public class Constants {
      * @param name Non-obfuscated class name
      * @return <tt>ObfusClass</tt> representation of the obfuscated class
      */
-    public static ObfusClass getByName(String name) {
+    /*public static ObfusClass getByName(String name) {
         Optional<ObfusClass> o = OBFUSCATED_CLASSES.stream().filter(c -> c.getRealName().equalsIgnoreCase(name))
                 .findFirst();
         if(o.isPresent()) {
@@ -115,9 +113,9 @@ public class Constants {
             }
             throw new IllegalArgumentException(message);
         }
-    }
+    }*/
 
-    private static void add(String name, String obfusName) {
+    /*private static void add(String name, String obfusName) {
         OBFUSCATED_CLASSES.add(new ObfusClass(name, obfusName));
     }
 
@@ -186,5 +184,5 @@ public class Constants {
         add("Session", SESSION);
         add("ServerPacketChatMessage", PACKETCHATMESSAGE_SERVER);
         add("PacketBuffer", PACKETBUFFER);
-    }
+    }*/
 }

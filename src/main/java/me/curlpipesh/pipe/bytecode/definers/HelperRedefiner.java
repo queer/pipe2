@@ -1,7 +1,7 @@
 package me.curlpipesh.pipe.bytecode.definers;
 
-import me.curlpipesh.bytecodetools.define.Redefiner;
 import me.curlpipesh.pipe.Pipe;
+import me.curlpipesh.pipe.bytecode.Redefiner;
 import me.curlpipesh.pipe.bytecode.generators.HelperGenerator;
 import me.curlpipesh.pipe.util.helpers.Helper;
 

@@ -1,9 +1,7 @@
 package me.curlpipesh.pipe.bytecode.injectors;
 
-import me.curlpipesh.bytecodetools.inject.Inject;
-import me.curlpipesh.bytecodetools.inject.Injector;
-import me.curlpipesh.pipe.Pipe;
-import me.curlpipesh.pipe.util.Constants;
+import me.curlpipesh.pipe.bytecode.Injector;
+import me.curlpipesh.pipe.bytecode.map.MappedClass;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.*;
 
@@ -13,16 +11,20 @@ import java.util.List;
  * @author audrey
  * @since 12/15/15.
  */
-@Inject(Constants.PACKETBUFFER)
 public class PacketBufferInjector extends Injector {
+    public PacketBufferInjector(final MappedClass classToInject) {
+        super(classToInject);
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     protected void inject(final ClassReader classReader, final ClassNode classNode) {
+        MappedClass.MethodDef readStringFromBuffer = getClassToInject().getMethod("readStringFromBuffer").get();
         ((List<MethodNode>) classNode.methods).stream()
-                .filter(m -> m.name.equals("c") &&
-                        m.desc.contains("(I)Ljava/lang/String;"))
+                .filter(m -> m.name.equals(readStringFromBuffer.getName()) &&
+                        m.desc.contains(readStringFromBuffer.getDesc()))
                 .forEach(m -> {
-                    Pipe.getLogger().info("Found PacketBuffer#readStringFromBuffer():" + m.name + " : " + m.desc);
+                    //Pipe.getLogger().info("Found PacketBuffer#readStringFromBuffer():" + m.name + " : " + m.desc);
                     InsnList list = new InsnList();
                     list.add(new MethodInsnNode(INVOKESTATIC,
                             "me/curlpipesh/pipe/Pipe", "getInstance", "()Lme/curlpipesh/pipe/Pipe;", false));

@@ -1,17 +1,13 @@
 package me.curlpipesh.pipe.bytecode.injectors;
 
-import me.curlpipesh.bytecodetools.inject.Inject;
-import me.curlpipesh.bytecodetools.inject.Injector;
+import me.curlpipesh.pipe.bytecode.Injector;
+import me.curlpipesh.pipe.bytecode.map.MappedClass;
 import me.curlpipesh.pipe.event.events.Render2D;
-import me.curlpipesh.pipe.util.Constants;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.*;
 
 import java.util.Iterator;
 import java.util.List;
-
-import static me.curlpipesh.bytecodetools.util.AccessHelper.isPublic;
-import static me.curlpipesh.bytecodetools.util.AccessHelper.isVoid;
 
 /**
  * Adds the {@link Render2D} event firing.
@@ -19,17 +15,20 @@ import static me.curlpipesh.bytecodetools.util.AccessHelper.isVoid;
  * @author c
  * @since 4/30/15
  */
-@Inject(Constants.GUIINGAME)
 public class GuiIngameInjector extends Injector {
+    public GuiIngameInjector(final MappedClass classToInject) {
+        super(classToInject);
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     protected void inject(ClassReader cr, ClassNode cn) {
+        MappedClass.MethodDef renderGameOverlay = getClassToInject().getMethod("renderGameOverlay").get();
+
         ((List<MethodNode>) cn.methods).stream()
-                .filter(m -> m.name.equals("a") && m.desc.equals("(F)V") && isVoid(m.desc) && isPublic(m.access))
+                .filter(m -> m.name.equals(renderGameOverlay.getName()) && m.desc.equals(renderGameOverlay.getDesc()))
                 .forEach(m -> {
                     InsnList list = new InsnList();
-                    /*list.add(new FieldInsnNode(GETSTATIC, "me/curlpipesh/pipe/event/events/Render2D", "instance", "Lme/curlpipesh/pipe/event/events/Render2D;"));
-                    list.add(new MethodInsnNode(INVOKESTATIC, "pw/aria/event/EventManager", "push", "(Ljava/lang/Object;)Ljava/lang/Object;", false));*/
                     list.add(new MethodInsnNode(INVOKESTATIC, "me/curlpipesh/pipe/Pipe", "getInstance", "()Lme/curlpipesh/pipe/Pipe;", false));
                     list.add(new MethodInsnNode(INVOKEVIRTUAL, "me/curlpipesh/pipe/Pipe", "getEventBus", "()Lme/curlpipesh/pipe/event/EventBus;", false));
                     list.add(new FieldInsnNode(GETSTATIC, "me/curlpipesh/pipe/event/events/Render2D", "instance", "Lme/curlpipesh/pipe/event/events/Render2D;"));
