@@ -1,6 +1,6 @@
 package me.curlpipesh.pipe.util.helpers;
 
-import me.curlpipesh.pipe.event.events.ChatSend;
+import me.curlpipesh.pipe.event.events.ChatMessage;
 import me.curlpipesh.pipe.gui.GuiModule;
 import me.curlpipesh.pipe.gui.GuiScreen;
 import me.curlpipesh.pipe.util.Vec3;
@@ -350,7 +350,7 @@ public class Helper {
     /**
      * Sends a chat message directly. This method is not meant to be called by
      * anything outside of {@link ChatHelper}, because it bypasses
-     * {@link ChatSend} events firing, which can cause
+     * {@link ChatMessage} events firing, which can cause
      * a large number of issues.
      *
      * @param message The message to be sent

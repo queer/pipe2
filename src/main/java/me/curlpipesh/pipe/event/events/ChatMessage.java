@@ -9,14 +9,22 @@ import me.curlpipesh.pipe.util.Cancellable;
  * @author c
  * @since 5/27/15
  */
-public class ChatSend extends Cancellable {
+public class ChatMessage extends Cancellable {
     /**
      * The message being sent
      */
     @Getter
-    private String message;
+    private final String message;
 
-    public ChatSend(String message) {
+    @Getter
+    private final ChatMode mode;
+
+    public ChatMessage(String message, ChatMode mode) {
         this.message = message;
+        this.mode = mode;
+    }
+
+    public enum ChatMode {
+        SEND, RECEIVE
     }
 }

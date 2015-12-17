@@ -1,4 +1,4 @@
-package me.curlpipesh.rendermods.modules;
+package me.curlpipesh.basicmods.modules;
 
 import me.curlpipesh.pipe.Pipe;
 import me.curlpipesh.pipe.event.Listener;

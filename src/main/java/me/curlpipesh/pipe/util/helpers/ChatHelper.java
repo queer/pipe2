@@ -2,7 +2,7 @@ package me.curlpipesh.pipe.util.helpers;
 
 import me.curlpipesh.pipe.Pipe;
 import me.curlpipesh.pipe.bytecode.injectors.GuiChatInjector;
-import me.curlpipesh.pipe.event.events.ChatSend;
+import me.curlpipesh.pipe.event.events.ChatMessage;
 
 import java.util.Arrays;
 import java.util.logging.Handler;
@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 /**
  * Used in {@link GuiChatInjector} for
  * redirecting the chat messages to our custom "handler," so that we can push
- * {@link ChatSend} events without too much pain.
+ * {@link ChatMessage} events without too much pain.
  *
  * @author c
  * @since 5/27/15
@@ -33,7 +33,7 @@ public class ChatHelper {
      * @param message The message to tinker with.
      */
     public static void handle(String message) {
-        if(!Pipe.getInstance().getEventBus().push(new ChatSend(message)).isCancelled()) {
+        if(!Pipe.getInstance().getEventBus().push(new ChatMessage(message, ChatMessage.ChatMode.SEND)).isCancelled()) {
             Helper._sendChatMessage(message);
             // TODO: Add to sent chat messages
         }

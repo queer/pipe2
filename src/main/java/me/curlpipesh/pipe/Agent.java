@@ -23,8 +23,9 @@ public class Agent {
         inst.addTransformer(new GuiIngameInjector());
         inst.addTransformer(new GuiMainMenuInjector());
         inst.addTransformer(new MinecraftInjector());
-        inst.addTransformer(new WorldProviderInjector());
         inst.addTransformer(new NetworkManagerInjector());
+        inst.addTransformer(new PacketBufferInjector());
+        inst.addTransformer(new WorldProviderInjector());
 
         Pipe.getLogger().info("Attempting to redefine classes!");
         try {

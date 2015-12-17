@@ -1,4 +1,4 @@
-package me.curlpipesh.rendermods.modules;
+package me.curlpipesh.basicmods.modules;
 
 import lombok.NonNull;
 import me.curlpipesh.pipe.Pipe;

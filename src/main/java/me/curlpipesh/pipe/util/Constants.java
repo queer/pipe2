@@ -67,6 +67,7 @@ public class Constants {
     ITEM = "zw",
     PACKETCHATMESSAGE_CLIENT = "ie",
     GUICHAT = "awv",
+    GUINEWCHAT = "avt",
     GUIOPTIONS = "axn",
     GUISINGLEPLAYER = "axv",
     GUIMULTIPLAYER = "azh",
@@ -86,7 +87,10 @@ public class Constants {
     NBTTAGBYTEARRAY = "dl",
     PACKETHANDSHAKE_CLIENT = "jc",
     ENUMCONNECTIONSTATE = "el",
-    SESSION = "avm";
+    SESSION = "avm",
+    // TODO: Add to autodeobf
+    PACKETCHATMESSAGE_SERVER = "fy",
+    PACKETBUFFER = "em";
 
     /**
      * Gets an {@link ObfusClass} representation of a class based on a
@@ -177,5 +181,10 @@ public class Constants {
         add("NBTTagLong", NBTTAGLONG);
         add("NBTTagShort", NBTTAGSHORT);
         add("NBTTagString", NBTTAGSTRING);
+        add("ClientPacketHandshake", PACKETHANDSHAKE_CLIENT);
+        add("EnumConnectionState", ENUMCONNECTIONSTATE);
+        add("Session", SESSION);
+        add("ServerPacketChatMessage", PACKETCHATMESSAGE_SERVER);
+        add("PacketBuffer", PACKETBUFFER);
     }
 }
