@@ -9,7 +9,6 @@ import me.curlpipesh.pipe.event.IgnoreEnable;
  * @author c
  * @since 5/2/15
  */
-@IgnoreEnable
 public class Keypress {
     /**
      * The key that was pressed. Uses the keycodes in
