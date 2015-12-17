@@ -13,7 +13,7 @@ import static org.objectweb.asm.Opcodes.*;
  * @author c
  * @since 5/24/15
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "Duplicates"})
 public class GuiScreenGenerator {
     public static byte[] generate() {
 
@@ -38,13 +38,8 @@ public class GuiScreenGenerator {
             mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
             mv.visitCode();
             Label l0 = new Label();
-            mv.visitLabel(l0);
-            mv.visitLineNumber(14, l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitMethodInsn(INVOKESPECIAL, getByName("GuiScreen").getName(), "<init>", "()V", false);
-            Label l1 = new Label();
-            mv.visitLabel(l1);
-            mv.visitLineNumber(15, l1);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitInsn(ACONST_NULL);
             mv.visitFieldInsn(PUTFIELD, "me/curlpipesh/pipe/gui/GuiScreen", "currentModule", "Lme/curlpipesh/pipe/gui/GuiModule;");
@@ -60,13 +55,11 @@ public class GuiScreenGenerator {
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel(l0);
-            mv.visitLineNumber(22, l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, "me/curlpipesh/pipe/gui/GuiScreen", "currentModule", "Lme/curlpipesh/pipe/gui/GuiModule;");
             mv.visitMethodInsn(INVOKEINTERFACE, "me/curlpipesh/pipe/gui/GuiModule", "init", "()V", true);
             Label l1 = new Label();
             mv.visitLabel(l1);
-            mv.visitLineNumber(23, l1);
             mv.visitInsn(RETURN);
             Label l2 = new Label();
             mv.visitLabel(l2);
@@ -79,7 +72,6 @@ public class GuiScreenGenerator {
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel(l0);
-            mv.visitLineNumber(26, l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, "me/curlpipesh/pipe/gui/GuiScreen", "currentModule", "Lme/curlpipesh/pipe/gui/GuiModule;");
             mv.visitVarInsn(ILOAD, 1);
@@ -88,7 +80,6 @@ public class GuiScreenGenerator {
             mv.visitMethodInsn(INVOKEINTERFACE, "me/curlpipesh/pipe/gui/GuiModule", "render", "(IIF)V", true);
             Label l1 = new Label();
             mv.visitLabel(l1);
-            mv.visitLineNumber(27, l1);
             mv.visitInsn(RETURN);
             Label l2 = new Label();
             mv.visitLabel(l2);
@@ -104,7 +95,6 @@ public class GuiScreenGenerator {
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel(l0);
-            mv.visitLineNumber(30, l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, "me/curlpipesh/pipe/gui/GuiScreen", "currentModule", "Lme/curlpipesh/pipe/gui/GuiModule;");
             mv.visitVarInsn(ILOAD, 1);
@@ -113,7 +103,6 @@ public class GuiScreenGenerator {
             mv.visitMethodInsn(INVOKEINTERFACE, "me/curlpipesh/pipe/gui/GuiModule", "mouseDown", "(III)V", true);
             Label l1 = new Label();
             mv.visitLabel(l1);
-            mv.visitLineNumber(31, l1);
             mv.visitInsn(RETURN);
             Label l2 = new Label();
             mv.visitLabel(l2);
@@ -129,7 +118,6 @@ public class GuiScreenGenerator {
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel(l0);
-            mv.visitLineNumber(34, l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, "me/curlpipesh/pipe/gui/GuiScreen", "currentModule", "Lme/curlpipesh/pipe/gui/GuiModule;");
             mv.visitVarInsn(ILOAD, 1);
@@ -139,7 +127,6 @@ public class GuiScreenGenerator {
             mv.visitMethodInsn(INVOKEINTERFACE, "me/curlpipesh/pipe/gui/GuiModule", "mouseDownMove", "(IIIJ)V", true);
             Label l1 = new Label();
             mv.visitLabel(l1);
-            mv.visitLineNumber(35, l1);
             mv.visitInsn(RETURN);
             Label l2 = new Label();
             mv.visitLabel(l2);
@@ -156,7 +143,6 @@ public class GuiScreenGenerator {
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel(l0);
-            mv.visitLineNumber(38, l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, "me/curlpipesh/pipe/gui/GuiScreen", "currentModule", "Lme/curlpipesh/pipe/gui/GuiModule;");
             mv.visitVarInsn(ILOAD, 1);
@@ -165,7 +151,6 @@ public class GuiScreenGenerator {
             mv.visitMethodInsn(INVOKEINTERFACE, "me/curlpipesh/pipe/gui/GuiModule", "mouseUp", "(III)V", true);
             Label l1 = new Label();
             mv.visitLabel(l1);
-            mv.visitLineNumber(39, l1);
             mv.visitInsn(RETURN);
             Label l2 = new Label();
             mv.visitLabel(l2);
@@ -181,7 +166,6 @@ public class GuiScreenGenerator {
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel(l0);
-            mv.visitLineNumber(42, l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, "me/curlpipesh/pipe/gui/GuiScreen", "currentModule", "Lme/curlpipesh/pipe/gui/GuiModule;");
             mv.visitVarInsn(ILOAD, 1);
@@ -189,7 +173,6 @@ public class GuiScreenGenerator {
             mv.visitMethodInsn(INVOKEINTERFACE, "me/curlpipesh/pipe/gui/GuiModule", "keypress", "(CI)V", true);
             Label l1 = new Label();
             mv.visitLabel(l1);
-            mv.visitLineNumber(43, l1);
             mv.visitInsn(RETURN);
             Label l2 = new Label();
             mv.visitLabel(l2);
@@ -204,7 +187,6 @@ public class GuiScreenGenerator {
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel(l0);
-            mv.visitLineNumber(46, l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ILOAD, 1);
             mv.visitVarInsn(ILOAD, 2);
@@ -212,7 +194,6 @@ public class GuiScreenGenerator {
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/gui/GuiScreen", "drawScreen", "(IIF)V", false);
             Label l1 = new Label();
             mv.visitLabel(l1);
-            mv.visitLineNumber(47, l1);
             mv.visitInsn(RETURN);
             Label l2 = new Label();
             mv.visitLabel(l2);
@@ -228,14 +209,12 @@ public class GuiScreenGenerator {
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel(l0);
-            mv.visitLineNumber(50, l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ILOAD, 1);
             mv.visitVarInsn(ILOAD, 2);
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/gui/GuiScreen", "keyPress", "(CI)V", false);
             Label l1 = new Label();
             mv.visitLabel(l1);
-            mv.visitLineNumber(51, l1);
             mv.visitInsn(RETURN);
             Label l2 = new Label();
             mv.visitLabel(l2);
@@ -250,7 +229,6 @@ public class GuiScreenGenerator {
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel(l0);
-            mv.visitLineNumber(54, l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ILOAD, 1);
             mv.visitVarInsn(ILOAD, 2);
@@ -258,7 +236,6 @@ public class GuiScreenGenerator {
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/gui/GuiScreen", "mouseClicked", "(III)V", false);
             Label l1 = new Label();
             mv.visitLabel(l1);
-            mv.visitLineNumber(55, l1);
             mv.visitInsn(RETURN);
             Label l2 = new Label();
             mv.visitLabel(l2);
@@ -274,7 +251,6 @@ public class GuiScreenGenerator {
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel(l0);
-            mv.visitLineNumber(58, l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ILOAD, 1);
             mv.visitVarInsn(ILOAD, 2);
@@ -282,7 +258,6 @@ public class GuiScreenGenerator {
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/gui/GuiScreen", "mouseReleased", "(III)V", false);
             Label l1 = new Label();
             mv.visitLabel(l1);
-            mv.visitLineNumber(59, l1);
             mv.visitInsn(RETURN);
             Label l2 = new Label();
             mv.visitLabel(l2);
@@ -298,7 +273,6 @@ public class GuiScreenGenerator {
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel(l0);
-            mv.visitLineNumber(62, l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ILOAD, 1);
             mv.visitVarInsn(ILOAD, 2);
@@ -307,7 +281,6 @@ public class GuiScreenGenerator {
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/gui/GuiScreen", "mouseDownDrag", "(IIIJ)V", false);
             Label l1 = new Label();
             mv.visitLabel(l1);
-            mv.visitLineNumber(63, l1);
             mv.visitInsn(RETURN);
             Label l2 = new Label();
             mv.visitLabel(l2);
@@ -324,12 +297,10 @@ public class GuiScreenGenerator {
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel(l0);
-            mv.visitLineNumber(66, l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/gui/GuiScreen", "initGui", "()V", false);
             Label l1 = new Label();
             mv.visitLabel(l1);
-            mv.visitLineNumber(67, l1);
             mv.visitInsn(RETURN);
             Label l2 = new Label();
             mv.visitLabel(l2);
@@ -342,7 +313,6 @@ public class GuiScreenGenerator {
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel(l0);
-            mv.visitLineNumber(70, l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, "me/curlpipesh/pipe/gui/GuiScreen", "currentModule", "Lme/curlpipesh/pipe/gui/GuiModule;");
             mv.visitMethodInsn(INVOKEINTERFACE, "me/curlpipesh/pipe/gui/GuiModule", "isPauseGame", "()Z", true);
@@ -358,7 +328,6 @@ public class GuiScreenGenerator {
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel(l0);
-            mv.visitLineNumber(74, l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/gui/GuiScreen", "doesGuiPauseGame", "()Z", false);
             mv.visitInsn(IRETURN);
@@ -373,7 +342,6 @@ public class GuiScreenGenerator {
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel(l0);
-            mv.visitLineNumber(78, l0);
             mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/gui/GuiScreen", "instance", "Lme/curlpipesh/pipe/gui/GuiScreen;");
             mv.visitInsn(ARETURN);
             mv.visitMaxs(1, 0);
@@ -384,7 +352,6 @@ public class GuiScreenGenerator {
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel(l0);
-            mv.visitLineNumber(15, l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, "me/curlpipesh/pipe/gui/GuiScreen", "currentModule", "Lme/curlpipesh/pipe/gui/GuiModule;");
             mv.visitInsn(ARETURN);
@@ -399,7 +366,6 @@ public class GuiScreenGenerator {
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel(l0);
-            mv.visitLineNumber(16, l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ALOAD, 1);
             mv.visitFieldInsn(PUTFIELD, "me/curlpipesh/pipe/gui/GuiScreen", "currentModule", "Lme/curlpipesh/pipe/gui/GuiModule;");
@@ -416,7 +382,6 @@ public class GuiScreenGenerator {
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel(l0);
-            mv.visitLineNumber(19, l0);
             mv.visitTypeInsn(NEW, "me/curlpipesh/pipe/gui/GuiScreen");
             mv.visitInsn(DUP);
             mv.visitMethodInsn(INVOKESPECIAL, "me/curlpipesh/pipe/gui/GuiScreen", "<init>", "()V", false);

@@ -17,6 +17,9 @@ import org.lwjgl.opengl.GL11;
  * @since 10/6/15.
  */
 public class ModuleStorageESP extends ToggleModule {
+    private final Vec3 p = new Vec3(0, 0, 0);
+    private final Vec3 v = new Vec3(0, 0, 0), v2 = new Vec3(0, 0, 0);
+
     public ModuleStorageESP(Plugin plugin) {
         super(plugin, "Storage ESP", "Draws pretty boxes around storage things");
     }
@@ -36,14 +39,13 @@ public class ModuleStorageESP extends ToggleModule {
                     //Vec3 p = Helper.getEntityVec(Helper.getPlayer());
                     Vec3 prev = Helper.getEntityPrevVec(Helper.getPlayer());
                     Vec3 cur = Helper.getEntityVec(Helper.getPlayer());
-                    Vec3 p = new Vec3(prev.x() + ((cur.x() - prev.x()) * render3D.getPartialTickTime()),
-                            prev.y() + ((cur.y() - prev.y()) * render3D.getPartialTickTime()),
-                            prev.z() + ((cur.z() - prev.z()) * render3D.getPartialTickTime())
-                    );
+                    p.x(prev.x() + ((cur.x() - prev.x()) * render3D.getPartialTickTime()));
+                    p.y(prev.y() + ((cur.y() - prev.y()) * render3D.getPartialTickTime()));
+                    p.z(prev.z() + ((cur.z() - prev.z()) * render3D.getPartialTickTime()));
                     for(Object o : Helper.getLoadedBlockEntities()) {
                         if(Helper.isBlockEntityChest(o)) {
-                            Vec3 v = Helper.getBlockEntityVec(o);
-                            Vec3 v2 = Helper.getBlockEntityVec(o);
+                            v.set(Helper.getBlockEntityVec(o));
+                            v2.set(v);
                             if(v != null && v2 != null) {
                                 v.sub(p);
                                 v2.add(Vec3.unit()).sub(p);

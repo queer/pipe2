@@ -1,7 +1,6 @@
 package me.curlpipesh.pipe.event.events;
 
 import lombok.Getter;
-import me.curlpipesh.pipe.event.IgnoreEnable;
 
 /**
  * Event that represents a keypress

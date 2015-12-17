@@ -16,6 +16,10 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 public class Helper {
+    private static final Vec3 entityVec = new Vec3(0, 0, 0);
+    private static final Vec3 entityPrevVec = new Vec3(0, 0, 0);
+    private static final Vec3 blockEntityVec = new Vec3(0, 0, 0);
+
     /**
      * Returns true if the world is null, false otherwise
      *
