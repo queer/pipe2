@@ -1,6 +1,5 @@
 package me.curlpipesh.pipe.plugin.module;
 
-import lombok.NonNull;
 import me.curlpipesh.pipe.plugin.Plugin;
 import me.curlpipesh.pipe.util.Keybind;
 
@@ -41,7 +40,7 @@ public interface Module {
      *
      * @param keybind The new keybind to set. May be null.
      */
-    void setKeybind(@NonNull Keybind keybind);
+    void setKeybind(Keybind keybind);
 
     /**
      * Initializes this module. Registration of routes, file IO, and everything
@@ -62,7 +61,7 @@ public interface Module {
      *
      * @param status The status to set. May be null
      */
-    void setStatus(@NonNull String status);
+    void setStatus(String status);
 
     default boolean isStatusShown() {
         return true;

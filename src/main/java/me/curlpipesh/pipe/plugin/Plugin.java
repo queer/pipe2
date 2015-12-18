@@ -2,6 +2,7 @@ package me.curlpipesh.pipe.plugin;
 
 import me.curlpipesh.pipe.command.Command;
 import me.curlpipesh.pipe.plugin.module.Module;
+import me.curlpipesh.pipe.util.Toggleable;
 
 import java.util.List;
 

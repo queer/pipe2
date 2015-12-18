@@ -24,6 +24,10 @@ public class HelperGenerator {
         @SuppressWarnings("unused")
         AnnotationVisitor av0;
 
+        /////////////////////////////////////////////////////
+        // Because I was tired of putting these everywhere //
+        /////////////////////////////////////////////////////
+
         MappedClass minecraft = getClassByName("Minecraft");
         MappedClass fontRenderer = getClassByName("FontRenderer");
         MappedClass world = getClassByName("World");

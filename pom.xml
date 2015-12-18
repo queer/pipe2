@@ -128,6 +128,23 @@
             <version>2.2.4</version>
             <classifier>javadoc</classifier>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>19.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>19.0</version>
+            <classifier>sources</classifier>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>19.0</version>
+            <classifier>javadoc</classifier>
+        </dependency>
 
         <dependency>
             <groupId>me.curlpipesh.gl</groupId>
@@ -165,6 +182,7 @@
                                     <exclude>net.java.jinput:*:*</exclude>
                                     <exclude>net.java.jutils:*:*</exclude>
                                     <exclude>org.projectlombok:*</exclude>
+                                    <exclude>com.google:*:*</exclude>
                                 </excludes>
                             </artifactSet>
                         </configuration>

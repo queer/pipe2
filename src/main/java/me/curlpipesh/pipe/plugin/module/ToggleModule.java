@@ -7,7 +7,7 @@ import me.curlpipesh.pipe.Pipe;
 import me.curlpipesh.pipe.event.Listener;
 import me.curlpipesh.pipe.event.events.Keypress;
 import me.curlpipesh.pipe.plugin.Plugin;
-import me.curlpipesh.pipe.plugin.Toggleable;
+import me.curlpipesh.pipe.util.Toggleable;
 import me.curlpipesh.pipe.util.helpers.KeypressHelper;
 
 /**

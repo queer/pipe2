@@ -2,7 +2,7 @@ package me.curlpipesh.pipe.bytecode.generators;
 
 import org.objectweb.asm.*;
 
-//import static me.curlpipesh.pipe.util.Constants.getByName;
+import static me.curlpipesh.pipe.bytecode.map.ClassMap.getClassByName;
 import static org.objectweb.asm.Opcodes.*;
 
 /**
@@ -17,14 +17,14 @@ import static org.objectweb.asm.Opcodes.*;
  */
 @SuppressWarnings({"unused", "Duplicates"})
 public class GuiScreenGenerator {
-    /*public static byte[] generate() {
+    public static byte[] generate() {
 
         ClassWriter cw = new ClassWriter(0);
         FieldVisitor fv;
         MethodVisitor mv;
         AnnotationVisitor av0;
 
-        cw.visit(52, ACC_PUBLIC + ACC_FINAL + ACC_SUPER, "me/curlpipesh/pipe/gui/GuiScreen", null, getByName("GuiScreen").getName(), null);
+        cw.visit(52, ACC_PUBLIC + ACC_FINAL + ACC_SUPER, "me/curlpipesh/pipe/gui/GuiScreen", null, getClassByName("GuiScreen").getObfuscatedName(), null);
 
         cw.visitSource("GuiScreen.java", null);
 
@@ -41,7 +41,7 @@ public class GuiScreenGenerator {
             mv.visitCode();
             Label l0 = new Label();
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitMethodInsn(INVOKESPECIAL, getByName("GuiScreen").getName(), "<init>", "()V", false);
+            mv.visitMethodInsn(INVOKESPECIAL, getClassByName("GuiScreen").getObfuscatedName(), "<init>", "()V", false);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitInsn(ACONST_NULL);
             mv.visitFieldInsn(PUTFIELD, "me/curlpipesh/pipe/gui/GuiScreen", "currentModule", "Lme/curlpipesh/pipe/gui/GuiModule;");
@@ -395,5 +395,5 @@ public class GuiScreenGenerator {
         cw.visitEnd();
 
         return cw.toByteArray();
-    }*/
+    }
 }

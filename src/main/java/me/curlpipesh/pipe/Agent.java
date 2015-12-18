@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
@@ -58,6 +60,17 @@ public class Agent {
         } catch(ClassNotFoundException | UnmodifiableClassException e) {
             Pipe.getLogger().severe("Class redefinition failed! Not much you can do about this one.");
             e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void defineClass(ClassLoader cl, byte[] clazz, String fullName) {
+        Method define;
+        try {
+            define = ClassLoader.class.getDeclaredMethod("defineClass", String.class, byte[].class, int.class, int.class);
+            define.setAccessible(true);
+            define.invoke(cl, fullName, clazz, 0, clazz.length);
+        } catch(NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
