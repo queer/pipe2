@@ -19,6 +19,8 @@ import org.lwjgl.opengl.GL11;
 public class ModuleStorageESP extends ToggleModule {
     private final Vec3 p = new Vec3(0, 0, 0);
     private final Vec3 v = new Vec3(0, 0, 0), v2 = new Vec3(0, 0, 0);
+    private final Vec3 offset = new Vec3(0, 1.62D, 0);
+    private final Vec3 half = new Vec3(0.5D, 0.5D, 0.5D);
 
     public ModuleStorageESP(Plugin plugin) {
         super(plugin, "Storage ESP", "Draws pretty boxes around storage things");
@@ -32,11 +34,12 @@ public class ModuleStorageESP extends ToggleModule {
             @SuppressWarnings("ConstantConditions")
             public void event(Render3D render3D) {
                 if(ModuleStorageESP.this.isEnabled()) {
+                    // Sneak bug fix
+                    offset.y(Helper.isEntitySneaking(Helper.getPlayer()) ? 1.54D : 1.62D);
                     int count = 0;
                     GLRenderer.pre();
                     GL11.glDisable(GL11.GL_DEPTH_TEST);
                     Helper.disableLightmap();
-                    //Vec3 p = Helper.getEntityVec(Helper.getPlayer());
                     Vec3 prev = Helper.getEntityPrevVec(Helper.getPlayer());
                     Vec3 cur = Helper.getEntityVec(Helper.getPlayer());
                     p.x(prev.x() + ((cur.x() - prev.x()) * render3D.getPartialTickTime()));
@@ -49,7 +52,8 @@ public class ModuleStorageESP extends ToggleModule {
                             if(v != null && v2 != null) {
                                 v.sub(p);
                                 v2.add(Vec3.unit()).sub(p);
-                                GLRenderer.drawBoxFromPoints(v, v2, 0x7700FFFF);
+                                GLRenderer.drawBoxFromPoints(v, v2, 0x5600FFFF);
+                                GLRenderer.drawLine(offset, v.add(half), 0x7700FFFF, 2.235F);
                                 ++count;
                             }
                         }

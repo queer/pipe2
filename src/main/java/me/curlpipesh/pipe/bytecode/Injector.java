@@ -28,7 +28,7 @@ public abstract class Injector implements ClassFileTransformer, Opcodes {
     @SuppressWarnings({"ConstantConditions", "unchecked"})
     public final byte[] transform(ClassLoader classLoader, String s, Class<?> aClass, ProtectionDomain protectionDomain, byte[] bytes) throws IllegalClassFormatException {
         if(classToInject.getObfuscatedName().equals(s)) {
-            Pipe.getLogger().info("Injecting " + classToInject + "...");
+            Pipe.getLogger().info("Injecting mapped class [" + classToInject.getDeobfuscatedName() + "," + classToInject.getObfuscatedName() + "]...");
             ClassReader cr = new ClassReader(bytes);
             ClassNode cn = new ClassNode();
             cr.accept(cn, 0);

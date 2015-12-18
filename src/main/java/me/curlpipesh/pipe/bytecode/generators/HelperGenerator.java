@@ -33,7 +33,7 @@ public class HelperGenerator {
         MappedClass entity = getClassByName("Entity");
         MappedClass worldProvider = getClassByName("WorldProvider");
         MappedClass entityLiving = getClassByName("EntityLiving");
-        MappedClass entityAnimal = getClassByName("EntityLiving");
+        MappedClass entityAnimal = getClassByName("EntityAnimal");
         MappedClass entityMonster = getClassByName("EntityMonster");
         MappedClass entityPlayer = getClassByName("EntityPlayer");
         MappedClass blockEntity = getClassByName("BlockEntity");
@@ -276,7 +276,7 @@ public class HelperGenerator {
             mv.visitMethodInsn(INVOKESTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "getWorld", "()Ljava/lang/Object;", false);
             mv.visitTypeInsn(CHECKCAST, abstractWorld.getObfuscatedName());
             mv.visitFieldInsn(GETFIELD, abstractWorld.getDescription(), abstractWorld.getFields().get("worldProvider"), worldProvider.getDescription());
-            mv.visitFieldInsn(GETFIELD, worldProvider.getDescription(), world.getFields().get("lightBrightnessTable"), "[F");
+            mv.visitFieldInsn(GETFIELD, worldProvider.getDescription(), worldProvider.getFields().get("lightBrightnessTable"), "[F");
             mv.visitInsn(ARETURN);
             mv.visitMaxs(3, 1);
             mv.visitEnd();
@@ -400,7 +400,7 @@ public class HelperGenerator {
             mv.visitCode();
             mv.visitMethodInsn(INVOKESTATIC, minecraft.getObfuscatedName(), getMinecraft.getName(), getMinecraft.getDesc(), false);
             mv.visitFieldInsn(GETFIELD, minecraft.getObfuscatedName(), minecraft.getFields().get("entityRenderer"), entityRenderer.getDescription());
-            mv.visitMethodInsn(INVOKEVIRTUAL, entityRenderer.getObfuscatedName(), entity.getMethod("enableLightmap").get().getName(), entity.getMethod("enableLightmap").get().getDesc(), false);
+            mv.visitMethodInsn(INVOKEVIRTUAL, entityRenderer.getObfuscatedName(), entityRenderer.getMethod("enableLightmap").get().getName(), entityRenderer.getMethod("enableLightmap").get().getDesc(), false);
             mv.visitInsn(RETURN);
             mv.visitMaxs(2, 0);
             mv.visitEnd();
@@ -410,7 +410,7 @@ public class HelperGenerator {
             mv.visitCode();
             mv.visitMethodInsn(INVOKESTATIC, minecraft.getObfuscatedName(), getMinecraft.getName(), getMinecraft.getDesc(), false);
             mv.visitFieldInsn(GETFIELD, minecraft.getObfuscatedName(), minecraft.getFields().get("entityRenderer"), entityRenderer.getDescription());
-            mv.visitMethodInsn(INVOKEVIRTUAL, entityRenderer.getObfuscatedName(), entity.getMethod("disableLightmap").get().getName(), entity.getMethod("disableLightmap").get().getDesc(), false);
+            mv.visitMethodInsn(INVOKEVIRTUAL, entityRenderer.getObfuscatedName(), entityRenderer.getMethod("disableLightmap").get().getName(), entityRenderer.getMethod("disableLightmap").get().getDesc(), false);
             mv.visitInsn(RETURN);
             mv.visitMaxs(2, 0);
             mv.visitEnd();

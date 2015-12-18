@@ -37,7 +37,6 @@ public class ModuleTracers extends ToggleModule {
                     // Sneak bug fix
                     offset.y(Helper.isEntitySneaking(Helper.getPlayer()) ? 1.54D : 1.62D);
                     int count = 0;
-                    //Vec3 p = Helper.getEntityVec(Helper.getPlayer());
                     Vec3 prev = Helper.getEntityPrevVec(Helper.getPlayer());
                     Vec3 cur = Helper.getEntityVec(Helper.getPlayer());
                     p.x(prev.x() + ((cur.x() - prev.x()) * render3D.getPartialTickTime()));
@@ -53,19 +52,18 @@ public class ModuleTracers extends ToggleModule {
                                 if(e != null) {
                                     e.sub(p);
                                     GLRenderer.drawLine(offset, e,
-                                            Helper.isEntityAnimal(o) ? 0x7700FF00 :
-                                                    Helper.isEntityMonster(o) ? 0x77FF0000 :
-                                                            Helper.isEntityPlayer(o) ? 0xFFFF5555 : 0x770000FF, 2.235F);
+                                            Helper.isEntityAnimal(o) ? 0x3300FF00 :
+                                                    Helper.isEntityMonster(o) ? 0x33FF0000 :
+                                                            Helper.isEntityPlayer(o) ? 0x77FF5555 : 0x330000FF, 2.235F);
                                     e.add(p);
                                     v.set(e);
                                     v2.set(e);
                                     v.sub(p).sub(half);
                                     v2.add(Vec3.unit()).sub(p).addY(1D);
                                     GLRenderer.drawBoxFromPoints(v, v2,
-                                            (Helper.isEntityAnimal(o) ? 0x7700FF00 :
-                                                    Helper.isEntityMonster(o) ? 0x77FF0000 :
-                                                            Helper.isEntityPlayer(o) ? 0xFFFF5555 : 0x770000FF)
-                                                    & (isPlayer ? 0x77FFFFFF : 0x34FFFFFF));
+                                            (Helper.isEntityAnimal(o) ? 0x5600FF00 :
+                                                    Helper.isEntityMonster(o) ? 0x56FF0000 :
+                                                            Helper.isEntityPlayer(o) ? 0x77FF5555 : 0x560000FF));
                                     ++count;
                                 }
                             }
