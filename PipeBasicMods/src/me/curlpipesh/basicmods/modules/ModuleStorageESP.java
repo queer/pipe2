@@ -1,6 +1,8 @@
 package me.curlpipesh.basicmods.modules;
 
 import me.curlpipesh.pipe.Pipe;
+import me.curlpipesh.pipe.config.ColorOption;
+import me.curlpipesh.pipe.config.RangeOption;
 import me.curlpipesh.pipe.event.Listener;
 import me.curlpipesh.pipe.event.events.Render3D;
 import me.curlpipesh.pipe.plugin.Plugin;
@@ -22,6 +24,11 @@ public class ModuleStorageESP extends ToggleModule {
     private final Vec3 offset = new Vec3(0, 1.62D, 0);
     private final Vec3 half = new Vec3(0.5D, 0.5D, 0.5D);
 
+    private ColorOption colorBox = new ColorOption("colorBox", 0x00FFFF);
+    private RangeOption<Integer> opacityTracers = new RangeOption<>("opacityTracers", 0x56, 0xFF, 0x00, 0x01),
+            opacityBox = new RangeOption<>("opacityBox", 0x77, 0xFF, 0x00, 0x01);
+    private RangeOption<Float> thicknessTracers = new RangeOption<>("thicknessTracers", 2.2F, 5.0F, 1.0F, 0.1F);
+
     public ModuleStorageESP(Plugin plugin) {
         super(plugin, "Storage ESP", "Draws pretty boxes around storage things");
     }
@@ -29,6 +36,12 @@ public class ModuleStorageESP extends ToggleModule {
     @Override
     public void init() {
         setKeybind(new Keybind(Keyboard.KEY_C));
+
+        addOption(colorBox);
+        addOption(opacityTracers);
+        addOption(opacityBox);
+        addOption(thicknessTracers);
+
         Pipe.getInstance().getEventBus().register(getPlugin(), new Listener<Render3D>() {
             @Override
             @SuppressWarnings("ConstantConditions")
@@ -52,8 +65,8 @@ public class ModuleStorageESP extends ToggleModule {
                             if(v != null && v2 != null) {
                                 v.sub(p);
                                 v2.add(Vec3.unit()).sub(p);
-                                GLRenderer.drawBoxFromPoints(v, v2, 0x5600FFFF);
-                                GLRenderer.drawLine(offset, v.add(half), 0x7700FFFF, 2.235F);
+                                GLRenderer.drawBoxFromPoints(v, v2, colorBox.get() | (opacityBox.get() << 24));
+                                GLRenderer.drawLine(offset, v.add(half), colorBox.get() | (opacityTracers.get() << 24), thicknessTracers.get());
                                 ++count;
                             }
                         }

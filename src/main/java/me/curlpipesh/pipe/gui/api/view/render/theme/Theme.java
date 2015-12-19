@@ -50,11 +50,7 @@ public abstract class Theme implements ITheme {
         if(widget instanceof Container) {
             renderContainer((Container) widget);
         } else {
-            Helper.disableLightmap();
-            glDisable(GL_LIGHTING);
             ((Renderer<T>) rendererMap.get(widget.getTagValue("type"))).render(widget);
-            glEnable(GL_LIGHTING);
-            Helper.enableLightmap();
         }
     }
 

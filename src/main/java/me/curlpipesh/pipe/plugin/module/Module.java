@@ -1,7 +1,10 @@
 package me.curlpipesh.pipe.plugin.module;
 
+import me.curlpipesh.pipe.config.Option;
 import me.curlpipesh.pipe.plugin.Plugin;
 import me.curlpipesh.pipe.util.Keybind;
+
+import java.util.Collection;
 
 /**
  * The base of all modules. A module is not intended to be used in a standalone
@@ -89,4 +92,10 @@ public interface Module {
      * @param enabled Whether or not the module should be accepting events.
      */
     void setEnabled(boolean enabled);
+
+    Collection<Option<?>> getOptions();
+
+    void addOption(Option<?> option);
+
+    Option<?> getOption(String name);
 }

@@ -72,7 +72,7 @@ public class PipeTheme extends Theme {
                 container.getTitleArea().getWidth(), container.getTitleArea().getHeight(), COLOR_BACKGROUND_TITLE);
         Helper.drawString(container.getText(), (float) container.getArea().getX() + 1,
                 (float) container.getArea().getY() + (float) (container.getTitleArea().getHeight() / 2) - (Helper.getFontHeight() / 2F),
-                COLOR_TEXT_INACTIVE, false);
+                container.isState() ? COLOR_TEXT_ACTIVE : COLOR_TEXT_INACTIVE, false);
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     };
@@ -81,12 +81,12 @@ public class PipeTheme extends Theme {
         super("Pipe");
         registerRenderer("container", containerRenderer);
         registerRenderer("window", containerRenderer);
-        registerRenderer("label", widget -> Helper.drawString(widget.getText(), (float) widget.getArea().getX() + 1,
+        registerRenderer("label", widget -> Helper.drawString(widget.getText(), (float) (widget.getArea().getX() + (widget.getArea().getWidth() / 2) - (Helper.getStringWidth(widget.getText()) / 2)),
                 (float) widget.getArea().getY() + (float) (widget.getArea().getHeight() / 2) - (Helper.getFontHeight() / 2F), 0xFFFFFFFF, false));
         registerRenderer("button", widget -> {
             GLRenderer.drawRect(widget.getArea().getX(), widget.getArea().getY(), widget.getArea().getWidth(),
                     widget.getArea().getHeight(), COLOR_BACKGROUND_SLIDER);
-            Helper.drawString(widget.getText(), (float) widget.getArea().getX() + 1,
+            Helper.drawString(widget.getText(), (float) (widget.getArea().getX() + (widget.getArea().getWidth() / 2) - (Helper.getStringWidth(widget.getText()) / 2)),
                     (float) widget.getArea().getY() + (float) (widget.getArea().getHeight() / 2) - (Helper.getFontHeight() / 2F),
                     widget.isState() ? COLOR_TEXT_ACTIVE : COLOR_TEXT_INACTIVE, false);
             GL11.glColor4d(1, 1, 1, 1);
@@ -101,8 +101,7 @@ public class PipeTheme extends Theme {
                         widget.getArea().getWidth() * widget.getAmountScrolled(), widget.getArea().getHeight(),
                         COLOR_FOREGROUND_SLIDER);
                 Helper.drawString(
-                        String.format("%s: %s", widget.getText(), widget.getValue().get()),
-                        (float) widget.getArea().getX() + 1,
+                        widget.getText(), (float) (widget.getArea().getX() + (widget.getArea().getWidth() / 2) - (Helper.getStringWidth(widget.getText()) / 2)),
                         (float) widget.getArea().getY() + (float) (widget.getArea().getHeight() / 2) - (Helper.getFontHeight() / 2F),
                         widget.isMouseOver() ? COLOR_TEXT_ACTIVE : COLOR_TEXT_INACTIVE, false);
             }

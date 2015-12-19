@@ -3,13 +3,13 @@ package me.curlpipesh.pipe.config;
 import me.curlpipesh.pipe.util.Toggleable;
 
 /**
- * An extension of {@link BooleanOption} that can be toggled between states
+ * An extension of {@link BasicOption} that can be toggled between states
  * easily.
  *
  * @author c
  * @since 5/23/15
  */
-public class ToggleOption extends BooleanOption implements Toggleable {
+public class ToggleOption extends BasicOption<Boolean> implements Toggleable {
     public ToggleOption(String name, Boolean defaultValue) {
         super(name, defaultValue);
     }
@@ -28,10 +28,5 @@ public class ToggleOption extends BooleanOption implements Toggleable {
     @Override
     public void setEnabled(boolean e) {
         set(e);
-    }
-
-    @Override
-    public void set(String string) {
-        set(Boolean.valueOf(string));
     }
 }

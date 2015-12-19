@@ -2,6 +2,8 @@ package me.curlpipesh.basicmods.modules;
 
 import lombok.NonNull;
 import me.curlpipesh.pipe.Pipe;
+import me.curlpipesh.pipe.config.Option;
+import me.curlpipesh.pipe.config.RangeOption;
 import me.curlpipesh.pipe.event.Listener;
 import me.curlpipesh.pipe.event.events.Keypress;
 import me.curlpipesh.pipe.event.events.Render2D;
@@ -10,8 +12,11 @@ import me.curlpipesh.pipe.gui.api.controller.action.MouseClickAction;
 import me.curlpipesh.pipe.gui.api.controller.action.TickAction;
 import me.curlpipesh.pipe.gui.api.model.base.interfaces.IContainer;
 import me.curlpipesh.pipe.gui.api.model.base.interfaces.IWidget;
+import me.curlpipesh.pipe.gui.api.model.impl.BasicContainer;
+import me.curlpipesh.pipe.gui.api.model.impl.BasicSlider;
 import me.curlpipesh.pipe.gui.api.model.impl.BasicWidget;
 import me.curlpipesh.pipe.gui.api.model.impl.BasicWindow;
+import me.curlpipesh.pipe.gui.api.util.Tuple;
 import me.curlpipesh.pipe.gui.api.view.layout.impl.StandardLayout;
 import me.curlpipesh.pipe.gui.api.view.render.state.RenderException;
 import me.curlpipesh.pipe.gui.module.ContainerGuiModule;
@@ -24,6 +29,9 @@ import me.curlpipesh.pipe.util.Keybind;
 import me.curlpipesh.pipe.util.helpers.Helper;
 import me.curlpipesh.pipe.util.helpers.KeypressHelper;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+
+import java.awt.*;
 
 /**
  * @author audrey
@@ -56,16 +64,52 @@ public class ModuleGui extends BasicModule {
                 IContainer container = new BasicWindow(plugin.getName());
                 int counter = 0;
                 for(Module module : plugin.getProvidedModules()) {
-                    if(module instanceof ToggleModule) {
+                    IContainer optionsPane = new BasicContainer(module.getName() + " Options", new Tuple<>("minimizable", "true"));
+                    int oCounter = 0;
+                    for(Option<?> o : module.getOptions()) {
+                        if(o instanceof RangeOption) {
+                            optionsPane.addChild(new BasicSlider((RangeOption<?>) o));
+                            ++oCounter;
+                        }
+                    }
+
+                    if(oCounter > 0) {
+                        if(module instanceof ToggleModule) {
+                            optionsPane.addAction((MouseClickAction<IContainer>) (iContainer, i) -> {
+                                if(i == 0) {
+                                    if(container.getTitleArea().contains(calculateMouseLocation())) {
+                                        ((ToggleModule) module).toggle();
+                                    }
+                                }
+                            });
+                            optionsPane.addAction((TickAction<BasicContainer>) widget -> {
+                                boolean state = widget.isFocused();
+                                widget.setFocused(true);
+                                widget.setState(module.isEnabled());
+                                widget.setFocused(state);
+                            });
+                        }
+                        optionsPane.initialize();
+                        optionsPane.getMinimizeControl().setState(true);
+                        container.addChild(optionsPane);
+                    } else {
                         IWidget button = new BasicWidget("button", module.getName());
-                        button.addAction((MouseClickAction<BasicWidget>) (basicWidget, i) -> ((ToggleModule) module).toggle());
-                        button.addAction((TickAction<BasicWidget>) widget -> {
-                            boolean state = widget.isFocused();
-                            widget.setFocused(true);
-                            widget.setState(module.isEnabled());
-                            widget.setFocused(state);
-                        });
-                        container.addChild(button);
+                        if(module instanceof ToggleModule) {
+                            button.addAction((MouseClickAction<BasicWidget>) (basicWidget, i) -> {
+                                if(i == 0) {
+                                    ((ToggleModule) module).toggle();
+                                }
+                            });
+                            button.addAction((TickAction<BasicWidget>) widget -> {
+                                boolean state = widget.isFocused();
+                                widget.setFocused(true);
+                                widget.setState(module.isEnabled());
+                                widget.setFocused(state);
+                            });
+                            container.addChild(button);
+                        }
+                    }
+                    if(module instanceof ToggleModule || oCounter > 0) {
                         ++counter;
                     }
                 }
@@ -89,6 +133,7 @@ public class ModuleGui extends BasicModule {
             }
         });
         Pipe.eventBus().register(getPlugin(), new Listener<Render2D>() {
+            @SuppressWarnings("ConstantConditions")
             @Override
             public void event(final Render2D event) {
                 if(Helper.getCurrentScreen() == null) {
@@ -109,5 +154,27 @@ public class ModuleGui extends BasicModule {
     @Override
     public final boolean isStatusShown() {
         return false;
+    }
+
+    /**
+     * Returns a {@link Point} containing the current x- and
+     * y-coordinates of the mouse cursor, scaled to work with Minecraft's GUI
+     * scaling. Originally written by DarkStorm_.
+     *
+     * @return A {@link Point} containing x- and y-coordinates of the
+     *         mouse cursor.
+     */
+    private Point calculateMouseLocation() {
+        int scale = Helper.getScale();
+        if (scale == 0) {
+            scale = 1000;
+        }
+        int scaleFactor = 0;
+        while ((scaleFactor < scale) && ((Helper.getWidth() / (scaleFactor + 1)) >= 320)
+                && ((Helper.getHeight() / (scaleFactor + 1)) >= 240)) {
+            scaleFactor++;
+        }
+        return new Point(Mouse.getX() / scaleFactor, (Helper.getHeight() / scaleFactor)
+                - (Mouse.getY() / scaleFactor));
     }
 }

@@ -86,10 +86,18 @@ public class BasicWindow extends Container {
             }
         });
         setLayout(new StandardLayout());
-        addControls(
-                new Control("pin"),
-                new Control("minimize")
-        );
+        if(getTagValue("closeable").equals("true")) {
+            addControls(
+                    new Control("pin"),
+                    new Control("minimize"),
+                    new Control("close")
+            );
+        } else {
+            addControls(
+                    new Control("pin"),
+                    new Control("minimize")
+            );
+        }
     }
 
     /**

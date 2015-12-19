@@ -1,6 +1,7 @@
 package me.curlpipesh.pipe.gui.api.model.impl;
 
 import me.curlpipesh.pipe.gui.api.model.base.Container;
+import me.curlpipesh.pipe.gui.api.model.base.controls.Control;
 import me.curlpipesh.pipe.gui.api.util.Tuple;
 import me.curlpipesh.pipe.gui.api.view.layout.impl.StandardLayout;
 
@@ -25,5 +26,8 @@ public class BasicContainer extends Container {
     public BasicContainer(String text, Tuple<String, String>... tags) {
         super(text, tags);
         setLayout(new StandardLayout());
+        if(getTagValue("minimizable").equals("true")) {
+            addControl(new Control("minimize"));
+        }
     }
 }

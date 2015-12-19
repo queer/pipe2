@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.curlpipesh.pipe.bytecode.Generator;
 import me.curlpipesh.pipe.bytecode.Version;
+import me.curlpipesh.pipe.bytecode.v1_9_X.generators.HelperGenerator;
 import me.curlpipesh.pipe.command.CommandManager;
 import me.curlpipesh.pipe.event.EventBus;
 import me.curlpipesh.pipe.event.PipeEventBus;
@@ -106,7 +107,7 @@ public final class Pipe {
         pipePluginDir = new File(pipeDataDir + File.separator + "plugins");
         pipeConfigDir = new File(pipeDataDir + File.separator + "config");
         if(!pipeDataDir.exists()) {
-            if(!pipeDataDir.mkdir()) {
+            if(!pipeDataDir.mkdirs()) {
                 throw new IllegalStateException(exceptionMessage);
             } else {
                 logger.info("Created Pipe data dir!");

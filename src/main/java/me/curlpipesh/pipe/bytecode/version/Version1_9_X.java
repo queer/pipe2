@@ -22,7 +22,7 @@ public class Version1_9_X implements Version {
     @Override
     public Injector[] getInjectors() {
         return new Injector[] {
-                /*new BlockEntityInjector(ClassMap.getClassByName("BlockEntity")),
+                new BlockEntityInjector(ClassMap.getClassByName("BlockEntity")),
                 new EntityRendererInjector(ClassMap.getClassByName("EntityRenderer")),
                 //new GuiChatInjector(ClassMap.getClassByName("GuiChat")),
                 new GuiIngameInjector(ClassMap.getClassByName("GuiIngame")),
@@ -30,14 +30,14 @@ public class Version1_9_X implements Version {
                 new MinecraftInjector(ClassMap.getClassByName("Minecraft")),
                 new NetworkManagerInjector(ClassMap.getClassByName("NetworkManager")),
                 new PacketBufferInjector(ClassMap.getClassByName("PacketBuffer")),
-                new WorldProviderInjector(ClassMap.getClassByName("WorldProvider"))*/
+                new WorldProviderInjector(ClassMap.getClassByName("WorldProvider"))
         };
     }
 
     @Override
     public Generator[] getGenerators() {
         return new Generator[] {
-                //new GuiScreenGenerator()
+                new GuiScreenGenerator()
         };
     }
 

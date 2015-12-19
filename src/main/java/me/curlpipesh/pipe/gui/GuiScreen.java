@@ -2,6 +2,8 @@ package me.curlpipesh.pipe.gui;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.curlpipesh.pipe.util.helpers.Helper;
+import org.lwjgl.opengl.GL11;
 
 /**
  * This class must not be present in the final JAR. The configuration in
@@ -23,6 +25,8 @@ public final class GuiScreen {
     }
 
     public void drawScreen(int i, int j, float f) {
+        Helper.disableLightmap();
+        GL11.glDisable(GL11.GL_LIGHTING);
         currentModule.render(i, j, f);
     }
 

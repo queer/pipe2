@@ -1,5 +1,6 @@
 package me.curlpipesh.pipe.bytecode.v1_9_X.injectors;
 
+import me.curlpipesh.pipe.Pipe;
 import me.curlpipesh.pipe.bytecode.Injector;
 import me.curlpipesh.pipe.bytecode.map.MappedClass;
 import me.curlpipesh.pipe.event.events.Keypress;
@@ -28,7 +29,7 @@ public class MinecraftInjector extends Injector {
         MappedClass.MethodDef startGame = getClassToInject().getMethod("startGame").get();
         MappedClass.MethodDef runGame = getClassToInject().getMethod("runGame").get();
 
-        for(MethodNode m : (List<MethodNode>)cn.methods) {
+        for(MethodNode m : (List<MethodNode>) cn.methods) {
             if(m.name.equals(startGame.getName()) && m.desc.equals(startGame.getDesc())) {
                 InsnList list = new InsnList();
                 list.add(new MethodInsnNode(INVOKESTATIC, "me/curlpipesh/pipe/Pipe", "getInstance", "()Lme/curlpipesh/pipe/Pipe;", false));
@@ -68,30 +69,23 @@ public class MinecraftInjector extends Injector {
 
                 Iterator<AbstractInsnNode> i = m.instructions.iterator();
                 AbstractInsnNode node = null;
-                boolean merp = false; // haveWeFoundThatStupidManuallyTriggeredDebugWhateverThingThatMeansWereInTheRightPlace
                 while(i.hasNext()) {
                     AbstractInsnNode n = i.next();
-                    if(n instanceof LdcInsnNode) {
-                        if(((LdcInsnNode)n).cst.equals("Manually triggered debug crash")) {
-                            merp = true;
-                        }
-                    }
-                    if(merp) {
-                        if (n.getOpcode() == INVOKESTATIC && n.getNext().getOpcode() == IFEQ) {
-                            if(n instanceof MethodInsnNode) {
-                                MethodInsnNode m2 = (MethodInsnNode) n;
-                                if (m2.owner.equals("org/lwjgl/input/Keyboard")) {
-                                    if (m2.name.equals("getEventKeyState")) {
-                                        node = n.getNext().getNext().getNext();
-                                        break;
-                                    }
+                    if(n.getOpcode() == INVOKESTATIC) {
+                        if(n instanceof MethodInsnNode) {
+                            MethodInsnNode m2 = (MethodInsnNode) n;
+                            if(m2.owner.equals("org/lwjgl/input/Keyboard")) {
+                                if(m2.name.equals("getEventKeyState")) {
+                                    Pipe.getLogger().info("Found node!");
+                                    node = n.getNext().getNext().getNext().getNext().getNext();
+                                    break;
                                 }
                             }
                         }
                     }
                 }
                 if(node == null) {
-                    throw new IllegalStateException("IFEQ insn node was null?!");
+                    throw new IllegalStateException("Insn node was null?!");
                 }
                 m.instructions.insert(node, list);
             }

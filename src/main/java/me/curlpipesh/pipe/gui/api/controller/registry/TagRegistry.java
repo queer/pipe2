@@ -39,6 +39,12 @@ public final class TagRegistry {
         registerTag("render-focus", new String[] {
                 "true", "false"
         });
+        registerTag("closeable", new String[] {
+                "true", "false"
+        });
+        registerTag("minimizable", new String[] {
+                "true", "false"
+        });
     }
 
     /**

@@ -7,7 +7,7 @@ package me.curlpipesh.pipe.config;
  * @author c
  * @since 5/23/15
  */
-public abstract class BasicOption<T> implements Option<T> {
+public class BasicOption<T> implements Option<T> {
     private final String name;
     private T value;
 

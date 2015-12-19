@@ -21,6 +21,5 @@ public interface MouseClickAction<T extends IWidget> extends IAction<T> {
      *
      * @param component The component to be clicked.
      */
-
     void click(T component, int button);
 }

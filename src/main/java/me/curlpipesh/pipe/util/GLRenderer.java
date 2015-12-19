@@ -81,14 +81,25 @@ public class GLRenderer {
      * @param c Color of the rectangle, in 0xAARRGGBB format
      */
     public static void drawRect(double x, double y, double w, double h, int c) {
-        pre();
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        glPushMatrix();
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glDisable(GL_TEXTURE_2D);
+        glShadeModel(GL_SMOOTH);
+        glDisable(GL_ALPHA_TEST);
         tess.startDrawing(GL_QUADS).color(c)
                 .addVertex(x, y, 0)
                 .addVertex(x, y + h, 0)
                 .addVertex(x + w, y + h, 0)
                 .addVertex(x + w, y, 0)
                 .bindAndDraw();
-        post();
+        glEnable(GL_ALPHA_TEST);
+        glShadeModel(GL_FLAT);
+        glEnable(GL_TEXTURE_2D);
+        glDisable(GL_BLEND);
+        glPopMatrix();
+        glPopAttrib();
     }
 
     /**
