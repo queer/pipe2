@@ -1,7 +1,7 @@
 package me.curlpipesh.pipe.util.helpers;
 
 import me.curlpipesh.pipe.Pipe;
-import me.curlpipesh.pipe.bytecode.injectors.GuiChatInjector;
+import me.curlpipesh.pipe.bytecode.v1_8_X.injectors.GuiChatInjector;
 import me.curlpipesh.pipe.event.events.ChatMessage;
 
 import java.util.Arrays;

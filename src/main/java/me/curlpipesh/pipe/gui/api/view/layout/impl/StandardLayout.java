@@ -11,7 +11,9 @@ import me.curlpipesh.pipe.gui.api.view.layout.Layout;
  * @since 08.16.2014
  */
 public class StandardLayout extends Layout {
-    private final int widgetWidth, widgetHeight;
+    private final int widgetWidth;
+    private final int widgetHeight;
+    private final int padding;
 
     public StandardLayout() {
         this(72);
@@ -22,13 +24,18 @@ public class StandardLayout extends Layout {
     }
 
     public StandardLayout(int widgetWidth, int widgetHeight) {
+        this(widgetWidth, widgetHeight, 2);
+    }
+
+    public StandardLayout(int widgetWidth, int widgetHeight, int padding) {
         this.widgetWidth = widgetWidth;
         this.widgetHeight = widgetHeight;
+        this.padding = padding;
     }
 
     @Override
     public double getPadding() {
-        return 2;
+        return padding;
     }
 
     @Override

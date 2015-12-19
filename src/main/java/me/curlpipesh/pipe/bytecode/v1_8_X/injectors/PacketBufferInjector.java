@@ -1,4 +1,4 @@
-package me.curlpipesh.pipe.bytecode.injectors;
+package me.curlpipesh.pipe.bytecode.v1_8_X.injectors;
 
 import me.curlpipesh.pipe.bytecode.Injector;
 import me.curlpipesh.pipe.bytecode.map.MappedClass;

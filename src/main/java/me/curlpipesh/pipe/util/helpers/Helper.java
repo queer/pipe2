@@ -87,8 +87,9 @@ public class Helper {
      * Returns the width of the supplied String
      *
      * @param string The String whose width will be returned
+     *
      * @return The width of the String, as determined by Minecraft's
-     *         FontRenderer
+     * FontRenderer
      */
     public static int getStringWidth(String string) {
         return 0;
@@ -98,13 +99,14 @@ public class Helper {
      * Renders a String on the screen using Minecraft's FontRenderer
      *
      * @param string The String to render
-     * @param x The x-coordinate to render at
-     * @param y The y-coordinate to render at
-     * @param color The color to draw the String in. 0xAARRGGBB format.
+     * @param x      The x-coordinate to render at
+     * @param y      The y-coordinate to render at
+     * @param color  The color to draw the String in. 0xAARRGGBB format.
      * @param shadow Whether or not the String should have a shadow drawn
      *               underneath it
      */
-    public static void drawString(String string, float x, float y, int color, boolean shadow) {}
+    public static void drawString(String string, float x, float y, int color, boolean shadow) {
+    }
 
     /**
      * Returns the current world loaded by the game. May be null
@@ -128,6 +130,7 @@ public class Helper {
      * A {@link Vec3} representing the position of an entity in the world
      *
      * @param entity The entity whose position is needed
+     *
      * @return A Vec3 containing the entity's position
      */
     public static Vec3 getEntityVec(Object entity) {
@@ -139,6 +142,7 @@ public class Helper {
      * world
      *
      * @param entity The entity whose position is needed
+     *
      * @return A Vec3 containing the entity's position
      */
     public static Vec3 getEntityPrevVec(Object entity) {
@@ -153,7 +157,7 @@ public class Helper {
      * @return The light brightness table for the current world
      */
     public static float[] getLightBrightnessTable() {
-        return new float[] {};
+        return new float[]{};
     }
 
     /**
@@ -161,8 +165,9 @@ public class Helper {
      * EntityLiving
      *
      * @param entity The entity to check
+     *
      * @return True if the entity is an instance of EntityLiving, false
-     *         otherwise
+     * otherwise
      */
     public static boolean isEntityLiving(Object entity) {
         return false;
@@ -173,8 +178,9 @@ public class Helper {
      * EntityAnimal
      *
      * @param entity The entity to check
+     *
      * @return True if the entity is an instance of EntityAnimal, false
-     *         otherwise
+     * otherwise
      */
     public static boolean isEntityAnimal(Object entity) {
         return false;
@@ -185,8 +191,9 @@ public class Helper {
      * EntityMonster
      *
      * @param entity The entity to check
+     *
      * @return True if the entity is an instance of EntityMonster, false
-     *         otherwise
+     * otherwise
      */
     public static boolean isEntityMonster(Object entity) {
         return false;
@@ -197,8 +204,9 @@ public class Helper {
      * EntityPlayer
      *
      * @param entity The entity to check
+     *
      * @return True if the entity is an instance of EntityPlayer, false
-     *         otherwise
+     * otherwise
      */
     public static boolean isEntityPlayer(Object entity) {
         return false;
@@ -217,6 +225,7 @@ public class Helper {
      * A {@link Vec3} representing the position of a block entity in the world
      *
      * @param blockEntity The block entity whose position is needed
+     *
      * @return A Vec3 containing the block entity's position
      */
     public static Vec3 getBlockEntityVec(Object blockEntity) {
@@ -227,6 +236,7 @@ public class Helper {
      * Returns whether or not the supplied block entity is a chest
      *
      * @param blockEntity The block entity to check
+     *
      * @return True if the block entity is a chest, false otherwise
      */
     public static boolean isBlockEntityChest(Object blockEntity) {
@@ -236,33 +246,38 @@ public class Helper {
     /**
      * Enables the lightmap for 3D rendering
      */
-    public static void enableLightmap() {}
+    public static void enableLightmap() {
+    }
 
     /**
      * Disables the lightmap for 3D rendering
      */
-    public static void disableLightmap() {}
+    public static void disableLightmap() {
+    }
 
     /**
      * Adds a message to the in-game chat
      *
      * @param message The message to be added
      */
-    public static void addChatMessage(String message) {}
+    public static void addChatMessage(String message) {
+    }
 
     /**
      * Sends an in-game chat message
      *
      * @param message The message to be sent
      */
-    public static void sendChatMessage(String message) {}
+    public static void sendChatMessage(String message) {
+    }
 
     /**
      * Sends a packet to the server
      *
      * @param packet The packet to be sent. May be any valid packet.
      */
-    public static void sendPacket(Object packet) {}
+    public static void sendPacket(Object packet) {
+    }
 
     /**
      * Returns the current width of the screen
@@ -288,7 +303,8 @@ public class Helper {
      *
      * @param gui The GuiScreen to display
      */
-    public static void displayGuiScreen(GuiScreen gui) {}
+    public static void displayGuiScreen(GuiScreen gui) {
+    }
 
     /**
      * Displays a "Minecraft-native" GUI. Since this requires instantiating the
@@ -296,14 +312,16 @@ public class Helper {
      *
      * @param screen The GuiScreen to display
      */
-    public static void mc_displayGuiScreen(Object screen) {}
+    public static void mc_displayGuiScreen(Object screen) {
+    }
 
     /**
      * Displays a {@link GuiModule} on the screen.
      *
      * @param module The GuiModule to display
      */
-    public static void displayGuiModule(GuiModule module) {}
+    public static void displayGuiModule(GuiModule module) {
+    }
 
     /**
      * Returns the current scale of the game's GUI
@@ -328,7 +346,8 @@ public class Helper {
      *
      * @param state The new state of view bobbing
      */
-    public static void setViewBobbing(boolean state) {}
+    public static void setViewBobbing(boolean state) {
+    }
 
     /**
      * Returns the currently displayed GuiScreen (Minecraft GuiScreen, not the
@@ -344,8 +363,9 @@ public class Helper {
      * Returns whether or not the given entity is sneaking
      *
      * @param entity The entity to get the sneaking status of
+     *
      * @return <tt>true</tt> if the entity is sneaking, <tt>false</tt>
-     *         otherwise
+     * otherwise
      */
     public static boolean isEntitySneaking(Object entity) {
         return false;
@@ -359,7 +379,8 @@ public class Helper {
      *
      * @param message The message to be sent
      */
-    static void _sendChatMessage(String message) {}
+    static void _sendChatMessage(String message) {
+    }
 
     /**
      * Returns the <tt>Container</tt> object representing the player's
@@ -375,7 +396,8 @@ public class Helper {
      * Returns the ItemStack in the given slot
      *
      * @param player unused
-     * @param slot The slot to get the ItemStack from
+     * @param slot   The slot to get the ItemStack from
+     *
      * @return The ItemStack in the slot at the given index
      */
     public static Object getStackInSlot(Object player, int slot) {
@@ -398,6 +420,15 @@ public class Helper {
      * @return The Minecraft data directory
      */
     public static File getMinecraftDataDir() {
+        return null;
+    }
+
+    /**
+     * Returns the version of Minecraft that was launched
+     *
+     * @return The version of Minecraft that was launched
+     */
+    public static String getMinecraftVersion() {
         return null;
     }
 }

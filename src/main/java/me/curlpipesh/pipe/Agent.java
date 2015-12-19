@@ -3,19 +3,26 @@ package me.curlpipesh.pipe;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import me.curlpipesh.pipe.bytecode.definers.HelperRedefiner;
-import me.curlpipesh.pipe.bytecode.injectors.*;
+import me.curlpipesh.pipe.bytecode.Injector;
+import me.curlpipesh.pipe.bytecode.Redefiner;
+import me.curlpipesh.pipe.bytecode.Version;
 import me.curlpipesh.pipe.bytecode.map.ClassMap;
 import me.curlpipesh.pipe.bytecode.map.MappedClass;
+import me.curlpipesh.pipe.bytecode.version.Version1_8_X;
+import me.curlpipesh.pipe.bytecode.version.Version1_9_X;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.instrument.ClassDefinition;
 import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A reimplementation of the <a href="https://github.com/curlpipesh/pipe/">Pipe</a>
@@ -26,11 +33,29 @@ import java.util.ArrayList;
  * @since 7/10/15
  */
 public class Agent {
+    private static final Map<String, Version> versions = new HashMap<>();
+
+    static {
+        versions.put("1_8_X", new Version1_8_X());
+        versions.put("1.8.X", new Version1_8_X());
+        versions.put("1_9_X", new Version1_9_X());
+        versions.put("1.9.X", new Version1_9_X());
+    }
+
     public static void premain(String agentArgs, Instrumentation inst) {
         String propertyMappings = System.getProperty("pipe.mappings.path", "null");
+        String propertyVersion = System.getProperty("pipe.game.version", "null");
+        Pipe.getLogger().info("Using mappings '" + propertyMappings + "' for game version '" + propertyVersion + "'");
         if(propertyMappings.equals("null")) {
             throw new IllegalArgumentException("No mappings path passed! Restart with -Dpipe.mappings.path=/path/to/mapping.json");
         }
+        if(propertyVersion.equals("null")) {
+            throw new IllegalArgumentException("No version passed! Restart with -Dpipe.game.version=MAJOR_MINOR_X (Ex. 1_8_X)");
+        }
+        if(!versions.containsKey(propertyVersion)) {
+            throw new IllegalArgumentException("Invalid version passed!");
+        }
+        Pipe.getInstance().setVersion(versions.get(propertyVersion));
 
         Pipe.getLogger().info("Reading class mappings!");
 
@@ -44,19 +69,17 @@ public class Agent {
         }
 
         Pipe.getLogger().info("Adding transformers!");
-        inst.addTransformer(new BlockEntityInjector(ClassMap.getClassByName("BlockEntity")));
-        inst.addTransformer(new EntityRendererInjector(ClassMap.getClassByName("EntityRenderer")));
-        //inst.addTransformer(new GuiChatInjector(ClassMap.getClassByName("GuiChat")));
-        inst.addTransformer(new GuiIngameInjector(ClassMap.getClassByName("GuiIngame")));
-        //inst.addTransformer(new GuiMainMenuInjector(ClassMap.getClassByName("GuiMainMenu")));
-        inst.addTransformer(new MinecraftInjector(ClassMap.getClassByName("Minecraft")));
-        inst.addTransformer(new NetworkManagerInjector(ClassMap.getClassByName("NetworkManager")));
-        inst.addTransformer(new PacketBufferInjector(ClassMap.getClassByName("PacketBuffer")));
-        inst.addTransformer(new WorldProviderInjector(ClassMap.getClassByName("WorldProvider")));
+
+        for(Injector injector : Pipe.getInstance().getVersion().getInjectors()) {
+            inst.addTransformer(injector);
+        }
 
         Pipe.getLogger().info("Attempting to redefine classes!");
         try {
-            inst.redefineClasses(new HelperRedefiner().redefine());
+            //inst.redefineClasses(Arrays.stream(Pipe.getInstance().getVersion().getRedefiners()).map(Redefiner::redefine).toArray(ClassDefinition[]::new));
+            for(Redefiner r : Pipe.getInstance().getVersion().getRedefiners()) {
+                inst.redefineClasses(r.redefine());
+            }
         } catch(ClassNotFoundException | UnmodifiableClassException e) {
             Pipe.getLogger().severe("Class redefinition failed! Not much you can do about this one.");
             e.printStackTrace();

@@ -5,6 +5,7 @@ import me.curlpipesh.pipe.gui.api.model.base.interfaces.IContainer;
 import me.curlpipesh.pipe.gui.api.model.base.interfaces.IWidget;
 import me.curlpipesh.pipe.gui.api.view.render.Renderer;
 import me.curlpipesh.pipe.gui.api.view.render.state.RenderException;
+import me.curlpipesh.pipe.util.helpers.Helper;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -47,18 +48,22 @@ public abstract class Theme implements ITheme {
     @SuppressWarnings("unchecked")
     public <T extends IWidget> void render(T widget) throws RenderException {
         if(widget instanceof Container) {
-            renderContainer((Container)widget);
+            renderContainer((Container) widget);
         } else {
-            ((Renderer<T>)rendererMap.get(widget.getTagValue("type"))).render(widget);
+            Helper.disableLightmap();
+            glDisable(GL_LIGHTING);
+            ((Renderer<T>) rendererMap.get(widget.getTagValue("type"))).render(widget);
+            glEnable(GL_LIGHTING);
+            Helper.enableLightmap();
         }
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <T extends IContainer> void renderContainer(T container) throws RenderException {
-        ((Renderer<T>)rendererMap.get(container.getTagValue("type"))).render(container);
+        ((Renderer<T>) rendererMap.get(container.getTagValue("type"))).render(container);
         if(container.getMinimizeControl() != null) {
-            if (container.getMinimizeControl().getState()) {
+            if(container.getMinimizeControl().getState()) {
                 return;
             }
         }
@@ -71,7 +76,7 @@ public abstract class Theme implements ITheme {
             container.getChildren().stream().sequential().forEach(widget -> {
                 try {
                     render(widget);
-                } catch (RenderException e) {
+                } catch(RenderException e) {
                     e.printStackTrace();
                 }
             });

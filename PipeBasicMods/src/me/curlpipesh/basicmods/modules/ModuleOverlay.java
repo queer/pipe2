@@ -42,11 +42,12 @@ public class ModuleOverlay extends BasicModule {
         });
         Pipe.eventBus().register(getPlugin(), new Listener<Render2D>() {
             @Override
+            @SuppressWarnings("ConstantConditions")
             public void event(Render2D render2D) {
                 if(Helper.isIngameGuiInDebugMode() || !enabled) {
                     return;
                 }
-                final String statusLine = "Pipe";
+                final String statusLine = "MC " + Helper.getMinecraftVersion();
                 final List<String> enabledModules = new ArrayList<>();
                 final List<Plugin> plugins = Pipe.getInstance().getPluginManager().getPlugins();
                 for(@NonNull Plugin plugin : plugins) {

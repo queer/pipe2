@@ -2,9 +2,11 @@ package me.curlpipesh.pipe;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import me.curlpipesh.pipe.bytecode.generators.GuiScreenGenerator;
+import me.curlpipesh.pipe.bytecode.Generator;
+import me.curlpipesh.pipe.bytecode.Version;
 import me.curlpipesh.pipe.command.CommandManager;
 import me.curlpipesh.pipe.event.EventBus;
 import me.curlpipesh.pipe.event.PipeEventBus;
@@ -68,6 +70,10 @@ public final class Pipe {
     @Getter
     private final Gson gson;
 
+    @Getter
+    @Setter(AccessLevel.PACKAGE)
+    private Version version;
+
     private Pipe() {
         pluginManager = new PluginManager(this);
         gson = new GsonBuilder()
@@ -83,13 +89,10 @@ public final class Pipe {
         logger.info("Starting up Pipe...");
         setupDirectories();
         pluginManager.init();
-        setupChatInterceptor();
-        Agent.defineClass(Pipe.class.getClassLoader(), GuiScreenGenerator.generate(), "me.curlpipesh.pipe.gui.GuiScreen");
+        for(Generator generator : version.getGenerators()) {
+            Agent.defineClass(Pipe.class.getClassLoader(), generator.generate(), generator.getClassName());
+        }
         eventBus.push(new ModFinishedLoading());
-    }
-
-    public void setupChatInterceptor() {
-
     }
 
     /**

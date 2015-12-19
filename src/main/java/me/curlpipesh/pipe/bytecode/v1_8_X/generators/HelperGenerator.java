@@ -1,4 +1,4 @@
-package me.curlpipesh.pipe.bytecode.generators;
+package me.curlpipesh.pipe.bytecode.v1_8_X.generators;
 
 import me.curlpipesh.pipe.bytecode.map.MappedClass;
 import me.curlpipesh.pipe.util.helpers.Helper;
@@ -616,6 +616,16 @@ public class HelperGenerator {
             mv.visitMethodInsn(INVOKESTATIC, "Lme/curlpipesh/pipe/util/helpers/Helper;", "getMinecraft", "()Ljava/lang/Object;", false);
             mv.visitTypeInsn(CHECKCAST, minecraft.getObfuscatedName());
             mv.visitFieldInsn(GETFIELD, minecraft.getDescription(), minecraft.getFields().get("mcDataDir"), "Ljava/io/File;");
+            mv.visitInsn(ARETURN);
+            mv.visitMaxs(1, 0);
+            mv.visitEnd();
+        }
+        {
+            mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "getMinecraftVersion", "()Ljava/lang/String;", null, null);
+            mv.visitCode();
+            mv.visitMethodInsn(INVOKESTATIC, "Lme/curlpipesh/pipe/util/helpers/Helper;", "getMinecraft", "()Ljava/lang/Object;", false);
+            mv.visitTypeInsn(CHECKCAST, minecraft.getObfuscatedName());
+            mv.visitMethodInsn(INVOKEVIRTUAL, minecraft.getObfuscatedName(), minecraft.getMethod("getVersion").get().getName(), minecraft.getMethod("getVersion").get().getDesc(), false);
             mv.visitInsn(ARETURN);
             mv.visitMaxs(1, 0);
             mv.visitEnd();

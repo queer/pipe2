@@ -1,5 +1,6 @@
-package me.curlpipesh.pipe.bytecode.generators;
+package me.curlpipesh.pipe.bytecode.v1_8_X.generators;
 
+import me.curlpipesh.pipe.bytecode.Generator;
 import org.objectweb.asm.*;
 
 import static me.curlpipesh.pipe.bytecode.map.ClassMap.getClassByName;
@@ -16,8 +17,8 @@ import static org.objectweb.asm.Opcodes.*;
  * @since 5/24/15
  */
 @SuppressWarnings({"unused", "Duplicates"})
-public class GuiScreenGenerator {
-    public static byte[] generate() {
+public class GuiScreenGenerator implements Generator {
+    public byte[] generate() {
 
         ClassWriter cw = new ClassWriter(0);
         FieldVisitor fv;
@@ -395,5 +396,10 @@ public class GuiScreenGenerator {
         cw.visitEnd();
 
         return cw.toByteArray();
+    }
+
+    @Override
+    public String getClassName() {
+        return "me.curlpipesh.pipe.gui.GuiScreen";
     }
 }

@@ -1,8 +1,7 @@
-package me.curlpipesh.pipe.bytecode.definers;
+package me.curlpipesh.pipe.bytecode.v1_8_X.definers;
 
-import me.curlpipesh.pipe.Pipe;
 import me.curlpipesh.pipe.bytecode.Redefiner;
-import me.curlpipesh.pipe.bytecode.generators.HelperGenerator;
+import me.curlpipesh.pipe.bytecode.v1_8_X.generators.HelperGenerator;
 import me.curlpipesh.pipe.util.helpers.Helper;
 
 import java.lang.instrument.ClassDefinition;
@@ -16,7 +15,6 @@ import java.lang.instrument.ClassDefinition;
 public class HelperRedefiner implements Redefiner {
     @Override
     public ClassDefinition redefine() {
-        Pipe.getLogger().info("Redefining Helper!");
         return new ClassDefinition(Helper.class, HelperGenerator.generate());
     }
 }

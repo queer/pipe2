@@ -17,6 +17,14 @@ import org.lwjgl.opengl.GL11;
  * @since 5/25/15
  */
 public class PipeTheme extends Theme {
+
+    private final int COLOR_BACKGROUND_TITLE = 0xFF2F3237;
+    private final int COLOR_BACKGROUND_COMPONENT = 0xFF35383E;
+    private final int COLOR_TEXT_ACTIVE = 0xFFFB5162;
+    private final int COLOR_TEXT_INACTIVE = 0xFFDCDCDC;
+    private final int COLOR_FOREGROUND_SLIDER = 0xFF0E75DE;
+    private final int COLOR_BACKGROUND_SLIDER = 0xFF2F3237;
+
     /**
      * Renderer for both containers and windows, hence why it is a
      * <tt>private final</tt> field instead of a local variable.
@@ -25,14 +33,14 @@ public class PipeTheme extends Theme {
     private final Renderer<IContainer> containerRenderer = container -> {
         // The area where components will be placed
         GLRenderer.drawRect(container.getComponentArea().getX(), container.getComponentArea().getY(),
-                container.getComponentArea().getWidth(), container.getComponentArea().getHeight(), 0x77000000);
+                container.getComponentArea().getWidth(), container.getComponentArea().getHeight(), COLOR_BACKGROUND_COMPONENT);
         // Controls
         for(IControl control : container.getControls()) {
             int color = 0xFFFFFFFF;
             String letter = "?";
             switch(control.getType()) {
                 case "minimize":
-                    color = control.getState() || container.isMouseOver() ? 0x77777777 : 0x77444444;
+                    color = control.getState() ? 0x77777777 : 0x77444444;
                     letter = control.getState() ? "+" : "-";
                     break;
                 case "pin":
@@ -51,7 +59,8 @@ public class PipeTheme extends Theme {
             GL11.glColor4d(1, 1, 1, 1);
             // Control indicator character
             Helper.drawString(letter, (float) control.getArea().getX() + (float) control.getArea().getWidth() / 4,
-                    (float) control.getArea().getY() + (float) control.getArea().getHeight() / 4 - 1, 0xFFFFFFFF, false);
+                    (float) control.getArea().getY() + (float) control.getArea().getHeight() / 4 - 1,
+                    control.getState() ? COLOR_TEXT_ACTIVE : COLOR_TEXT_INACTIVE, false);
         }
         GL11.glColor4d(1, 1, 1, 1);
         // Title
@@ -60,9 +69,10 @@ public class PipeTheme extends Theme {
         GLRenderer.scissor(container.getTitleArea().getX(), container.getTitleArea().getY(),
                 container.getTitleArea().getWidth(), container.getTitleArea().getHeight());
         GLRenderer.drawRect(container.getTitleArea().getX(), container.getTitleArea().getY(),
-                container.getTitleArea().getWidth(), container.getTitleArea().getHeight(), 0x77000000);
-        Helper.drawString(container.getText(), (float) container.getArea().getX() + 0.5F,
-                (float) container.getArea().getY() + 0.5F, 0xFFFFFFFF, false);
+                container.getTitleArea().getWidth(), container.getTitleArea().getHeight(), COLOR_BACKGROUND_TITLE);
+        Helper.drawString(container.getText(), (float) container.getArea().getX() + 1,
+                (float) container.getArea().getY() + (float) (container.getTitleArea().getHeight() / 2) - (Helper.getFontHeight() / 2F),
+                COLOR_TEXT_INACTIVE, false);
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     };
@@ -71,27 +81,30 @@ public class PipeTheme extends Theme {
         super("Pipe");
         registerRenderer("container", containerRenderer);
         registerRenderer("window", containerRenderer);
-        registerRenderer("label", widget -> Helper.drawString(widget.getText(), (float) widget.getArea().getX() + 0.5F,
-                (float) widget.getArea().getY() + 0.5F, 0xFFFFFFFF, false));
+        registerRenderer("label", widget -> Helper.drawString(widget.getText(), (float) widget.getArea().getX() + 1,
+                (float) widget.getArea().getY() + (float) (widget.getArea().getHeight() / 2) - (Helper.getFontHeight() / 2F), 0xFFFFFFFF, false));
         registerRenderer("button", widget -> {
             GLRenderer.drawRect(widget.getArea().getX(), widget.getArea().getY(), widget.getArea().getWidth(),
-                    widget.getArea().getHeight(), 0x34FFFFFF);
-            Helper.drawString(widget.getText(), (float) widget.getArea().getX() + 0.5F,
-                    (float) widget.getArea().getY() + 0.5F,
-                    widget.isFocused() ? 0xFF00FF00 : widget.isState() ? 0xFF00CC00 : 0xFFFFFFFF, false);
+                    widget.getArea().getHeight(), COLOR_BACKGROUND_SLIDER);
+            Helper.drawString(widget.getText(), (float) widget.getArea().getX() + 1,
+                    (float) widget.getArea().getY() + (float) (widget.getArea().getHeight() / 2) - (Helper.getFontHeight() / 2F),
+                    widget.isState() ? COLOR_TEXT_ACTIVE : COLOR_TEXT_INACTIVE, false);
+            GL11.glColor4d(1, 1, 1, 1);
         });
         //noinspection Convert2Lambda
         registerRenderer("slider", new Renderer<BasicSlider>() {
             @Override
             public void render(final BasicSlider widget) throws RenderException {
                 GLRenderer.drawRect(widget.getArea().getX(), widget.getArea().getY(), widget.getArea().getWidth(),
-                        widget.getArea().getHeight(), 0x34FFFFFF);
+                        widget.getArea().getHeight(), COLOR_BACKGROUND_SLIDER);
                 GLRenderer.drawRect(widget.getArea().getX(), widget.getArea().getY(),
                         widget.getArea().getWidth() * widget.getAmountScrolled(), widget.getArea().getHeight(),
-                        0x34770000);
+                        COLOR_FOREGROUND_SLIDER);
                 Helper.drawString(
                         String.format("%s: %s", widget.getText(), widget.getValue().get()),
-                        (float) widget.getArea().getX() + 0.5F, (float) widget.getArea().getY() + 0.5F, 0xFFFFFFFF, false);
+                        (float) widget.getArea().getX() + 1,
+                        (float) widget.getArea().getY() + (float) (widget.getArea().getHeight() / 2) - (Helper.getFontHeight() / 2F),
+                        widget.isMouseOver() ? COLOR_TEXT_ACTIVE : COLOR_TEXT_INACTIVE, false);
             }
         });
     }
