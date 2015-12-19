@@ -13,6 +13,5 @@ public class BasicMods extends BasicPlugin {
         registerModule(new ModuleTracers(this));
         registerModule(new ModuleOverlay(this));
         registerModule(new ModuleBrightness(this));
-        registerModule(new ModuleGui(this));
     }
 }
