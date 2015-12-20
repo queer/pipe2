@@ -106,4 +106,6 @@ public interface Plugin extends Loadable, Toggleable {
      * @return All commands that this plugin has registered
      */
     List<Command> getRegisteredCommands();
+
+    Command getCommand(String name);
 }

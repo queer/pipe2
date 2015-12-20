@@ -16,9 +16,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class PipeEventBus implements EventBus {
     private final Map<Plugin, List<Listener<?>>> listeners = new ConcurrentHashMap<>();
+    private final List<Listener<?>> directListeners = new CopyOnWriteArrayList<>();
 
     @Override
-    public void register(@NonNull Plugin plugin, @NonNull Listener<?> listener) {
+    public void register(Plugin plugin, @NonNull Listener<?> listener) {
         if(!listeners.containsKey(plugin)) {
             listeners.put(plugin, new CopyOnWriteArrayList<>());
         }
@@ -48,11 +49,22 @@ public class PipeEventBus implements EventBus {
         listeners.entrySet().stream()
                 .forEach(l -> l.getValue().stream().filter(i -> i.getType().equals(event.getClass()))
                         .forEach(i -> ((Listener<T>) i).event(event)));
+        directListeners.stream().filter(l -> l.getType().equals(event.getClass())).forEach(l -> ((Listener<T>) l).event(event));
         return event;
+    }
+
+    /**
+     * Intended for internal use only.
+     * @param listener
+     */
+    @Deprecated
+    public void addDirectListener(Listener<?> listener) {
+        directListeners.add(listener);
     }
 
     @Override
     public void clear() {
         listeners.clear();
+        directListeners.clear();
     }
 }

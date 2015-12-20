@@ -7,7 +7,7 @@ package me.curlpipesh.pipe.config;
  * @author c
  * @since 5/23/15
  */
-public class BasicOption<T> implements Option<T> {
+public abstract class BasicOption<T> implements Option<T> {
     private final String name;
     private T value;
 
@@ -27,5 +27,10 @@ public class BasicOption<T> implements Option<T> {
 
     public void set(T t) {
         value = t;
+    }
+
+    @Override
+    public String toString() {
+        return "" + value;
     }
 }

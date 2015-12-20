@@ -15,10 +15,12 @@ public class ToggleOption extends BasicOption<Boolean> implements Toggleable {
     }
 
     @Override
-    public void onEnable() {}
+    public void onEnable() {
+    }
 
     @Override
-    public void onDisable() {}
+    public void onDisable() {
+    }
 
     @Override
     public boolean isEnabled() {
@@ -28,5 +30,16 @@ public class ToggleOption extends BasicOption<Boolean> implements Toggleable {
     @Override
     public void setEnabled(boolean e) {
         set(e);
+    }
+
+
+    @Override
+    public void set(String string) {
+        set(Boolean.valueOf(string));
+    }
+
+    @Override
+    public String toString() {
+        return Boolean.toString(get());
     }
 }

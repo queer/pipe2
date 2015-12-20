@@ -1,19 +1,19 @@
 package me.curlpipesh.pipe.command;
 
 import lombok.Data;
+import lombok.NonNull;
 
 /**
  * @author audrey
  * @since 10/8/15.
  */
 @Data
-public abstract class Command {
+public class Command {
     private final String name;
-    private final String description;
+    private String description = "No description given!";
     private CommandExecutor executor;
 
-    public Command(String name, String description) {
+    public Command(@NonNull String name) {
         this.name = name;
-        this.description = description;
     }
 }

@@ -61,7 +61,7 @@ public abstract class BasicModule implements Module {
         if(optional.isPresent()) {
             return optional.get();
         } else {
-            throw new IllegalArgumentException("Couldn't find option with name '" + plugin.getName() + "." + this.name + "." + name + "'.");
+            return null;
         }
     }
 }

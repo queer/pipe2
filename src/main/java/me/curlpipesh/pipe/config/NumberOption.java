@@ -28,4 +28,16 @@ public abstract class NumberOption<T extends Number> extends BasicOption<T> {
      * @return The type of number that this <tt>Option</tt> holds
      */
     public abstract Class<T> getNumberType();
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        if(getNumberType().equals(Double.class) || getNumberType().equals(Float.class)) {
+            sb.append(String.format("%.2f", get().doubleValue()));
+        } else {
+            sb.append(String.format("%d / %s / %s", get().intValue(), Integer.toHexString(get().intValue()), Integer.toOctalString(get().intValue())));
+        }
+
+        return sb.toString().trim();
+    }
 }

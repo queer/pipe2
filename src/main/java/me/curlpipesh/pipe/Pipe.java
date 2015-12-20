@@ -7,8 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import me.curlpipesh.pipe.bytecode.Generator;
 import me.curlpipesh.pipe.bytecode.Version;
-import me.curlpipesh.pipe.bytecode.v1_9_X.generators.HelperGenerator;
 import me.curlpipesh.pipe.command.CommandManager;
+import me.curlpipesh.pipe.command.PipeCommandManager;
 import me.curlpipesh.pipe.event.EventBus;
 import me.curlpipesh.pipe.event.PipeEventBus;
 import me.curlpipesh.pipe.event.events.ModFinishedLoading;
@@ -43,6 +43,28 @@ public final class Pipe {
      */
     private static final Pipe instance = new Pipe();
 
+    static {
+        logger.setUseParentHandlers(false);
+        logger.addHandler(new Handler() {
+            @Override
+            public void publish(LogRecord logRecord) {
+                System.out.println(String.format("[Pipe] [%s] %s", logRecord.getLevel().getName(), logRecord.getMessage()));
+            }
+
+            @Override
+            public void flush() {
+            }
+
+            @Override
+            public void close() throws SecurityException {
+            }
+        });
+    }
+
+    @Getter
+    private final PluginManager pluginManager;
+    @Getter
+    private final Gson gson;
     /**
      * The {@link EventBus} that will be used by the client. Defaults to being
      * an instance of {@link PipeEventBus}.
@@ -50,27 +72,16 @@ public final class Pipe {
     @Getter
     @Setter
     private EventBus eventBus = new PipeEventBus();
-
     @Getter
     private File pipeDataDir;
-
     // TODO Better way to reference the two directories below?
     @Getter
     private File pipePluginDir;
-
     @Getter
     private File pipeConfigDir;
-
     @Getter
     @Setter
     private CommandManager commandManager;
-
-    @Getter
-    private final PluginManager pluginManager;
-
-    @Getter
-    private final Gson gson;
-
     @Getter
     @Setter(AccessLevel.PACKAGE)
     private Version version;
@@ -89,11 +100,17 @@ public final class Pipe {
     public void init() {
         logger.info("Starting up Pipe...");
         setupDirectories();
+        setupCommandManager();
         pluginManager.init();
         for(Generator generator : version.getGenerators()) {
             Agent.defineClass(Pipe.class.getClassLoader(), generator.generate(), generator.getClassName());
         }
         eventBus.push(new ModFinishedLoading());
+    }
+
+    private void setupCommandManager() {
+        commandManager = new PipeCommandManager();
+        commandManager.init();
     }
 
     /**
@@ -200,23 +217,5 @@ public final class Pipe {
      */
     public static Gson gson() {
         return getInstance().getGson();
-    }
-
-    static {
-        logger.setUseParentHandlers(false);
-        logger.addHandler(new Handler() {
-            @Override
-            public void publish(LogRecord logRecord) {
-                System.out.println(String.format("[Pipe] [%s] %s", logRecord.getLevel().getName(), logRecord.getMessage()));
-            }
-
-            @Override
-            public void flush() {
-            }
-
-            @Override
-            public void close() throws SecurityException {
-            }
-        });
     }
 }

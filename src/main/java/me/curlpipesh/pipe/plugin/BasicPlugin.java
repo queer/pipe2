@@ -95,4 +95,13 @@ public abstract class BasicPlugin implements Plugin {
     public final void finishEnabling() {
         providedModules.forEach(Module::init);
     }
+
+    public final Command getCommand(String name) {
+        for(Command command : registeredCommands) {
+            if(command.getName().equals(name)) {
+                return command;
+            }
+        }
+        return null;
+    }
 }

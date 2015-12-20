@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import me.curlpipesh.pipe.Pipe;
 import me.curlpipesh.pipe.bytecode.ClassEnumerator;
+import me.curlpipesh.pipe.command.Command;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -118,6 +119,8 @@ public class PluginManager {
                 p.onEnable();
                 p.finishEnabling();
                 p.setEnabled(true);
+                p.getProvidedModules().forEach(m -> Pipe.getInstance().getCommandManager()
+                        .registerCommand(p, new Command(m.getName().toLowerCase().replaceAll("\\s+", ""))));
                 Pipe.getLogger().info("Enabled plugin: " + p.getName());
             } catch(Exception e) {
                 Pipe.getLogger().warning("Error enabling plugin (" + p.getClass().getName() + "):");

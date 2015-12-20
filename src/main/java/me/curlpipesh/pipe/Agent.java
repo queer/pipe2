@@ -13,14 +13,12 @@ import me.curlpipesh.pipe.bytecode.version.Version1_9_X;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.instrument.ClassDefinition;
 import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,7 +74,6 @@ public class Agent {
 
         Pipe.getLogger().info("Attempting to redefine classes!");
         try {
-            //inst.redefineClasses(Arrays.stream(Pipe.getInstance().getVersion().getRedefiners()).map(Redefiner::redefine).toArray(ClassDefinition[]::new));
             for(Redefiner r : Pipe.getInstance().getVersion().getRedefiners()) {
                 inst.redefineClasses(r.redefine());
             }

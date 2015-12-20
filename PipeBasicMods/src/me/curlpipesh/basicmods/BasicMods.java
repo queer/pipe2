@@ -1,6 +1,9 @@
 package me.curlpipesh.basicmods;
 
-import me.curlpipesh.basicmods.modules.*;
+import me.curlpipesh.basicmods.modules.ModuleBrightness;
+import me.curlpipesh.basicmods.modules.ModuleOverlay;
+import me.curlpipesh.basicmods.modules.ModuleStorageESP;
+import me.curlpipesh.basicmods.modules.ModuleTracers;
 import me.curlpipesh.pipe.plugin.BasicPlugin;
 
 /**
