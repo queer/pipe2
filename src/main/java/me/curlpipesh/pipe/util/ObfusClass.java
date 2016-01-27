@@ -36,13 +36,13 @@ public class ObfusClass {
      * @param name The name of the class
      * @param obfName The obfuscated name of the class
      */
-    public ObfusClass(String name, String obfName) {
-        this.realName = name;
+    public ObfusClass(final String name, final String obfName) {
+        realName = name;
         this.name = obfName;
-        this.desc = "L" + obfName + ";";
+        desc = 'L' + obfName + ';';
         try {
             clazz = Class.forName(obfName);
-        } catch(ClassNotFoundException e) {
+        } catch(final ClassNotFoundException e) {
             throw new IllegalArgumentException("You asked me to find a class named \"" + obfName + "\", but the " +
                     "JVM is telling me that there's no class with that name.");
         }

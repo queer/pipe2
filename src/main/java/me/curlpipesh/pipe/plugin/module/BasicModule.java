@@ -16,9 +16,12 @@ import java.util.Optional;
  * @author c
  * @since 7/12/15
  */
+@SuppressWarnings("FieldMayBeFinal")
 public abstract class BasicModule implements Module {
     @Getter
-    private final String name, description;
+    private final String name;
+    @Getter
+    private final String description;
 
     @Getter
     @Setter
@@ -26,7 +29,7 @@ public abstract class BasicModule implements Module {
 
     @Getter
     @Setter
-    private Keybind keybind = null;
+    private Keybind keybind;
 
     @Getter
     private final Plugin plugin;
@@ -34,7 +37,7 @@ public abstract class BasicModule implements Module {
     @Getter
     private final Collection<Option<?>> options = new HashSet<>();
 
-    public BasicModule(@NonNull Plugin plugin, @NonNull String name, @NonNull String description) {
+    public BasicModule(@NonNull final Plugin plugin, @NonNull final String name, @NonNull final String description) {
         this.name = name;
         this.description = description;
         this.plugin = plugin;
@@ -46,18 +49,18 @@ public abstract class BasicModule implements Module {
     }
 
     @Override
-    public void setEnabled(boolean enabled) {}
+    public void setEnabled(final boolean enabled) {}
 
     @Override
     public void addOption(final Option<?> option) {
         if(!options.add(option)) {
-            Pipe.getLogger().warning("Couldn't add '" + plugin.getName() + "." + name + "." + option.name() + "'.");
+            Pipe.getLogger().warning("Couldn't add '" + plugin.getName() + '.' + name + '.' + option.name() + "'.");
         }
     }
 
     @Override
     public Option<?> getOption(final String name) {
-        Optional<Option<?>> optional = options.stream().filter(o -> o.name().equalsIgnoreCase(name)).findFirst();
+        final Optional<Option<?>> optional = options.stream().filter(o -> o.name().equalsIgnoreCase(name)).findFirst();
         if(optional.isPresent()) {
             return optional.get();
         } else {

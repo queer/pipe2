@@ -2,6 +2,7 @@ package me.curlpipesh.pipe.bytecode.v1_9_X.injectors;
 
 import me.curlpipesh.pipe.bytecode.Injector;
 import me.curlpipesh.pipe.bytecode.map.MappedClass;
+import me.curlpipesh.pipe.bytecode.map.MappedClass.MethodDef;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.*;
 
@@ -19,13 +20,13 @@ public class PacketBufferInjector extends Injector {
     @Override
     @SuppressWarnings("unchecked")
     protected void inject(final ClassReader classReader, final ClassNode classNode) {
-        MappedClass.MethodDef readStringFromBuffer = getClassToInject().getMethod("readStringFromBuffer").get();
+        final MethodDef readStringFromBuffer = getClassToInject().getMethod("readStringFromBuffer").get();
         ((List<MethodNode>) classNode.methods).stream()
                 .filter(m -> m.name.equals(readStringFromBuffer.getName()) &&
                         m.desc.contains(readStringFromBuffer.getDesc()))
                 .forEach(m -> {
                     //Pipe.getLogger().info("Found PacketBuffer#readStringFromBuffer():" + m.name + " : " + m.desc);
-                    InsnList list = new InsnList();
+                    final InsnList list = new InsnList();
                     list.add(new MethodInsnNode(INVOKESTATIC,
                             "me/curlpipesh/pipe/Pipe", "getInstance", "()Lme/curlpipesh/pipe/Pipe;", false));
                     list.add(new MethodInsnNode(INVOKEVIRTUAL, "me/curlpipesh/pipe/Pipe", "getEventBus", "()Lme/curlpipesh/pipe/event/EventBus;", false));

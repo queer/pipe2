@@ -24,14 +24,14 @@ public class GuiMainMenuInjector extends Injector {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected void inject(ClassReader classReader, ClassNode classNode) {
-        for(MethodNode m : (List<MethodNode>)classNode.methods) {
+    protected void inject(final ClassReader classReader, final ClassNode classNode) {
+        for(final MethodNode m : (List<MethodNode>)classNode.methods) {
             if(m.name.equals("a") && m.desc.equals("(IIF)V")) {
-                Iterator<AbstractInsnNode> i = m.instructions.iterator();
+                final Iterator<AbstractInsnNode> i = m.instructions.iterator();
                 while(i.hasNext()) {
-                    AbstractInsnNode insn = i.next();
+                    final AbstractInsnNode insn = i.next();
                     if(insn instanceof LdcInsnNode) {
-                        LdcInsnNode ldc = (LdcInsnNode) insn;
+                        final LdcInsnNode ldc = (LdcInsnNode) insn;
                         if(ldc.cst instanceof String) {
                             String cst = (String) ldc.cst;
                             if(cst.contains("Minecraft")) {

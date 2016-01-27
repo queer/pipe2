@@ -7,14 +7,17 @@ import static org.objectweb.asm.Opcodes.*;
  * @since 4/30/15
  */
 @SuppressWarnings("unused")
-public class AccessHelper {
+public final class AccessHelper {
+    private AccessHelper() {
+    }
+
     /**
      * Tells whether a given access modifier is public
      *
      * @param mod The access modifier to check
      * @return True if the access modifier is public, false otherwise
      */
-    public static boolean isPublic(int mod) {
+    public static boolean isPublic(final int mod) {
         return (mod & ACC_PUBLIC) != 0;
     }
 
@@ -24,7 +27,7 @@ public class AccessHelper {
      * @param mod The access modifier to check
      * @return True if the access modifier is protected, false otherwise
      */
-    public static boolean isProtected(int mod) {
+    public static boolean isProtected(final int mod) {
         return (mod & ACC_PROTECTED) != 0;
     }
 
@@ -34,7 +37,7 @@ public class AccessHelper {
      * @param mod The access modifier to check
      * @return True if the access modifier is private, false otherwise
      */
-    public static boolean isPrivate(int mod) {
+    public static boolean isPrivate(final int mod) {
         return (mod & ACC_PRIVATE) != 0;
     }
 
@@ -44,7 +47,7 @@ public class AccessHelper {
      * @param mod The access modifier to check
      * @return True if the access modifier is static, false otherwise
      */
-    public static boolean isStatic(int mod) {
+    public static boolean isStatic(final int mod) {
         return (mod & ACC_STATIC) != 0;
     }
 
@@ -54,7 +57,7 @@ public class AccessHelper {
      * @param mod The access modifier to check
      * @return True if the access modifier is abstract, false otherwise
      */
-    public static boolean isAbstract(int mod) {
+    public static boolean isAbstract(final int mod) {
         return (mod & ACC_ABSTRACT) != 0;
     }
 
@@ -64,7 +67,7 @@ public class AccessHelper {
      * @param mod The access modifier to check
      * @return True if the access modifier is final, false otherwise
      */
-    public static boolean isFinal(int mod) {
+    public static boolean isFinal(final int mod) {
         return (mod & ACC_FINAL) != 0;
     }
 
@@ -76,7 +79,7 @@ public class AccessHelper {
      * @param mod The access modifier to check
      * @return True if the access modifier is synthetic, false otherwise
      */
-    public static boolean isSynthetic(int mod) {
+    public static boolean isSynthetic(final int mod) {
         return (mod & ACC_SYNTHETIC) != 0;
     }
 
@@ -86,7 +89,7 @@ public class AccessHelper {
      * @param mod The access modifier to check
      * @return True if the access modifier is volatile, false otherwise
      */
-    public static boolean isVolatile(int mod) {
+    public static boolean isVolatile(final int mod) {
         return (mod & ACC_VOLATILE) != 0;
     }
 
@@ -98,7 +101,7 @@ public class AccessHelper {
      * @param mod The access modifier to check
      * @return True if the access modifier is bridge, false otherwise
      */
-    public static boolean isBridge(int mod) {
+    public static boolean isBridge(final int mod) {
         return (mod & ACC_BRIDGE) != 0;
     }
 
@@ -111,7 +114,7 @@ public class AccessHelper {
      * @param mod The access modifier to check
      * @return True if the access modifier is synchronized, false otherwise
      */
-    public static boolean isSynchronized(int mod) {
+    public static boolean isSynchronized(final int mod) {
         return (mod & ACC_SYNCHRONIZED) != 0;
     }
 
@@ -121,7 +124,7 @@ public class AccessHelper {
      * @param mod The access modifier to check
      * @return True if the access modifier is interface, false otherwise
      */
-    public static boolean isInterface(int mod) {
+    public static boolean isInterface(final int mod) {
         return (mod & ACC_INTERFACE) != 0;
     }
 
@@ -131,7 +134,7 @@ public class AccessHelper {
      * @param mod The access modifier to check
      * @return True if the access modifier is enum, false otherwise
      */
-    public static boolean isEnum(int mod) {
+    public static boolean isEnum(final int mod) {
         return (mod & ACC_ENUM) != 0;
     }
 
@@ -141,7 +144,7 @@ public class AccessHelper {
      * @param mod The access modifier to check
      * @return True if the access modifier is annotation, false otherwise
      */
-    public static boolean isAnnotation(int mod) {
+    public static boolean isAnnotation(final int mod) {
         return (mod & ACC_ANNOTATION) != 0;
     }
 
@@ -151,7 +154,7 @@ public class AccessHelper {
      * @param mod The access modifier to check
      * @return True if the access modifier is deprecated, false otherwise
      */
-    public static boolean isDeprecated(int mod) {
+    public static boolean isDeprecated(final int mod) {
         return (mod & ACC_DEPRECATED) != 0;
     }
 
@@ -161,7 +164,7 @@ public class AccessHelper {
      * @param desc The type description to check
      * @return True if the type is a void, false otherwise
      */
-    public static boolean isVoid(String desc) {
+    public static boolean isVoid(final String desc) {
         return desc.endsWith("V");
     }
 
@@ -171,7 +174,7 @@ public class AccessHelper {
      * @param desc The type description to check
      * @return True if the type is a boolean, false otherwise
      */
-    public static boolean isBoolean(String desc) {
+    public static boolean isBoolean(final String desc) {
         return desc.endsWith("Z");
     }
 
@@ -181,7 +184,7 @@ public class AccessHelper {
      * @param desc The type description to check
      * @return True if the type is a char, false otherwise
      */
-    public static boolean isChar(String desc) {
+    public static boolean isChar(final String desc) {
         return desc.endsWith("C");
     }
 
@@ -191,7 +194,7 @@ public class AccessHelper {
      * @param desc The type description to check
      * @return True if the type is a byte, false otherwise
      */
-    public static boolean isByte(String desc) {
+    public static boolean isByte(final String desc) {
         return desc.endsWith("B");
     }
 
@@ -201,7 +204,7 @@ public class AccessHelper {
      * @param desc The type description to check
      * @return True if the type is a short, false otherwise
      */
-    public static boolean isShort(String desc) {
+    public static boolean isShort(final String desc) {
         return desc.endsWith("S");
     }
 
@@ -211,7 +214,7 @@ public class AccessHelper {
      * @param desc The type description to check
      * @return True if the type is an int, false otherwise
      */
-    public static boolean isInt(String desc) {
+    public static boolean isInt(final String desc) {
         return desc.endsWith("I");
     }
 
@@ -221,7 +224,7 @@ public class AccessHelper {
      * @param desc The type description to check
      * @return True if the type is a float, false otherwise
      */
-    public static boolean isFloat(String desc) {
+    public static boolean isFloat(final String desc) {
         return desc.endsWith("F");
     }
 
@@ -231,7 +234,7 @@ public class AccessHelper {
      * @param desc The type description to check
      * @return True if the type is a long, false otherwise
      */
-    public static boolean isLong(String desc) {
+    public static boolean isLong(final String desc) {
         return desc.endsWith("J");
     }
 
@@ -241,7 +244,7 @@ public class AccessHelper {
      * @param desc The type description to check
      * @return True if the type is a double, false otherwise
      */
-    public static boolean isDouble(String desc) {
+    public static boolean isDouble(final String desc) {
         return desc.endsWith("D");
     }
 
@@ -251,7 +254,7 @@ public class AccessHelper {
      * @param desc The type description to check
      * @return True if the type is an array, false otherwise
      */
-    public static boolean isArray(String desc) {
+    public static boolean isArray(final String desc) {
         return desc.startsWith("[");
     }
 
@@ -261,7 +264,7 @@ public class AccessHelper {
      * @param desc The type description to check
      * @return True if the type is an Object, false otherwise
      */
-    public static boolean isObject(String desc) {
+    public static boolean isObject(final String desc) {
         return desc.endsWith(";");
     }
 
@@ -273,7 +276,7 @@ public class AccessHelper {
      * @param desc The method signature to check
      * @return True if the method signature is generic, false otherwise
      */
-    public static boolean isMethodReturnTypeGeneric(String desc) {
+    public static boolean isMethodReturnTypeGeneric(final String desc) {
         return desc.contains(")T");
     }
 
@@ -284,7 +287,7 @@ public class AccessHelper {
      * @param signature Signature of the field
      * @return True if the field is generic, false otherwise
      */
-    public static boolean isFieldGeneric(String desc, String signature) {
+    public static boolean isFieldGeneric(final String desc, final String signature) {
         return
                 signature != null
                         && desc != null

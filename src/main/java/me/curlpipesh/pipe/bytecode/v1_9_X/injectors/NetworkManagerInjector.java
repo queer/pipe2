@@ -2,6 +2,7 @@ package me.curlpipesh.pipe.bytecode.v1_9_X.injectors;
 
 import me.curlpipesh.pipe.bytecode.Injector;
 import me.curlpipesh.pipe.bytecode.map.MappedClass;
+import me.curlpipesh.pipe.bytecode.map.MappedClass.MethodDef;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.*;
 
@@ -18,16 +19,16 @@ public class NetworkManagerInjector extends Injector {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected void inject(ClassReader classReader, ClassNode classNode) {
-        MappedClass.MethodDef sendPacket = getClassToInject().getMethod("sendPacket").get();
-        MappedClass.MethodDef channelRead0 = getClassToInject().getMethod("channelRead0").get();
+    protected void inject(final ClassReader classReader, final ClassNode classNode) {
+        final MethodDef sendPacket = getClassToInject().getMethod("sendPacket").get();
+        final MethodDef channelRead0 = getClassToInject().getMethod("channelRead0").get();
 
         ((List<MethodNode>) classNode.methods).stream()
                 .filter(m -> m.name.equals(sendPacket.getName()) && m.desc.contains(sendPacket.getDesc()))
                 .forEach(m -> {
                     //Pipe.getLogger().info("Found NetworkManager#sendPacket(Packet): " + m.name + " : " + m.desc);
-                    LabelNode l = new LabelNode();
-                    InsnList list = new InsnList();
+                    final LabelNode l = new LabelNode();
+                    final InsnList list = new InsnList();
                     list.add(new MethodInsnNode(INVOKESTATIC, "me/curlpipesh/pipe/Pipe", "getInstance", "()Lme/curlpipesh/pipe/Pipe;", false));
                     list.add(new MethodInsnNode(INVOKEVIRTUAL, "me/curlpipesh/pipe/Pipe", "getEventBus", "()Lme/curlpipesh/pipe/event/EventBus;", false));
                     list.add(new TypeInsnNode(NEW, "me/curlpipesh/pipe/event/events/PacketSend"));
@@ -48,8 +49,8 @@ public class NetworkManagerInjector extends Injector {
                         m.desc.contains(channelRead0.getDesc()))
                 .forEach(m -> {
                     //Pipe.getLogger().info("Found NetworkManager#channelRead0(ChannelHandlerContext, Packet):" + m.name + " : " + m.desc);
-                    LabelNode l = new LabelNode();
-                    InsnList list = new InsnList();
+                    final LabelNode l = new LabelNode();
+                    final InsnList list = new InsnList();
                     list.add(new MethodInsnNode(INVOKESTATIC,
                             "me/curlpipesh/pipe/Pipe", "getInstance", "()Lme/curlpipesh/pipe/Pipe;", false));
                     list.add(new MethodInsnNode(INVOKEVIRTUAL, "me/curlpipesh/pipe/Pipe", "getEventBus", "()Lme/curlpipesh/pipe/event/EventBus;", false));

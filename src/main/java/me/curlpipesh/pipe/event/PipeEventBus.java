@@ -3,6 +3,7 @@ package me.curlpipesh.pipe.event;
 import lombok.NonNull;
 import me.curlpipesh.pipe.plugin.Plugin;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,10 +17,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class PipeEventBus implements EventBus {
     private final Map<Plugin, List<Listener<?>>> listeners = new ConcurrentHashMap<>();
-    private final List<Listener<?>> directListeners = new CopyOnWriteArrayList<>();
+    private final Collection<Listener<?>> directListeners = new CopyOnWriteArrayList<>();
 
     @Override
-    public void register(Plugin plugin, @NonNull Listener<?> listener) {
+    public void register(@NonNull final Plugin plugin, @NonNull final Listener<?> listener) {
         if(!listeners.containsKey(plugin)) {
             listeners.put(plugin, new CopyOnWriteArrayList<>());
         }
@@ -27,7 +28,7 @@ public class PipeEventBus implements EventBus {
     }
 
     @Override
-    public void unregister(@NonNull Plugin plugin, @NonNull Listener<?> listener) {
+    public void unregister(@NonNull final Plugin plugin, @NonNull final Listener<?> listener) {
         if(!listeners.containsKey(plugin)) {
             return;
         }
@@ -35,13 +36,13 @@ public class PipeEventBus implements EventBus {
     }
 
     @Override
-    public void unregister(Plugin plugin) {
+    public void unregister(final Plugin plugin) {
         listeners.remove(plugin);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T push(@NonNull T event) {
+    public <T> T push(@NonNull final T event) {
         // The typecast being performed here is actually safe, due to the fact
         // that a listener is looking for an event of type T if its class is
         // equal to event.getClass(), because that's essentially T.class.
@@ -55,10 +56,10 @@ public class PipeEventBus implements EventBus {
 
     /**
      * Intended for internal use only.
-     * @param listener
+     * @param listener Listener to add
      */
     @Deprecated
-    public void addDirectListener(Listener<?> listener) {
+    public void addDirectListener(final Listener<?> listener) {
         directListeners.add(listener);
     }
 

@@ -18,6 +18,7 @@ public class MappedClass {
     private String description;
 
     private Map<String, String> fields;
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private List<MethodDef> methods;
 
     @Value
@@ -29,11 +30,11 @@ public class MappedClass {
 
         @Override
         public String toString() {
-            return deobfName + " " + "[" + name + desc + "]";
+            return deobfName + " [" + name + desc + ']';
         }
     }
 
-    public Optional<MethodDef> getMethod(String name) {
+    public Optional<MethodDef> getMethod(final String name) {
         return methods.stream().filter(m -> m.deobfName.equalsIgnoreCase(name)).findFirst();
     }
 }

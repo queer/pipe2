@@ -9,8 +9,9 @@ import me.curlpipesh.pipe.util.helpers.ChatHelper;
  * @author c
  * @since 6/1/15
  */
+@SuppressWarnings("ClassTooDeepInInheritanceTree")
 public class ColorOption extends NumberOption<Integer> {
-    public ColorOption(String name, Integer defaultValue) {
+    public ColorOption(final String name, final Integer defaultValue) {
         super(name, defaultValue);
     }
 
@@ -20,15 +21,15 @@ public class ColorOption extends NumberOption<Integer> {
     }
 
     @Override
-    public void set(String string) {
+    public void set(final String string) {
         try {
             set(Long.decode(string).intValue());
-        } catch(Exception e) {
+        } catch(final Exception e) {
             ChatHelper.warn("Failed parsing '" + string + "': " + e.getLocalizedMessage(), "Falling back to hex-parse!");
             e.printStackTrace();
             try {
                 set(Integer.parseInt(string.replaceFirst("0x", ""), 16));
-            } catch(Exception e1) {
+            } catch(final Exception e1) {
                 ChatHelper.warn("Failed parsing '" + string + "': " + e.getLocalizedMessage(), "Falling back to dec-parse!");
                 e1.printStackTrace();
                 set(Integer.parseInt(string));

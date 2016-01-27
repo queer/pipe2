@@ -3,6 +3,7 @@ package me.curlpipesh.pipe.bytecode.v1_8_X.injectors;
 import me.curlpipesh.pipe.bytecode.Injector;
 import me.curlpipesh.pipe.bytecode.AccessHelper;
 import me.curlpipesh.pipe.bytecode.map.MappedClass;
+import me.curlpipesh.pipe.bytecode.map.MappedClass.MethodDef;
 import me.curlpipesh.pipe.event.events.Render3D;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.*;
@@ -23,13 +24,13 @@ public class EntityRendererInjector extends Injector {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected void inject(ClassReader classReader, ClassNode classNode) {
-        MappedClass.MethodDef doWorldRender = getClassToInject().getMethod("doWorldRender").get();
-        MappedClass.MethodDef applyViewBobbing = getClassToInject().getMethod("applyViewBobbing").get();
+    protected void inject(final ClassReader classReader, final ClassNode classNode) {
+        final MethodDef doWorldRender = getClassToInject().getMethod("doWorldRender").get();
+        final MethodDef applyViewBobbing = getClassToInject().getMethod("applyViewBobbing").get();
 
-        for(MethodNode m : (List<MethodNode>) classNode.methods) {
+        for(final MethodNode m : (List<MethodNode>) classNode.methods) {
             if(m.name.equals(doWorldRender.getName()) && m.desc.equals(doWorldRender.getDesc())) {
-                InsnList list = new InsnList();
+                final InsnList list = new InsnList();
                 list.add(new MethodInsnNode(INVOKESTATIC, "me/curlpipesh/pipe/Pipe", "getInstance", "()Lme/curlpipesh/pipe/Pipe;", false));
                 list.add(new MethodInsnNode(INVOKEVIRTUAL, "me/curlpipesh/pipe/Pipe", "getEventBus", "()Lme/curlpipesh/pipe/event/EventBus;", false));
                 list.add(new TypeInsnNode(NEW, "me/curlpipesh/pipe/event/events/Render3D"));
@@ -38,12 +39,12 @@ public class EntityRendererInjector extends Injector {
                 list.add(new MethodInsnNode(INVOKESPECIAL, "me/curlpipesh/pipe/event/events/Render3D", "<init>", "(F)V", false));
                 list.add(new MethodInsnNode(INVOKEINTERFACE, "me/curlpipesh/pipe/event/EventBus", "push", "(Ljava/lang/Object;)Ljava/lang/Object;", true));
                 list.add(new InsnNode(POP));
-                Iterator<AbstractInsnNode> i = m.instructions.iterator();
+                final Iterator<AbstractInsnNode> i = m.instructions.iterator();
                 AbstractInsnNode injectInsn = null;
                 while(i.hasNext()) {
-                    AbstractInsnNode insn = i.next();
+                    final AbstractInsnNode insn = i.next();
                     if(insn instanceof LdcInsnNode) {
-                        LdcInsnNode linsn = (LdcInsnNode) insn;
+                        final LdcInsnNode linsn = (LdcInsnNode) insn;
                         if(linsn.cst.equals("hand")) {
                             injectInsn = insn.getNext().getNext(); //.getPrevious().getPrevious().getPrevious();
                         }

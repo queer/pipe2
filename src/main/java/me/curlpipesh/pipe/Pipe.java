@@ -28,6 +28,8 @@ import java.util.logging.Logger;
  * this class is the actual "main" class of the mod, responsible for actually
  * handling everything.
  *
+ * TODO: Make not singleton?
+ *
  * @author c
  * @since 7/10/15
  */
@@ -40,14 +42,17 @@ public final class Pipe {
 
     /**
      * The singleton instance of Pipe. Guaranteed to never change.
+     *
+     * TODO: Interface
      */
     private static final Pipe instance = new Pipe();
 
     static {
         logger.setUseParentHandlers(false);
+        //noinspection AnonymousInnerClassWithTooManyMethods
         logger.addHandler(new Handler() {
             @Override
-            public void publish(LogRecord logRecord) {
+            public void publish(final LogRecord logRecord) {
                 System.out.println(String.format("[Pipe] [%s] %s", logRecord.getLevel().getName(), logRecord.getMessage()));
             }
 
@@ -63,6 +68,7 @@ public final class Pipe {
 
     @Getter
     private final PluginManager pluginManager;
+
     @Getter
     private final Gson gson;
     /**
@@ -71,17 +77,23 @@ public final class Pipe {
      */
     @Getter
     @Setter
+    @SuppressWarnings("FieldMayBeFinal")
     private EventBus eventBus = new PipeEventBus();
+
     @Getter
     private File pipeDataDir;
+
     // TODO Better way to reference the two directories below?
     @Getter
     private File pipePluginDir;
+
     @Getter
     private File pipeConfigDir;
+
     @Getter
     @Setter
     private CommandManager commandManager;
+
     @Getter
     @Setter(AccessLevel.PACKAGE)
     private Version version;
@@ -102,7 +114,7 @@ public final class Pipe {
         setupDirectories();
         setupCommandManager();
         pluginManager.init();
-        for(Generator generator : version.getGenerators()) {
+        for(final Generator generator : version.getGenerators()) {
             Agent.defineClass(Pipe.class.getClassLoader(), generator.generate(), generator.getClassName());
         }
         eventBus.push(new ModFinishedLoading());

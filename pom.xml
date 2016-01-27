@@ -9,6 +9,7 @@
     <version>0.1</version>
 
     <dependencies>
+        <!-- ASM -->
         <dependency>
             <groupId>org.ow2.asm</groupId>
             <artifactId>asm</artifactId>
@@ -77,6 +78,8 @@
             <version>5.0.3</version>
             <classifier>javadoc</classifier>
         </dependency>
+
+        <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -94,6 +97,8 @@
             <version>1.16.2</version>
             <classifier>sources</classifier>
         </dependency>
+
+        <!-- LWJGL -->
         <dependency>
             <groupId>org.lwjgl.lwjgl</groupId>
             <artifactId>lwjgl</artifactId>
@@ -128,6 +133,8 @@
             <version>2.9.1</version>
             <classifier>javadoc</classifier>
         </dependency>
+
+        <!-- Gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
@@ -145,6 +152,8 @@
             <version>2.2.4</version>
             <classifier>javadoc</classifier>
         </dependency>
+
+        <!-- Guava -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
@@ -163,6 +172,14 @@
             <classifier>javadoc</classifier>
         </dependency>
 
+        <!-- JUnit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+
+        <!-- My OpenGL lib -->
         <dependency>
             <groupId>me.curlpipesh.gl</groupId>
             <artifactId>pipe-gl</artifactId>

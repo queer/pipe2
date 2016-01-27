@@ -18,22 +18,23 @@ import java.security.ProtectionDomain;
  */
 public abstract class Injector implements ClassFileTransformer, Opcodes {
     @Getter
-    private MappedClass classToInject;
+    private final MappedClass classToInject;
 
-    public Injector(MappedClass classToInject) {
+    public Injector(final MappedClass classToInject) {
         this.classToInject = classToInject;
     }
 
     @Override
     @SuppressWarnings({"ConstantConditions", "unchecked"})
-    public final byte[] transform(ClassLoader classLoader, String s, Class<?> aClass, ProtectionDomain protectionDomain, byte[] bytes) throws IllegalClassFormatException {
+    public final byte[] transform(final ClassLoader classLoader, final String s, final Class<?> aClass, final ProtectionDomain protectionDomain, final byte[] bytes) throws IllegalClassFormatException {
         if(classToInject.getObfuscatedName().equals(s)) {
-            Pipe.getLogger().info("Injecting mapped class [" + classToInject.getDeobfuscatedName() + "," + classToInject.getObfuscatedName() + "]...");
-            ClassReader cr = new ClassReader(bytes);
-            ClassNode cn = new ClassNode();
+            Pipe.getLogger().info("Injecting mapped class [" + classToInject.getDeobfuscatedName() + ','
+                    + classToInject.getObfuscatedName() + "]...");
+            final ClassReader cr = new ClassReader(bytes);
+            final ClassNode cn = new ClassNode();
             cr.accept(cn, 0);
             inject(cr, cn);
-            ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+            final ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
             cn.accept(cw);
             Pipe.getLogger().info("Done!");
             return cw.toByteArray();

@@ -14,11 +14,14 @@ import java.util.List;
  * @author c
  * @since 5/2/15
  */
-@SuppressWarnings("unused")
-public class Helper {
+@SuppressWarnings({"unused", "StaticVariableOfConcreteClass"})
+public final class Helper {
     private static final Vec3 entityVec = new Vec3(0, 0, 0);
     private static final Vec3 entityPrevVec = new Vec3(0, 0, 0);
     private static final Vec3 blockEntityVec = new Vec3(0, 0, 0);
+
+    private Helper() {
+    }
 
     /**
      * Returns true if the world is null, false otherwise
@@ -91,7 +94,7 @@ public class Helper {
      * @return The width of the String, as determined by Minecraft's
      * FontRenderer
      */
-    public static int getStringWidth(String string) {
+    public static int getStringWidth(final String string) {
         return 0;
     }
 
@@ -105,7 +108,7 @@ public class Helper {
      * @param shadow Whether or not the String should have a shadow drawn
      *               underneath it
      */
-    public static void drawString(String string, float x, float y, int color, boolean shadow) {
+    public static void drawString(final String string, final float x, final float y, final int color, final boolean shadow) {
     }
 
     /**
@@ -133,7 +136,7 @@ public class Helper {
      *
      * @return A Vec3 containing the entity's position
      */
-    public static Vec3 getEntityVec(Object entity) {
+    public static Vec3 getEntityVec(final Object entity) {
         return null;
     }
 
@@ -145,7 +148,7 @@ public class Helper {
      *
      * @return A Vec3 containing the entity's position
      */
-    public static Vec3 getEntityPrevVec(Object entity) {
+    public static Vec3 getEntityPrevVec(final Object entity) {
         return null;
     }
 
@@ -169,7 +172,7 @@ public class Helper {
      * @return True if the entity is an instance of EntityLiving, false
      * otherwise
      */
-    public static boolean isEntityLiving(Object entity) {
+    public static boolean isEntityLiving(final Object entity) {
         return false;
     }
 
@@ -182,7 +185,7 @@ public class Helper {
      * @return True if the entity is an instance of EntityAnimal, false
      * otherwise
      */
-    public static boolean isEntityAnimal(Object entity) {
+    public static boolean isEntityAnimal(final Object entity) {
         return false;
     }
 
@@ -195,7 +198,7 @@ public class Helper {
      * @return True if the entity is an instance of EntityMonster, false
      * otherwise
      */
-    public static boolean isEntityMonster(Object entity) {
+    public static boolean isEntityMonster(final Object entity) {
         return false;
     }
 
@@ -208,7 +211,7 @@ public class Helper {
      * @return True if the entity is an instance of EntityPlayer, false
      * otherwise
      */
-    public static boolean isEntityPlayer(Object entity) {
+    public static boolean isEntityPlayer(final Object entity) {
         return false;
     }
 
@@ -228,7 +231,7 @@ public class Helper {
      *
      * @return A Vec3 containing the block entity's position
      */
-    public static Vec3 getBlockEntityVec(Object blockEntity) {
+    public static Vec3 getBlockEntityVec(final Object blockEntity) {
         return null;
     }
 
@@ -239,7 +242,7 @@ public class Helper {
      *
      * @return True if the block entity is a chest, false otherwise
      */
-    public static boolean isBlockEntityChest(Object blockEntity) {
+    public static boolean isBlockEntityChest(final Object blockEntity) {
         return false;
     }
 
@@ -260,7 +263,7 @@ public class Helper {
      *
      * @param message The message to be added
      */
-    public static void addChatMessage(String message) {
+    public static void addChatMessage(final String message) {
     }
 
     /**
@@ -268,7 +271,7 @@ public class Helper {
      *
      * @param message The message to be sent
      */
-    public static void sendChatMessage(String message) {
+    public static void sendChatMessage(final String message) {
     }
 
     /**
@@ -276,7 +279,7 @@ public class Helper {
      *
      * @param packet The packet to be sent. May be any valid packet.
      */
-    public static void sendPacket(Object packet) {
+    public static void sendPacket(final Object packet) {
     }
 
     /**
@@ -303,7 +306,7 @@ public class Helper {
      *
      * @param gui The GuiScreen to display
      */
-    public static void displayGuiScreen(GuiScreen gui) {
+    public static void displayGuiScreen(final GuiScreen gui) {
     }
 
     /**
@@ -312,7 +315,7 @@ public class Helper {
      *
      * @param screen The GuiScreen to display
      */
-    public static void mc_displayGuiScreen(Object screen) {
+    public static void mc_displayGuiScreen(final Object screen) {
     }
 
     /**
@@ -320,7 +323,7 @@ public class Helper {
      *
      * @param module The GuiModule to display
      */
-    public static void displayGuiModule(GuiModule module) {
+    public static void displayGuiModule(final GuiModule module) {
     }
 
     /**
@@ -346,7 +349,7 @@ public class Helper {
      *
      * @param state The new state of view bobbing
      */
-    public static void setViewBobbing(boolean state) {
+    public static void setViewBobbing(final boolean state) {
     }
 
     /**
@@ -367,7 +370,7 @@ public class Helper {
      * @return <tt>true</tt> if the entity is sneaking, <tt>false</tt>
      * otherwise
      */
-    public static boolean isEntitySneaking(Object entity) {
+    public static boolean isEntitySneaking(final Object entity) {
         return false;
     }
 
@@ -379,7 +382,7 @@ public class Helper {
      *
      * @param message The message to be sent
      */
-    static void _sendChatMessage(String message) {
+    static void _sendChatMessage(final String message) {
     }
 
     /**
@@ -400,7 +403,7 @@ public class Helper {
      *
      * @return The ItemStack in the slot at the given index
      */
-    public static Object getStackInSlot(Object player, int slot) {
+    public static Object getStackInSlot(final Object player, final int slot) {
         return null;
     }
 
@@ -431,4 +434,11 @@ public class Helper {
     public static String getMinecraftVersion() {
         return null;
     }
+
+    /**
+     * Sends a tab-complete packet to the server
+     *
+     * @param toComplete The string to be completed
+     */
+    public static void sendTabComplete(final String toComplete) {}
 }

@@ -30,7 +30,7 @@ import java.util.Map;
  * @author c
  * @since 7/10/15
  */
-public class Agent {
+public final class Agent {
     private static final Map<String, Version> versions = new HashMap<>();
 
     static {
@@ -40,10 +40,13 @@ public class Agent {
         versions.put("1.9.X", new Version1_9_X());
     }
 
-    public static void premain(String agentArgs, Instrumentation inst) {
-        String propertyMappings = System.getProperty("pipe.mappings.path", "null");
-        String propertyVersion = System.getProperty("pipe.game.version", "null");
-        Pipe.getLogger().info("Using mappings '" + propertyMappings + "' for game version '" + propertyVersion + "'");
+    private Agent() {
+    }
+
+    public static void premain(final String agentArgs, final Instrumentation inst) {
+        final String propertyMappings = System.getProperty("pipe.mappings.path", "null");
+        final String propertyVersion = System.getProperty("pipe.game.version", "null");
+        Pipe.getLogger().info("Using mappings '" + propertyMappings + "' for game version '" + propertyVersion + '\'');
         if(propertyMappings.equals("null")) {
             throw new IllegalArgumentException("No mappings path passed! Restart with -Dpipe.mappings.path=/path/to/mapping.json");
         }
@@ -57,24 +60,24 @@ public class Agent {
 
         Pipe.getLogger().info("Reading class mappings!");
 
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        final Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             ClassMap.getMappedClasses().addAll(gson.fromJson(Files.lines(new File(propertyMappings).toPath())
                     .reduce((t, u) -> t + u).get(), new TypeToken<ArrayList<MappedClass>>(){}.getType()));
-        } catch(IOException e) {
+        } catch(final IOException e) {
             Pipe.getLogger().severe("Class map reading failed!");
             throw new RuntimeException(e);
         }
 
         Pipe.getLogger().info("Adding transformers!");
 
-        for(Injector injector : Pipe.getInstance().getVersion().getInjectors()) {
+        for(final Injector injector : Pipe.getInstance().getVersion().getInjectors()) {
             inst.addTransformer(injector);
         }
 
         Pipe.getLogger().info("Attempting to redefine classes!");
         try {
-            for(Redefiner r : Pipe.getInstance().getVersion().getRedefiners()) {
+            for(final Redefiner r : Pipe.getInstance().getVersion().getRedefiners()) {
                 inst.redefineClasses(r.redefine());
             }
         } catch(ClassNotFoundException | UnmodifiableClassException e) {
@@ -84,8 +87,8 @@ public class Agent {
         }
     }
 
-    public static void defineClass(ClassLoader cl, byte[] clazz, String fullName) {
-        Method define;
+    public static void defineClass(final ClassLoader cl, final byte[] clazz, final String fullName) {
+        final Method define;
         try {
             define = ClassLoader.class.getDeclaredMethod("defineClass", String.class, byte[].class, int.class, int.class);
             define.setAccessible(true);

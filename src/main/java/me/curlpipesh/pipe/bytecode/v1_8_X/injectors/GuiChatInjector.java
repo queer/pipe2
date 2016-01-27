@@ -19,19 +19,19 @@ public class GuiChatInjector extends Injector {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected void inject(ClassReader classReader, ClassNode classNode) {
-        for(MethodNode m : (List<MethodNode>) classNode.methods) {
+    protected void inject(final ClassReader classReader, final ClassNode classNode) {
+        for(final MethodNode m : (List<MethodNode>) classNode.methods) {
             if(m.name.equals("a") && m.desc.equals("(CI)V")) {
-                InsnList list = new InsnList();
+                final InsnList list = new InsnList();
                 list.add(new VarInsnNode(ALOAD, 3));
                 list.add(new MethodInsnNode(INVOKESTATIC, "me/curlpipesh/pipe/util/helpers/ChatHelper", "handle", "(Ljava/lang/String;)V", false));
                 AbstractInsnNode insn = null;
-                Iterator<AbstractInsnNode> i = m.instructions.iterator();
+                final Iterator<AbstractInsnNode> i = m.instructions.iterator();
 
                 while(i.hasNext()) {
-                    AbstractInsnNode n = i.next();
+                    final AbstractInsnNode n = i.next();
                     if(n instanceof MethodInsnNode) {
-                        MethodInsnNode l = (MethodInsnNode) n;
+                        final MethodInsnNode l = (MethodInsnNode) n;
                         if(l.name.equals("f") && l.desc.equals("(Ljava/lang/String;)V")) {
                             insn = n.getPrevious().getPrevious();
                             break;

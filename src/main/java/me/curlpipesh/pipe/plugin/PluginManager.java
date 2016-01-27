@@ -4,13 +4,13 @@ import lombok.Getter;
 import lombok.NonNull;
 import me.curlpipesh.pipe.Pipe;
 import me.curlpipesh.pipe.bytecode.ClassEnumerator;
-import me.curlpipesh.pipe.command.Command;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.jar.JarFile;
@@ -26,64 +26,64 @@ public class PluginManager {
      * instance.
      */
     @Getter
-    private final List<Plugin> plugins = new CopyOnWriteArrayList<>();
+    private final Collection<Plugin> plugins = new CopyOnWriteArrayList<>();
 
     private final Pipe pipe;
 
-    public PluginManager(@NonNull Pipe pipe) {
+    public PluginManager(@NonNull final Pipe pipe) {
         this.pipe = pipe;
     }
 
     public void init() {
-        File[] files = pipe.getPipePluginDir().listFiles();
+        final File[] files = pipe.getPipePluginDir().listFiles();
         if(files == null) {
             Pipe.getLogger().warning("Couldn't get files from plugin directory! Skipping loading...");
             return;
         }
-        for(File file : files)
+        for(final File file : files) {
             if(file.getName().toLowerCase().endsWith(".jar")) {
-                List<Class<?>> classes;
+                final List<Class<?>> classes;
                 try {
-                    classes = ClassEnumerator.getClassesFromJar(file, URLClassLoader.newInstance(new URL[]{
+                    classes = ClassEnumerator.getClassesFromJar(file, URLClassLoader.newInstance(new URL[] {
                             new URL("jar:file:" + file.getAbsoluteFile().getAbsolutePath() + "!/")
                     }, Pipe.class.getClassLoader()));
-                } catch(Exception e) {
+                } catch(final Exception e) {
                     e.printStackTrace();
                     continue;
                 }
-                JarFile jarFile;
+                final JarFile jarFile;
                 try {
                     jarFile = new JarFile(file);
-                } catch(IOException e) {
+                } catch(final IOException e) {
                     Pipe.getLogger().warning("Error loading JAR (" + file.getName() + "):");
                     e.printStackTrace();
                     continue;
                 }
-                ZipEntry entry = jarFile.getEntry("plugin.json");
+                final ZipEntry entry = jarFile.getEntry("plugin.json");
                 if(entry == null) {
                     Pipe.getLogger().warning("No plugin.json in " + file.getName() + ", skipping.");
                     continue;
                 }
-                InputStream manifestInputStream;
+                final InputStream manifestInputStream;
                 try {
                     manifestInputStream = jarFile.getInputStream(entry);
-                } catch(IOException e) {
+                } catch(final IOException e) {
                     Pipe.getLogger().warning("Error reading manifest in JAR (" + file.getName() + "):");
                     e.printStackTrace();
                     continue;
                 }
-                String manifestContents = readFromInputStream(manifestInputStream);
+                final String manifestContents = readFromInputStream(manifestInputStream);
                 try {
                     manifestInputStream.close();
-                } catch(IOException e) {
+                } catch(final IOException e) {
                     Pipe.getLogger().warning("Error reading manifest in JAR (" + file.getName() + "):");
                     e.printStackTrace();
                     continue;
                 }
-                PluginManifest pluginManifest;
+                final PluginManifest pluginManifest;
                 try {
                     pluginManifest = pipe.getGson().fromJson(manifestContents, PluginManifest.class);
-                } catch(IllegalArgumentException e) {
+                } catch(final IllegalArgumentException e) {
                     Pipe.getLogger().warning("Error loading manifest from JAR (" + file.getName() + "):");
                     e.printStackTrace();
                     continue;
@@ -95,11 +95,11 @@ public class PluginManager {
                             Pipe.getLogger().warning("Unable to load plugin \"" + pluginManifest.getName()
                                     + "\": No main class found");
                         }
-                        Plugin plugin = (Plugin) clazz.getDeclaredConstructor().newInstance();
+                        final Plugin plugin = (Plugin) clazz.getDeclaredConstructor().newInstance();
                         plugin.setManifest(pluginManifest);
                         try {
                             plugin.onLoad();
-                        } catch(Exception e) {
+                        } catch(final Exception e) {
                             Pipe.getLogger().warning("Error loading plugin: " + clazz.getName());
                             e.printStackTrace();
                             return;
@@ -111,6 +111,7 @@ public class PluginManager {
                     }
                 });
             }
+        }
         Pipe.getLogger().info("Done!");
 
         plugins.forEach(p -> {
@@ -119,34 +120,32 @@ public class PluginManager {
                 p.onEnable();
                 p.finishEnabling();
                 p.setEnabled(true);
-                p.getProvidedModules().forEach(m -> Pipe.getInstance().getCommandManager()
-                        .registerCommand(p, new Command(m.getName().toLowerCase().replaceAll("\\s+", ""))));
                 Pipe.getLogger().info("Enabled plugin: " + p.getName());
-            } catch(Exception e) {
+            } catch(final Exception e) {
                 Pipe.getLogger().warning("Error enabling plugin (" + p.getClass().getName() + "):");
                 e.printStackTrace();
             }
         });
     }
 
-    private boolean isInstantiable(@NonNull Class<?> clazz) {
+    private boolean isInstantiable(@NonNull final Class<?> clazz) {
         return !Modifier.isInterface(clazz.getModifiers())
                 && !Modifier.isAbstract(clazz.getModifiers());
     }
 
-    private String readFromInputStream(@NonNull InputStream in) {
-        char[] buffer = new char[4096];
-        Reader reader = new InputStreamReader(in);
-        StringBuilder out = new StringBuilder();
+    private String readFromInputStream(@NonNull final InputStream in) {
+        final char[] buffer = new char[4096];
+        final Reader reader = new InputStreamReader(in);
+        final StringBuilder out = new StringBuilder();
         try {
             while(true) {
-                int rsz = reader.read(buffer, 0, buffer.length);
+                final int rsz = reader.read(buffer, 0, buffer.length);
                 if(rsz < 0) {
                     break;
                 }
                 out.append(buffer, 0, rsz);
             }
-        } catch(IOException e) {
+        } catch(final IOException e) {
             e.printStackTrace();
         }
         return out.toString();
@@ -158,12 +157,12 @@ public class PluginManager {
         plugins.forEach(this::unloadPlugin);
     }
 
-    private void disablePlugin(Plugin plugin) {
+    private void disablePlugin(final Plugin plugin) {
         plugin.onDisable();
         pipe.getEventBus().unregister(plugin);
     }
 
-    private void unloadPlugin(Plugin plugin) {
+    private void unloadPlugin(final Plugin plugin) {
         plugin.onUnload();
         plugins.remove(plugin);
     }

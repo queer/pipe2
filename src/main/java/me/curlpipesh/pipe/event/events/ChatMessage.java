@@ -19,11 +19,12 @@ public class ChatMessage extends Cancellable {
     @Getter
     private final ChatMode mode;
 
-    public ChatMessage(String message, ChatMode mode) {
+    public ChatMessage(final String message, final ChatMode mode) {
         this.message = message;
         this.mode = mode;
     }
 
+    @SuppressWarnings("unused")
     public enum ChatMode {
         SEND, RECEIVE
     }

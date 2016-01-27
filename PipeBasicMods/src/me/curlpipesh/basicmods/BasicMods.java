@@ -1,10 +1,10 @@
 package me.curlpipesh.basicmods;
 
-import me.curlpipesh.basicmods.modules.ModuleBrightness;
-import me.curlpipesh.basicmods.modules.ModuleOverlay;
-import me.curlpipesh.basicmods.modules.ModuleStorageESP;
-import me.curlpipesh.basicmods.modules.ModuleTracers;
+import me.curlpipesh.basicmods.modules.*;
+import me.curlpipesh.pipe.Pipe;
+import me.curlpipesh.pipe.command.Command;
 import me.curlpipesh.pipe.plugin.BasicPlugin;
+import me.curlpipesh.pipe.plugin.module.ToggleModule;
 
 /**
  * @author audrey
@@ -16,5 +16,17 @@ public class BasicMods extends BasicPlugin {
         registerModule(new ModuleTracers(this));
         registerModule(new ModuleOverlay(this));
         registerModule(new ModuleBrightness(this));
+        registerModule(new ModuleAntiSoulSand(this));
+        getProvidedModules().stream().filter(module -> module instanceof ToggleModule).forEach(module -> {
+            Pipe.getLogger().info(module.toString());
+
+            Pipe.getInstance().getCommandManager()
+                    .registerCommand(this, new Command.Builder()
+                            .setName(module.getName().toLowerCase().replaceAll("\\s+", ""))
+                            .setExecutor((command1, s, strings) -> {
+                                ((ToggleModule) module).toggle();
+                                return true;
+                            }).build());
+        });
     }
 }

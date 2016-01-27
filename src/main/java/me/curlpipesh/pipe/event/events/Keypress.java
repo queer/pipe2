@@ -21,7 +21,7 @@ public class Keypress {
      *
      * @param key The key that was pressed
      */
-    public Keypress(int key) {
+    public Keypress(final int key) {
         this.key = key;
     }
 }

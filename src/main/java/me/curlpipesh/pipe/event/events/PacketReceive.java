@@ -8,12 +8,13 @@ import lombok.Data;
  * @author audrey
  * @since 12/15/15.
  */
+@SuppressWarnings("FieldMayBeFinal")
 @Data
 public class PacketReceive {
     private Object packet;
-    private boolean cancelled = false;
+    private boolean cancelled;
 
-    public PacketReceive(Object packet) {
+    public PacketReceive(final Object packet) {
         this.packet = packet;
     }
 }

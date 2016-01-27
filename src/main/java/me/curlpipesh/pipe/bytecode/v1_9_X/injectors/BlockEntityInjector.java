@@ -21,9 +21,9 @@ public class BlockEntityInjector extends Injector {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected void inject(ClassReader classReader, ClassNode classNode) {
-        String blockPos = getClassToInject().getFields().get("blockPos");
-        ((List<FieldNode>) classNode.fields).stream().filter(f -> f.name.equals("c"))
+    protected void inject(final ClassReader classReader, final ClassNode classNode) {
+        final String blockPos = getClassToInject().getFields().get("blockPos");
+        ((List<FieldNode>) classNode.fields).stream().filter(f -> f.name.equals(blockPos))
                 .forEach(f -> f.access = ACC_PUBLIC);
     }
 }

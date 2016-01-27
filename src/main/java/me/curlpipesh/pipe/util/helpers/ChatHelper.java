@@ -3,6 +3,7 @@ package me.curlpipesh.pipe.util.helpers;
 import me.curlpipesh.pipe.Pipe;
 import me.curlpipesh.pipe.bytecode.v1_8_X.injectors.GuiChatInjector;
 import me.curlpipesh.pipe.event.events.ChatMessage;
+import me.curlpipesh.pipe.event.events.ChatMessage.ChatMode;
 
 import java.util.Arrays;
 import java.util.logging.Handler;
@@ -19,12 +20,15 @@ import java.util.logging.Logger;
  * @since 5/27/15
  */
 @SuppressWarnings("unused")
-public class ChatHelper {
+public final class ChatHelper {
     /**
      * The {@link Logger} implementation for this class. Uses a custom
      * {@link Handler} to log messages to the in-game chat.
      */
     private static final Logger logger = Logger.getLogger("PipeChat");
+
+    private ChatHelper() {
+    }
 
     /**
      * Handles the "redirection" of chat messages. Method is "unused" because
@@ -32,8 +36,8 @@ public class ChatHelper {
      *
      * @param message The message to tinker with.
      */
-    public static void handle(String message) {
-        if(!Pipe.getInstance().getEventBus().push(new ChatMessage(message, ChatMessage.ChatMode.SEND)).isCancelled()) {
+    public static void handle(final String message) {
+        if(!Pipe.getInstance().getEventBus().push(new ChatMessage(message, ChatMode.SEND)).isCancelled()) {
             Helper._sendChatMessage(message);
             // TODO: Add to sent chat messages
         }
@@ -44,7 +48,7 @@ public class ChatHelper {
      *
      * @param messages The messages to log
      */
-    public static void log(String... messages) {
+    public static void log(final String... messages) {
         Arrays.stream(messages).forEach(logger::info);
     }
 
@@ -53,7 +57,7 @@ public class ChatHelper {
      *
      * @param messages The messages to log
      */
-    public static void debug(String... messages) {
+    public static void debug(final String... messages) {
         Arrays.stream(messages).forEach(m -> logger.info("§8[§cDebug§8]§r " + m));
     }
 
@@ -62,15 +66,16 @@ public class ChatHelper {
      *
      * @param messages The messages to log
      */
-    public static void warn(String... messages) {
+    public static void warn(final String... messages) {
         Arrays.stream(messages).forEach(logger::warning);
     }
 
     static {
+        //noinspection AnonymousInnerClassWithTooManyMethods
         logger.addHandler(new Handler() {
             @Override
-            public void publish(LogRecord logRecord) {
-                String levelColor =
+            public void publish(final LogRecord logRecord) {
+                final String levelColor =
                         logRecord.getLevel().equals(Level.SEVERE) ? "§4" :
                                 logRecord.getLevel().equals(Level.WARNING) ? "§c" :
                                         logRecord.getLevel().equals(Level.INFO) ? "§e" : "§b";

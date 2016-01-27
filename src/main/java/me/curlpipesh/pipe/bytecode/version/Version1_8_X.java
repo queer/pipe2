@@ -23,6 +23,7 @@ public class Version1_8_X implements Version {
     public Injector[] getInjectors() {
         return new Injector[]{
                 new BlockEntityInjector(ClassMap.getClassByName("BlockEntity")),
+                new BlockSoulSandInjector(ClassMap.getClassByName("BlockSoulSand")),
                 new EntityRendererInjector(ClassMap.getClassByName("EntityRenderer")),
                 //new GuiChatInjector(ClassMap.getClassByName("GuiChat")),
                 new GuiIngameInjector(ClassMap.getClassByName("GuiIngame")),

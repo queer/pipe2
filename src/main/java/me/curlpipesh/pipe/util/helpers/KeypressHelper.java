@@ -11,7 +11,10 @@ import static org.lwjgl.input.Keyboard.*;
  * @author c
  * @since 5/24/15
  */
-public class KeypressHelper {
+public final class KeypressHelper {
+    private KeypressHelper() {
+    }
+
     /**
      * Returns whether or not the given key binding is fully satisfied,
      * including modifiers
@@ -20,11 +23,11 @@ public class KeypressHelper {
      * @param keypress The current keypress event
      * @return True if the key binding is satisfied, false otherwise
      */
-    public static boolean isKeyPlusModifiersDown(Keybind keybind, Keypress keypress) {
+    public static boolean isKeyPlusModifiersDown(final Keybind keybind, final Keypress keypress) {
         if(keypress.getKey() == keybind.getKey()) {
             if(keybind.getModifiers().length > 0) {
                 int mod = 0;
-                for(int m : keybind.getModifiers()) {
+                for(final int m : keybind.getModifiers()) {
                     if(m == KEY_LCONTROL || m == KEY_RCONTROL) {
                         if(isKeyDown(KEY_LCONTROL) || isKeyDown(KEY_RCONTROL)) {
                             ++mod;

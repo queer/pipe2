@@ -7,6 +7,7 @@ import me.curlpipesh.pipe.Pipe;
 import me.curlpipesh.pipe.command.Command;
 import me.curlpipesh.pipe.plugin.module.Module;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -17,6 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author c
  * @since 7/11/15
  */
+@SuppressWarnings("FieldMayBeFinal")
 public abstract class BasicPlugin implements Plugin {
     @Getter
     @Setter
@@ -33,15 +35,15 @@ public abstract class BasicPlugin implements Plugin {
 
     @Getter
     @Setter
-    private boolean loaded = false;
+    private boolean loaded;
 
     @Getter
     @Setter
-    private boolean enabled = false;
+    private boolean enabled;
 
     @Getter
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-    private List<Module> providedModules = new CopyOnWriteArrayList<>();
+    private Collection<Module> providedModules = new CopyOnWriteArrayList<>();
 
     @Getter
     private List<Command> registeredCommands = new CopyOnWriteArrayList<>();
@@ -60,13 +62,13 @@ public abstract class BasicPlugin implements Plugin {
 
     @Override
     public void loadManifestData() {
-        this.name = manifest.getName();
-        this.description = manifest.getDescription();
-        this.author = manifest.getAuthor();
+        name = manifest.getName();
+        description = manifest.getDescription();
+        author = manifest.getAuthor();
     }
 
     @Override
-    public void registerModule(@NonNull Module module) {
+    public void registerModule(@NonNull final Module module) {
         if(!providedModules.contains(module)) {
             if(!providedModules.add(module)) {
                 Pipe.getLogger().warning(String.format("[%s] Unable to register module \"%s\"!", name, module.getName()));
@@ -79,7 +81,7 @@ public abstract class BasicPlugin implements Plugin {
     }
 
     @Override
-    public void unregisterModule(@NonNull Module module) {
+    public void unregisterModule(@NonNull final Module module) {
         if(providedModules.contains(module)) {
             if(!providedModules.remove(module)) {
                 Pipe.getLogger().warning(String.format("[%s] Unable to unregister module \"%s\"!", name, module.getName()));
@@ -94,14 +96,5 @@ public abstract class BasicPlugin implements Plugin {
     @Override
     public final void finishEnabling() {
         providedModules.forEach(Module::init);
-    }
-
-    public final Command getCommand(String name) {
-        for(Command command : registeredCommands) {
-            if(command.getName().equals(name)) {
-                return command;
-            }
-        }
-        return null;
     }
 }

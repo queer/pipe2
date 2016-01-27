@@ -10,7 +10,7 @@ import me.curlpipesh.pipe.util.Toggleable;
  * @since 5/23/15
  */
 public class ToggleOption extends BasicOption<Boolean> implements Toggleable {
-    public ToggleOption(String name, Boolean defaultValue) {
+    public ToggleOption(final String name, final Boolean defaultValue) {
         super(name, defaultValue);
     }
 
@@ -28,13 +28,13 @@ public class ToggleOption extends BasicOption<Boolean> implements Toggleable {
     }
 
     @Override
-    public void setEnabled(boolean e) {
+    public void setEnabled(final boolean e) {
         set(e);
     }
 
 
     @Override
-    public void set(String string) {
+    public void set(final String string) {
         set(Boolean.valueOf(string));
     }
 

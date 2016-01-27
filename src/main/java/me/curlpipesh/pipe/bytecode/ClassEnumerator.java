@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
@@ -14,7 +15,10 @@ import java.util.jar.JarFile;
  * @since 4/29/15
  */
 @SuppressWarnings("unused")
-public class ClassEnumerator {
+public final class ClassEnumerator {
+    private ClassEnumerator() {
+    }
+
     /**
      * Parses a directory for jar files and class files
      * <p>
@@ -32,12 +36,12 @@ public class ClassEnumerator {
             throw new IllegalArgumentException(directory.getName() + " is not a directory!");
         }
         final List<Class<?>> classes = new ArrayList<>();
-        ClassLoader classLoader;
+        final ClassLoader classLoader;
         try {
             classLoader = new URLClassLoader(new URL[]{
                     directory.toURI().toURL()
             }, ClassEnumerator.class.getClassLoader());
-        } catch (MalformedURLException e) {
+        } catch (final MalformedURLException e) {
             throw new RuntimeException(e);
         }
         if(directory.listFiles() != null) {
@@ -121,8 +125,8 @@ public class ClassEnumerator {
      * @param directory directory file to traverse
      * @return list of classes
      */
-    private static List<Class<?>> processDirectory(final File directory, final String append) {
-        final List<Class<?>> classes = new ArrayList<>();
+    private static Collection<Class<?>> processDirectory(final File directory, final String append) {
+        final Collection<Class<?>> classes = new ArrayList<>();
         final String[] files = directory.list();
         if(files != null) {
             for (final String fileName : files) {
@@ -133,14 +137,14 @@ public class ClassEnumerator {
                 if (className != null) {
                     try {
                         classes.add(Class.forName(className.substring(1)));
-                    } catch(ClassNotFoundException e) {
+                    } catch(final ClassNotFoundException e) {
                         e.printStackTrace();
                     }
                     continue;
                 }
                 final File subdir = new File(directory, fileName);
                 if (subdir.isDirectory()) {
-                    classes.addAll(processDirectory(subdir, append + "." + fileName));
+                    classes.addAll(processDirectory(subdir, append + '.' + fileName));
                 }
             }
         } else {

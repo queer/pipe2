@@ -8,9 +8,9 @@ import lombok.Data;
  */
 @Data
 public class PacketBufferStringRead {
-    private String string;
+    private final String string;
 
-    public PacketBufferStringRead(String string) {
+    public PacketBufferStringRead(final String string) {
         this.string = string;
     }
 }

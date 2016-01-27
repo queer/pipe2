@@ -21,9 +21,9 @@ public class WorldProviderInjector extends Injector {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected void inject(ClassReader classReader, ClassNode classNode) {
+    protected void inject(final ClassReader classReader, final ClassNode classNode) {
         // f -> lightBrightnessTable
-        String obfFieldName = getClassToInject().getFields().get("lightBrightnessTable");
+        final String obfFieldName = getClassToInject().getFields().get("lightBrightnessTable");
         ((List<FieldNode>) classNode.fields).stream().filter(f -> f.name.equals(obfFieldName))
                 .forEach(f -> f.access = ACC_PUBLIC | ACC_FINAL);
     }

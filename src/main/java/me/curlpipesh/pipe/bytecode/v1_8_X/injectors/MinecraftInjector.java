@@ -2,6 +2,7 @@ package me.curlpipesh.pipe.bytecode.v1_8_X.injectors;
 
 import me.curlpipesh.pipe.bytecode.Injector;
 import me.curlpipesh.pipe.bytecode.map.MappedClass;
+import me.curlpipesh.pipe.bytecode.map.MappedClass.MethodDef;
 import me.curlpipesh.pipe.event.events.Keypress;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.*;
@@ -24,19 +25,19 @@ public class MinecraftInjector extends Injector {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected void inject(ClassReader cr, ClassNode cn) {
-        MappedClass.MethodDef startGame = getClassToInject().getMethod("startGame").get();
-        MappedClass.MethodDef runGame = getClassToInject().getMethod("runGame").get();
+    protected void inject(final ClassReader cr, final ClassNode cn) {
+        final MethodDef startGame = getClassToInject().getMethod("startGame").get();
+        final MethodDef runGame = getClassToInject().getMethod("runGame").get();
 
-        for(MethodNode m : (List<MethodNode>)cn.methods) {
+        for(final MethodNode m : (List<MethodNode>)cn.methods) {
             if(m.name.equals(startGame.getName()) && m.desc.equals(startGame.getDesc())) {
-                InsnList list = new InsnList();
+                final InsnList list = new InsnList();
                 list.add(new MethodInsnNode(INVOKESTATIC, "me/curlpipesh/pipe/Pipe", "getInstance", "()Lme/curlpipesh/pipe/Pipe;", false));
                 list.add(new MethodInsnNode(INVOKEVIRTUAL, "me/curlpipesh/pipe/Pipe", "init", "()V", false));
-                Iterator<AbstractInsnNode> i = m.instructions.iterator();
+                final Iterator<AbstractInsnNode> i = m.instructions.iterator();
                 AbstractInsnNode node = null;
                 while(i.hasNext()) {
-                    AbstractInsnNode n = i.next();
+                    final AbstractInsnNode n = i.next();
                     if(n.getOpcode() == RETURN) {
                         node = n;
                         break;
@@ -48,7 +49,7 @@ public class MinecraftInjector extends Injector {
                 m.instructions.insertBefore(node, list);
             } else if(m.name.equals(runGame.getName()) && m.desc.equals(runGame.getDesc())) {
                 // Tick event
-                InsnList list = new InsnList();
+                final InsnList list = new InsnList();
                 list.add(new MethodInsnNode(INVOKESTATIC, "me/curlpipesh/pipe/Pipe", "getInstance", "()Lme/curlpipesh/pipe/Pipe;", false));
                 list.add(new MethodInsnNode(INVOKEVIRTUAL, "me/curlpipesh/pipe/Pipe", "getEventBus", "()Lme/curlpipesh/pipe/event/EventBus;", false));
                 list.add(new FieldInsnNode(GETSTATIC, "me/curlpipesh/pipe/event/events/Tick", "instance", "Lme/curlpipesh/pipe/event/events/Tick;"));
@@ -66,11 +67,11 @@ public class MinecraftInjector extends Injector {
                 list.add(new MethodInsnNode(INVOKEINTERFACE, "me/curlpipesh/pipe/event/EventBus", "push", "(Ljava/lang/Object;)Ljava/lang/Object;", true));
                 list.add(new InsnNode(POP));
 
-                Iterator<AbstractInsnNode> i = m.instructions.iterator();
+                final Iterator<AbstractInsnNode> i = m.instructions.iterator();
                 AbstractInsnNode node = null;
                 boolean merp = false; // haveWeFoundThatStupidManuallyTriggeredDebugWhateverThingThatMeansWereInTheRightPlace
                 while(i.hasNext()) {
-                    AbstractInsnNode n = i.next();
+                    final AbstractInsnNode n = i.next();
                     if(n instanceof LdcInsnNode) {
                         if(((LdcInsnNode)n).cst.equals("Manually triggered debug crash")) {
                             merp = true;
@@ -79,7 +80,7 @@ public class MinecraftInjector extends Injector {
                     if(merp) {
                         if (n.getOpcode() == INVOKESTATIC && n.getNext().getOpcode() == IFEQ) {
                             if(n instanceof MethodInsnNode) {
-                                MethodInsnNode m2 = (MethodInsnNode) n;
+                                final MethodInsnNode m2 = (MethodInsnNode) n;
                                 if (m2.owner.equals("org/lwjgl/input/Keyboard")) {
                                     if (m2.name.equals("getEventKeyState")) {
                                         node = n.getNext().getNext().getNext();

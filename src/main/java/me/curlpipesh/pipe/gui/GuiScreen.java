@@ -14,55 +14,57 @@ import org.lwjgl.opengl.GL11;
  */
 @SuppressWarnings("unused")
 public final class GuiScreen {
+    @SuppressWarnings("FieldMayBeFinal")
     @Getter
     @Setter
-    private GuiModule currentModule = null;
+    private GuiModule currentModule;
 
+    @SuppressWarnings("StaticVariableOfConcreteClass")
     private static final GuiScreen instance = new GuiScreen();
 
     public void initGui() {
         currentModule.init();
     }
 
-    public void drawScreen(int i, int j, float f) {
+    public void drawScreen(final int i, final int j, final float f) {
         Helper.disableLightmap();
         GL11.glDisable(GL11.GL_LIGHTING);
         currentModule.render(i, j, f);
     }
 
-    public void mouseClicked(int mx, int my, int button) {
+    public void mouseClicked(final int mx, final int my, final int button) {
         currentModule.mouseDown(mx, my, button);
     }
 
-    public void mouseDownDrag(int mx, int my, int button, long timeSinceLastClick) {
+    public void mouseDownDrag(final int mx, final int my, final int button, final long timeSinceLastClick) {
         currentModule.mouseDownMove(mx, my, button, timeSinceLastClick);
     }
 
-    public void mouseReleased(int mx, int my, int button) {
+    public void mouseReleased(final int mx, final int my, final int button) {
         currentModule.mouseUp(mx, my, button);
     }
 
-    public void keyPress(char c, int i) {
+    public void keyPress(final char c, final int i) {
         currentModule.keypress(c, i);
     }
 
-    public void a(int i, int j1, float f) {
+    public void a(final int i, final int j1, final float f) {
         drawScreen(i, j1, f);
     }
 
-    public void a(char c, int i) {
+    public void a(final char c, final int i) {
         keyPress(c, i);
     }
 
-    public void a(int i, int j, int k) {
+    public void a(final int i, final int j, final int k) {
         mouseClicked(i, j, k);
     }
 
-    public void b(int i, int j, int k) {
+    public void b(final int i, final int j, final int k) {
         mouseReleased(i, j, k);
     }
 
-    public void a(int i, int j, int k, long l) {
+    public void a(final int i, final int j, final int k, final long l) {
         mouseDownDrag(i, j, k, l);
     }
 

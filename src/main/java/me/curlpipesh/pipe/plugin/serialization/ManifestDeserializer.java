@@ -11,9 +11,9 @@ import java.lang.reflect.Type;
  */
 public class ManifestDeserializer implements JsonDeserializer<PluginManifest> {
     @Override
-    public PluginManifest deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        PluginManifest pluginManifest = new PluginManifest();
-        JsonObject result = json.getAsJsonObject();
+    public PluginManifest deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context) throws JsonParseException {
+        final PluginManifest pluginManifest = new PluginManifest();
+        final JsonObject result = json.getAsJsonObject();
         if(!result.has("name")) {
             throw new IllegalArgumentException("No name present in manifest.");
         }
@@ -21,19 +21,19 @@ public class ManifestDeserializer implements JsonDeserializer<PluginManifest> {
             throw new IllegalArgumentException("No main present in manifest.");
         }
         if(result.has("disabled")) {
-            boolean disabled = result.get("disabled").getAsBoolean();
+            final boolean disabled = result.get("disabled").getAsBoolean();
             pluginManifest.setDisabled(disabled);
         }
         if(result.has("author")) {
-            String author = result.get("author").getAsString();
+            final String author = result.get("author").getAsString();
             pluginManifest.setAuthor(author);
         }
         if(result.has("description")) {
-            String description = result.get("description").getAsString();
+            final String description = result.get("description").getAsString();
             pluginManifest.setDescription(description);
         }
-        String name = result.get("name").getAsString();
-        String mainClass = result.get("main").getAsString();
+        final String name = result.get("name").getAsString();
+        final String mainClass = result.get("main").getAsString();
         pluginManifest.setName(name);
         pluginManifest.setMainClass(mainClass);
         return pluginManifest;

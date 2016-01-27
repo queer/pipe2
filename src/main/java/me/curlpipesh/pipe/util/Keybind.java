@@ -16,6 +16,7 @@ public class Keybind {
     /**
      * The main key that is bound
      */
+    @SuppressWarnings("FieldMayBeFinal")
     @Getter
     @Setter
     private int key;
@@ -29,7 +30,7 @@ public class Keybind {
      * Creates a new keybind with the given key
      * @param key The main key of the key binding
      */
-    public Keybind(int key) {
+    public Keybind(final int key) {
         this.key = key;
     }
 
@@ -38,7 +39,7 @@ public class Keybind {
      *
      * @param mod The modifier key to add
      */
-    public Keybind withModifier(int mod) {
+    public Keybind withModifier(final int mod) {
         if(!modifiers.contains(mod)) {
             modifiers.add(mod);
         }
@@ -50,7 +51,7 @@ public class Keybind {
      *
      * @param mod The modifier key to remove
      */
-    public Keybind removeModifier(int mod) {
+    public Keybind removeModifier(final int mod) {
         if(modifiers.contains(mod)) {
             modifiers.remove(mod);
         }

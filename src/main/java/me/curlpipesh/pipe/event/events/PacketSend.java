@@ -8,10 +8,12 @@ import lombok.Data;
  */
 @Data
 public class PacketSend {
+    @SuppressWarnings("FieldMayBeFinal")
     private Object packet;
-    private boolean cancelled = false;
+    @SuppressWarnings("FieldMayBeFinal")
+    private boolean cancelled;
 
-    public PacketSend(Object packet) {
+    public PacketSend(final Object packet) {
         this.packet = packet;
     }
 }

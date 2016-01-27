@@ -11,7 +11,7 @@ public abstract class BasicOption<T> implements Option<T> {
     private final String name;
     private T value;
 
-    public BasicOption(String name, T defaultValue) {
+    public BasicOption(final String name, final T defaultValue) {
         this.name = name;
         value = defaultValue;
     }
@@ -25,7 +25,7 @@ public abstract class BasicOption<T> implements Option<T> {
         return value;
     }
 
-    public void set(T t) {
+    public void set(final T t) {
         value = t;
     }
 

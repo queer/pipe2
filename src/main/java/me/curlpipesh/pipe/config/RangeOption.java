@@ -9,6 +9,7 @@ import lombok.Setter;
  * @author c
  * @since 5/24/15
  */
+@SuppressWarnings({"FieldMayBeFinal", "ClassTooDeepInInheritanceTree"})
 public class RangeOption<T extends Number> extends NumberOption<T> {
     /**
      * The upper limit of values for this option
@@ -40,7 +41,7 @@ public class RangeOption<T extends Number> extends NumberOption<T> {
      * @param lowerLimit   The lower limit of values for this option
      * @param increment    The increment value for this option
      */
-    public RangeOption(String name, T defaultValue, T upperLimit, T lowerLimit, T increment) {
+    public RangeOption(final String name, final T defaultValue, final T upperLimit, final T lowerLimit, final T increment) {
         super(name, defaultValue);
         this.upperLimit = upperLimit;
         this.lowerLimit = lowerLimit;
@@ -53,7 +54,7 @@ public class RangeOption<T extends Number> extends NumberOption<T> {
     }
 
     @Override
-    public void set(T t) {
+    public void set(final T t) {
         if(getNumberType().equals(Double.class) || getNumberType().equals(Float.class)) {
             if(t.doubleValue() < lowerLimit.doubleValue()) {
                 super.set(lowerLimit);
@@ -75,7 +76,7 @@ public class RangeOption<T extends Number> extends NumberOption<T> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void set(String string) {
+    public void set(final String string) {
         if(getNumberType().equals(Double.class)) {
             set((T) (Double) Double.parseDouble(string));
         }
@@ -99,7 +100,7 @@ public class RangeOption<T extends Number> extends NumberOption<T> {
     @Override
     @SuppressWarnings("unchecked")
     public Class<T> getNumberType() {
-        return (Class<T>) this.lowerLimit.getClass();
+        return (Class<T>) lowerLimit.getClass();
     }
 
     @Override

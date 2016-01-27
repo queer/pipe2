@@ -15,7 +15,7 @@ package me.curlpipesh.pipe.config;
  * @since 5/23/15
  */
 public abstract class NumberOption<T extends Number> extends BasicOption<T> {
-    public NumberOption(String name, T defaultValue) {
+    public NumberOption(final String name, final T defaultValue) {
         super(name, defaultValue);
     }
 
@@ -31,7 +31,7 @@ public abstract class NumberOption<T extends Number> extends BasicOption<T> {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         if(getNumberType().equals(Double.class) || getNumberType().equals(Float.class)) {
             sb.append(String.format("%.2f", get().doubleValue()));
         } else {

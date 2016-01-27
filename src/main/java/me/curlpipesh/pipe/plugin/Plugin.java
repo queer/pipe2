@@ -1,6 +1,5 @@
 package me.curlpipesh.pipe.plugin;
 
-import me.curlpipesh.pipe.command.Command;
 import me.curlpipesh.pipe.plugin.module.Module;
 import me.curlpipesh.pipe.util.Toggleable;
 
@@ -9,7 +8,7 @@ import java.util.List;
 /**
  * The base of all plugins. An individual plugin is not meant to be a "mod" or
  * "cheat" or "hack" or <insert term here> on its own; rather, it is meant to
- * have individual {@link me.curlpipesh.pipe.plugin.module.Module}s registered
+ * have individual {@link Module}s registered
  * to it. Each <tt>Module</tt> is then responsible for being the individual
  * "mod" or "cheat" that a given plugin provides. Each plugin will, by default,
  * provide a "manifest" of modules that it provides, so that an end-user (or a
@@ -98,14 +97,4 @@ public interface Plugin extends Loadable, Toggleable {
      * </pre>
      */
     void finishEnabling();
-
-    /**
-     * Gets the list of all {@link Command}s registered by this plugin. The
-     * list returned by this method may be empty.
-     *
-     * @return All commands that this plugin has registered
-     */
-    List<Command> getRegisteredCommands();
-
-    Command getCommand(String name);
 }

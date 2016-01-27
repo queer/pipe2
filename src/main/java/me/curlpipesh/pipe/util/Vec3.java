@@ -6,12 +6,14 @@ package me.curlpipesh.pipe.util;
  * @author c
  * @since 5/11/15
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "StaticVariableOfConcreteClass"})
 public class Vec3 implements Cloneable {
     /**
      * x-, y-, and z-coordinates of this vector
      */
-    private double x, y, z;
+    private double x;
+    private double y;
+    private double z;
 
     /**
      * Vector with values of zero
@@ -35,7 +37,7 @@ public class Vec3 implements Cloneable {
      * @param y The y-coordinate
      * @param z The z-coordinate
      */
-    public Vec3(double x, double y, double z) {
+    public Vec3(final double x, final double y, final double z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -47,7 +49,7 @@ public class Vec3 implements Cloneable {
      * @param v The vector to add
      * @return Itself
      */
-    public Vec3 add(Vec3 v) {
+    public Vec3 add(final Vec3 v) {
         x += v.x;
         y += v.y;
         z += v.z;
@@ -60,7 +62,7 @@ public class Vec3 implements Cloneable {
      * @param v The vector to subtract
      * @return Itself
      */
-    public Vec3 sub(Vec3 v) {
+    public Vec3 sub(final Vec3 v) {
         x -= v.x;
         y -= v.y;
         z -= v.z;
@@ -73,7 +75,7 @@ public class Vec3 implements Cloneable {
      * @param v The vector to multiply by
      * @return Itself
      */
-    public Vec3 mul(Vec3 v) {
+    public Vec3 mul(final Vec3 v) {
         x *= v.x;
         y *= v.y;
         z *= v.z;
@@ -86,7 +88,7 @@ public class Vec3 implements Cloneable {
      * @param v The vector to divide by
      * @return Itself
      */
-    public Vec3 div(Vec3 v) {
+    public Vec3 div(final Vec3 v) {
         x /= v.x;
         y /= v.y;
         z /= v.z;
@@ -99,7 +101,7 @@ public class Vec3 implements Cloneable {
      * @param v The vector to get the distance to
      * @return The distance from this vector to the supplied vector
      */
-    public double dist(Vec3 v) {
+    public double dist(final Vec3 v) {
         return Math.sqrt(x * v.x + y * v.y + z * v.z);
     }
 
@@ -109,7 +111,7 @@ public class Vec3 implements Cloneable {
      * @param v The vector to do the dot product with
      * @return The dot product
      */
-    public double dot(Vec3 v) {
+    public double dot(final Vec3 v) {
         return x * v.x + y * v.y + z * v.z;
     }
 
@@ -128,7 +130,7 @@ public class Vec3 implements Cloneable {
      * @return Itself
      */
     public Vec3 normalize() {
-        double l = length();
+        final double l = length();
         x = x / l;
         y = y / l;
         z = z / l;
@@ -141,10 +143,10 @@ public class Vec3 implements Cloneable {
      * @param v The vector to do the cross product with
      * @return The cross product
      */
-    public Vec3 cross(Vec3 v) {
-        double tx = y * v.z - z * v.y;
-        double ty = z * v.x - x * v.z;
-        double tz = x * v.y - y * v.x;
+    public Vec3 cross(final Vec3 v) {
+        final double tx = y * v.z - z * v.y;
+        final double ty = z * v.x - x * v.z;
+        final double tz = x * v.y - y * v.x;
         x = tx;
         y = ty;
         z = tz;
@@ -157,7 +159,7 @@ public class Vec3 implements Cloneable {
      * @param x The amount to add
      * @return Itself
      */
-    public Vec3 addX(double x) {
+    public Vec3 addX(final double x) {
         this.x += x;
         return this;
     }
@@ -168,7 +170,7 @@ public class Vec3 implements Cloneable {
      * @param y The amount to add
      * @return Itself
      */
-    public Vec3 addY(double y) {
+    public Vec3 addY(final double y) {
         this.y += y;
         return this;
     }
@@ -179,7 +181,7 @@ public class Vec3 implements Cloneable {
      * @param z The amount to add
      * @return Itself
      */
-    public Vec3 addZ(double z) {
+    public Vec3 addZ(final double z) {
         this.z += z;
         return this;
     }
@@ -191,10 +193,10 @@ public class Vec3 implements Cloneable {
      * @param v The vector to "clone"
      * @return Itself
      */
-    public Vec3 set(Vec3 v) {
-        this.x = v.x;
-        this.y = v.y;
-        this.z = v.z;
+    public Vec3 set(final Vec3 v) {
+        x = v.x;
+        y = v.y;
+        z = v.z;
         return this;
     }
 
@@ -230,7 +232,7 @@ public class Vec3 implements Cloneable {
      *
      * @param x The new x-coordinate
      */
-    public void x(double x) {
+    public void x(final double x) {
         this.x = x;
     }
 
@@ -239,7 +241,7 @@ public class Vec3 implements Cloneable {
      *
      * @param y The new y-coordinate
      */
-    public void y(double y) {
+    public void y(final double y) {
         this.y = y;
     }
 
@@ -248,7 +250,7 @@ public class Vec3 implements Cloneable {
      *
      * @param z The new z-coordinate
      */
-    public void z(double z) {
+    public void z(final double z) {
         this.z = z;
     }
 
@@ -259,7 +261,7 @@ public class Vec3 implements Cloneable {
      */
     @Override
     public String toString() {
-        return "(" + x + ", " + y + ", " + z + ")";
+        return '(' + x + ", " + y + ", " + z + ')';
     }
 
     /**

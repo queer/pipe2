@@ -12,7 +12,7 @@ import lombok.Data;
 public class Render3D {
     private final float partialTickTime;
 
-    public Render3D(float partialTickTime) {
+    public Render3D(final float partialTickTime) {
         this.partialTickTime = partialTickTime;
     }
 }
