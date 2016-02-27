@@ -4,6 +4,12 @@ import me.curlpipesh.gl.tessellation.Tessellator;
 import me.curlpipesh.gl.tessellation.impl.VAOTessellator;
 import me.curlpipesh.pipe.util.helpers.Helper;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.Project;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
@@ -17,6 +23,9 @@ import static org.lwjgl.opengl.GL13.GL_SAMPLE_ALPHA_TO_COVERAGE;
  * @since 4/30/15
  */
 public final class GLRenderer {
+    private static final FloatBuffer matModelView;
+    private static final FloatBuffer matProjection;
+
     /**
      * The {@link Tessellator} to be used for rendering. By default, this is a
      * {@link VAOTessellator}.
@@ -109,10 +118,10 @@ public final class GLRenderer {
      * Draws a rectangle with a vertical gradient, using <tt>c1</tt> at the top
      * and <tt>c2</tt> at the bottom.
      *
-     * @param x X coordinate of the rectangle
-     * @param y Y coordinate of the rectangle
-     * @param w Width of the rectangle
-     * @param h Height of the rectangle
+     * @param x  X coordinate of the rectangle
+     * @param y  Y coordinate of the rectangle
+     * @param w  Width of the rectangle
+     * @param h  Height of the rectangle
      * @param c1 Upper gradient color of the rectangle, in 0xAARRGGBB format
      * @param c2 Lower gradient color of the rectangle, in 0xAARRGGBB format
      */
@@ -132,10 +141,10 @@ public final class GLRenderer {
      * Draws a rectangle with a vertical gradient, using <tt>c1</tt> at the top
      * and <tt>c2</tt> at the bottom.
      *
-     * @param x X coordinate of the rectangle
-     * @param y Y coordinate of the rectangle
-     * @param w Width of the rectangle
-     * @param h Height of the rectangle
+     * @param x  X coordinate of the rectangle
+     * @param y  Y coordinate of the rectangle
+     * @param w  Width of the rectangle
+     * @param h  Height of the rectangle
      * @param c1 Upper gradient color of the rectangle, in 0xAARRGGBB format
      * @param c2 Lower gradient color of the rectangle, in 0xAARRGGBB format
      */
@@ -154,10 +163,10 @@ public final class GLRenderer {
     /**
      * Renders a 3-dimensional line on the screen.
      *
-     * @param a The starting vector
-     * @param b The ending vector
+     * @param a     The starting vector
+     * @param b     The ending vector
      * @param color The color of the line, in 0xAARRGGBB format
-     * @param size The width of the line
+     * @param size  The width of the line
      */
     public static void drawLine(final Vec3 a, final Vec3 b, final int color, final float size) {
         drawLine(a.x(), a.y(), a.z(), b.x(), b.y(), b.z(), color, size);
@@ -166,13 +175,13 @@ public final class GLRenderer {
     /**
      * Renders a 3-dimensional line on the screen
      *
-     * @param x Starting x-coordinate
-     * @param y Starting y-coordinate
-     * @param z Starting z-coordinate
-     * @param xx Ending x-coordinate
-     * @param yy Ending y-coordinate
-     * @param zz Ending z-coordinate
-     * @param c Color of the ine, in 0xAARRGGBB format
+     * @param x    Starting x-coordinate
+     * @param y    Starting y-coordinate
+     * @param z    Starting z-coordinate
+     * @param xx   Ending x-coordinate
+     * @param yy   Ending y-coordinate
+     * @param zz   Ending z-coordinate
+     * @param c    Color of the ine, in 0xAARRGGBB format
      * @param size The width of the line
      */
     public static void drawLine(final double x, final double y, final double z, final double xx, final double yy, final double zz, final int c, final float size) {
@@ -187,8 +196,8 @@ public final class GLRenderer {
     /**
      * Draws a box from the supplied vectors
      *
-     * @param min Minimum vector of all three axes
-     * @param max Maximum vector of all three axes
+     * @param min   Minimum vector of all three axes
+     * @param max   Maximum vector of all three axes
      * @param color Color of the box, in 0xAARRGGBB format
      */
     public static void drawBoxFromPoints(final Vec3 min, final Vec3 max, final int color) {
@@ -266,16 +275,52 @@ public final class GLRenderer {
     /**
      * Draws a String with an "embossing" effect, using the provided offset and colors.
      *
-     * @param s The String to render
-     * @param x The x position to render at
-     * @param y The y position to render at
-     * @param c The main color of the String
-     * @param c2 The "emboss" color of the String
+     * @param s       The String to render
+     * @param x       The x position to render at
+     * @param y       The y position to render at
+     * @param c       The main color of the String
+     * @param c2      The "emboss" color of the String
      * @param eOffset The amount to offset the "emboss" effect by.
      */
     public static void drawEmbossedString(final String s, final float x, final float y, final int c, final int c2,
                                           final float eOffset) {
         Helper.drawString(s, x, y + eOffset, c2, false);
         Helper.drawString(s, x, y, c, false);
+    }
+
+    public static float[] getScreenPos(final double x, final double y, final double z) {
+        final float[] nResult = new float[2];
+        final IntBuffer viewPort = createDirectIntBuffer(16);
+        final FloatBuffer screen = createDirectFloatBuffer(4);
+        glGetInteger(2978, viewPort);
+
+        if(Project.gluProject((float) x, (float) y, (float) z, matModelView, matProjection, viewPort, screen)) {
+            if(screen.get(2) < 1.0F) {
+                return null;
+            }
+            nResult[0] = screen.get(0);
+            nResult[1] = screen.get(1);
+
+            return nResult;
+        }
+
+        return null;
+    }
+
+    public static IntBuffer createDirectIntBuffer(final int a) {
+        return createDirectByteBuffer(a << 2).asIntBuffer();
+    }
+
+    public static FloatBuffer createDirectFloatBuffer(final int a) {
+        return createDirectByteBuffer(a << 2).asFloatBuffer();
+    }
+
+    public static ByteBuffer createDirectByteBuffer(final int a) {
+        return ByteBuffer.allocateDirect(a).order(ByteOrder.nativeOrder());
+    }
+
+    static {
+        matModelView = createDirectFloatBuffer(16);
+        matProjection = createDirectFloatBuffer(16);
     }
 }

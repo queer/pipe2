@@ -4,6 +4,9 @@ import me.curlpipesh.pipe.bytecode.map.MappedClass;
 import me.curlpipesh.pipe.bytecode.map.MappedClass.MethodDef;
 import me.curlpipesh.pipe.util.helpers.Helper;
 import org.objectweb.asm.*;
+import org.objectweb.asm.util.CheckClassAdapter;
+
+import java.io.PrintWriter;
 
 import static me.curlpipesh.pipe.bytecode.map.ClassMap.getClassByName;
 import static org.objectweb.asm.Opcodes.*;
@@ -85,6 +88,10 @@ public final class HelperGenerator {
             fv.visitEnd();
         }
         {
+            fv = cw.visitField(ACC_PRIVATE + ACC_FINAL + ACC_STATIC, "rotVec", "Lme/curlpipesh/pipe/util/Vec2;", null, null);
+            fv.visitEnd();
+        }
+        {
             mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
             mv.visitCode();
             mv.visitVarInsn(ALOAD, 0);
@@ -124,7 +131,7 @@ public final class HelperGenerator {
             mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "getWorld", "()Ljava/lang/Object;", null, null);
             mv.visitCode();
             mv.visitMethodInsn(INVOKESTATIC, minecraft.getObfuscatedName(), getMinecraft.getName(), getMinecraft.getDesc(), false);
-            mv.visitFieldInsn(GETFIELD, minecraft.getDescription(), minecraft.getFields().get("theWorld"), world.getDescription());
+            mv.visitFieldInsn(GETFIELD, minecraft.getObfuscatedName(), minecraft.getFields().get("theWorld"), world.getDescription());
             mv.visitInsn(ARETURN);
             mv.visitMaxs(1, 0);
             mv.visitEnd();
@@ -133,7 +140,7 @@ public final class HelperGenerator {
             mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "getPlayer", "()Ljava/lang/Object;", null, null);
             mv.visitCode();
             mv.visitMethodInsn(INVOKESTATIC, minecraft.getObfuscatedName(), getMinecraft.getName(), getMinecraft.getDesc(), false);
-            mv.visitFieldInsn(GETFIELD, minecraft.getDescription(), minecraft.getFields().get("thePlayer"), entityClientPlayer.getDescription());
+            mv.visitFieldInsn(GETFIELD, minecraft.getObfuscatedName(), minecraft.getFields().get("thePlayer"), entityClientPlayer.getDescription());
             mv.visitInsn(ARETURN);
             mv.visitMaxs(1, 0);
             mv.visitEnd();
@@ -142,7 +149,7 @@ public final class HelperGenerator {
             mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "getGameSettings", "()Ljava/lang/Object;", null, null);
             mv.visitCode();
             mv.visitMethodInsn(INVOKESTATIC, minecraft.getObfuscatedName(), getMinecraft.getName(), getMinecraft.getDesc(), false);
-            mv.visitFieldInsn(GETFIELD, minecraft.getDescription(), minecraft.getFields().get("gameSettings"), gameSettings.getDescription());
+            mv.visitFieldInsn(GETFIELD, minecraft.getObfuscatedName(), minecraft.getFields().get("gameSettings"), gameSettings.getDescription());
             mv.visitInsn(ARETURN);
             mv.visitMaxs(1, 0);
             mv.visitEnd();
@@ -151,8 +158,8 @@ public final class HelperGenerator {
             mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "isIngameGuiInDebugMode", "()Z", null, null);
             mv.visitCode();
             mv.visitMethodInsn(INVOKESTATIC, minecraft.getObfuscatedName(), getMinecraft.getName(), getMinecraft.getDesc(), false);
-            mv.visitFieldInsn(GETFIELD, minecraft.getDescription(), minecraft.getFields().get("gameSettings"), gameSettings.getDescription());
-            mv.visitFieldInsn(GETFIELD, gameSettings.getDescription(), gameSettings.getFields().get("isIngameGuiInDebugMode"), "Z");
+            mv.visitFieldInsn(GETFIELD, minecraft.getObfuscatedName(), minecraft.getFields().get("gameSettings"), gameSettings.getDescription());
+            mv.visitFieldInsn(GETFIELD, gameSettings.getObfuscatedName(), gameSettings.getFields().get("isIngameGuiInDebugMode"), "Z");
             mv.visitInsn(IRETURN);
             mv.visitMaxs(3, 0);
             mv.visitEnd();
@@ -161,7 +168,7 @@ public final class HelperGenerator {
             mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "getFontRenderer", "()Ljava/lang/Object;", null, null);
             mv.visitCode();
             mv.visitMethodInsn(INVOKESTATIC, minecraft.getObfuscatedName(), getMinecraft.getName(), getMinecraft.getDesc(), false);
-            mv.visitFieldInsn(GETFIELD, minecraft.getDescription(), minecraft.getFields().get("fontRenderer"), fontRenderer.getDescription());
+            mv.visitFieldInsn(GETFIELD, minecraft.getObfuscatedName(), minecraft.getFields().get("fontRenderer"), fontRenderer.getDescription());
             mv.visitInsn(ARETURN);
             mv.visitMaxs(1, 0);
             mv.visitEnd();
@@ -171,7 +178,7 @@ public final class HelperGenerator {
             mv.visitCode();
             mv.visitMethodInsn(INVOKESTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "getFontRenderer", "()Ljava/lang/Object;", false);
             mv.visitTypeInsn(CHECKCAST, fontRenderer.getObfuscatedName());
-            mv.visitFieldInsn(GETFIELD, fontRenderer.getDescription(), fontRenderer.getFields().get("fontHeight"), "I");
+            mv.visitFieldInsn(GETFIELD, fontRenderer.getObfuscatedName(), fontRenderer.getFields().get("fontHeight"), "I");
             mv.visitInsn(IRETURN);
             mv.visitMaxs(1, 0);
             mv.visitEnd();
@@ -207,7 +214,7 @@ public final class HelperGenerator {
             mv.visitCode();
             mv.visitMethodInsn(INVOKESTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "getWorld", "()Ljava/lang/Object;", false);
             mv.visitTypeInsn(CHECKCAST, abstractWorld.getObfuscatedName());
-            mv.visitFieldInsn(GETFIELD, abstractWorld.getDescription(), abstractWorld.getFields().get("loadedEntities"), "Ljava/util/List;");
+            mv.visitFieldInsn(GETFIELD, abstractWorld.getObfuscatedName(), abstractWorld.getFields().get("loadedEntities"), "Ljava/util/List;");
             mv.visitInsn(ARETURN);
             mv.visitMaxs(1, 0);
         }
@@ -219,21 +226,21 @@ public final class HelperGenerator {
             mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "entityVec", "Lme/curlpipesh/pipe/util/Vec3;");
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(CHECKCAST, entity.getObfuscatedName());
-            mv.visitFieldInsn(GETFIELD, entity.getDescription(), entity.getFields().get("curX"), "D");
+            mv.visitFieldInsn(GETFIELD, entity.getObfuscatedName(), entity.getFields().get("curX"), "D");
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/util/Vec3", "x", "(D)V", false);
             final Label l1 = new Label();
             mv.visitLabel(l1);
             mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "entityVec", "Lme/curlpipesh/pipe/util/Vec3;");
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(CHECKCAST, entity.getObfuscatedName());
-            mv.visitFieldInsn(GETFIELD, entity.getDescription(), entity.getFields().get("curY"), "D");
+            mv.visitFieldInsn(GETFIELD, entity.getObfuscatedName(), entity.getFields().get("curY"), "D");
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/util/Vec3", "y", "(D)V", false);
             final Label l2 = new Label();
             mv.visitLabel(l2);
             mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "entityVec", "Lme/curlpipesh/pipe/util/Vec3;");
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(CHECKCAST, entity.getObfuscatedName());
-            mv.visitFieldInsn(GETFIELD, entity.getDescription(), entity.getFields().get("curZ"), "D");
+            mv.visitFieldInsn(GETFIELD, entity.getObfuscatedName(), entity.getFields().get("curZ"), "D");
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/util/Vec3", "z", "(D)V", false);
             final Label l3 = new Label();
             mv.visitLabel(l3);
@@ -253,21 +260,21 @@ public final class HelperGenerator {
             mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "entityPrevVec", "Lme/curlpipesh/pipe/util/Vec3;");
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(CHECKCAST, entity.getObfuscatedName());
-            mv.visitFieldInsn(GETFIELD, entity.getDescription(), entity.getFields().get("prevX"), "D");
+            mv.visitFieldInsn(GETFIELD, entity.getObfuscatedName(), entity.getFields().get("prevX"), "D");
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/util/Vec3", "x", "(D)V", false);
             final Label l1 = new Label();
             mv.visitLabel(l1);
             mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "entityPrevVec", "Lme/curlpipesh/pipe/util/Vec3;");
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(CHECKCAST, entity.getObfuscatedName());
-            mv.visitFieldInsn(GETFIELD, entity.getDescription(), entity.getFields().get("prevY"), "D");
+            mv.visitFieldInsn(GETFIELD, entity.getObfuscatedName(), entity.getFields().get("prevY"), "D");
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/util/Vec3", "y", "(D)V", false);
             final Label l2 = new Label();
             mv.visitLabel(l2);
             mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "entityPrevVec", "Lme/curlpipesh/pipe/util/Vec3;");
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(CHECKCAST, entity.getObfuscatedName());
-            mv.visitFieldInsn(GETFIELD, entity.getDescription(), entity.getFields().get("prevZ"), "D");
+            mv.visitFieldInsn(GETFIELD, entity.getObfuscatedName(), entity.getFields().get("prevZ"), "D");
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/util/Vec3", "z", "(D)V", false);
             final Label l3 = new Label();
             mv.visitLabel(l3);
@@ -284,8 +291,8 @@ public final class HelperGenerator {
             mv.visitCode();
             mv.visitMethodInsn(INVOKESTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "getWorld", "()Ljava/lang/Object;", false);
             mv.visitTypeInsn(CHECKCAST, abstractWorld.getObfuscatedName());
-            mv.visitFieldInsn(GETFIELD, abstractWorld.getDescription(), abstractWorld.getFields().get("worldProvider"), worldProvider.getDescription());
-            mv.visitFieldInsn(GETFIELD, worldProvider.getDescription(), worldProvider.getFields().get("lightBrightnessTable"), "[F");
+            mv.visitFieldInsn(GETFIELD, abstractWorld.getObfuscatedName(), abstractWorld.getFields().get("worldProvider"), worldProvider.getDescription());
+            mv.visitFieldInsn(GETFIELD, worldProvider.getObfuscatedName(), worldProvider.getFields().get("lightBrightnessTable"), "[F");
             mv.visitInsn(ARETURN);
             mv.visitMaxs(3, 1);
             mv.visitEnd();
@@ -331,7 +338,7 @@ public final class HelperGenerator {
             mv.visitCode();
             mv.visitMethodInsn(INVOKESTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "getWorld", "()Ljava/lang/Object;", false);
             mv.visitTypeInsn(CHECKCAST, abstractWorld.getObfuscatedName());
-            mv.visitFieldInsn(GETFIELD, abstractWorld.getDescription(), abstractWorld.getFields().get("loadedBlockEntities"), "Ljava/util/List;");
+            mv.visitFieldInsn(GETFIELD, abstractWorld.getObfuscatedName(), abstractWorld.getFields().get("loadedBlockEntities"), "Ljava/util/List;");
             mv.visitInsn(ARETURN);
             mv.visitMaxs(1, 0);
         }
@@ -454,7 +461,7 @@ public final class HelperGenerator {
             mv.visitCode();
             mv.visitMethodInsn(INVOKESTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "getPlayer", "()Ljava/lang/Object;", false);
             mv.visitTypeInsn(CHECKCAST, entityClientPlayer.getObfuscatedName());
-            mv.visitFieldInsn(GETFIELD, entityClientPlayer.getDescription(), entityClientPlayer.getFields().get("netClientPlayHandler"), netClientPlayHandler.getDescription());
+            mv.visitFieldInsn(GETFIELD, entityClientPlayer.getObfuscatedName(), entityClientPlayer.getFields().get("netClientPlayHandler"), netClientPlayHandler.getDescription());
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(CHECKCAST, packet.getObfuscatedName());
             mv.visitMethodInsn(INVOKEVIRTUAL, netClientPlayHandler.getObfuscatedName(), netClientPlayHandler.getMethod("sendPacket").get().getName(), netClientPlayHandler.getMethod("sendPacket").get().getDesc(), false);
@@ -467,7 +474,7 @@ public final class HelperGenerator {
             mv.visitCode();
             mv.visitMethodInsn(INVOKESTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "getMinecraft", "()Ljava/lang/Object;", false);
             mv.visitTypeInsn(CHECKCAST, minecraft.getObfuscatedName());
-            mv.visitFieldInsn(GETFIELD, minecraft.getDescription(), minecraft.getFields().get("width"), "I");
+            mv.visitFieldInsn(GETFIELD, minecraft.getObfuscatedName(), minecraft.getFields().get("width"), "I");
             mv.visitInsn(IRETURN);
             mv.visitMaxs(2, 0);
             mv.visitEnd();
@@ -477,7 +484,7 @@ public final class HelperGenerator {
             mv.visitCode();
             mv.visitMethodInsn(INVOKESTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "getMinecraft", "()Ljava/lang/Object;", false);
             mv.visitTypeInsn(CHECKCAST, minecraft.getObfuscatedName());
-            mv.visitFieldInsn(GETFIELD, minecraft.getDescription(), minecraft.getFields().get("height"), "I");
+            mv.visitFieldInsn(GETFIELD, minecraft.getObfuscatedName(), minecraft.getFields().get("height"), "I");
             mv.visitInsn(IRETURN);
             mv.visitMaxs(2, 0);
             mv.visitEnd();
@@ -533,7 +540,7 @@ public final class HelperGenerator {
             mv.visitCode();
             mv.visitMethodInsn(INVOKESTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "getGameSettings", "()Ljava/lang/Object;", false);
             mv.visitTypeInsn(CHECKCAST, gameSettings.getObfuscatedName());
-            mv.visitFieldInsn(GETFIELD, gameSettings.getDescription(), gameSettings.getFields().get("isViewBobbingEnabled"), "Z");
+            mv.visitFieldInsn(GETFIELD, gameSettings.getObfuscatedName(), gameSettings.getFields().get("isViewBobbingEnabled"), "Z");
             mv.visitInsn(IRETURN);
             mv.visitMaxs(4, 0);
             mv.visitEnd();
@@ -544,7 +551,7 @@ public final class HelperGenerator {
             mv.visitMethodInsn(INVOKESTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "getGameSettings", "()Ljava/lang/Object;", false);
             mv.visitTypeInsn(CHECKCAST, gameSettings.getObfuscatedName());
             mv.visitVarInsn(ILOAD, 0);
-            mv.visitFieldInsn(PUTFIELD, gameSettings.getDescription(), gameSettings.getFields().get("isViewBobbingEnabled"), "Z");
+            mv.visitFieldInsn(PUTFIELD, gameSettings.getObfuscatedName(), gameSettings.getFields().get("isViewBobbingEnabled"), "Z");
             mv.visitInsn(RETURN);
             mv.visitMaxs(2, 1);
             mv.visitEnd();
@@ -554,7 +561,7 @@ public final class HelperGenerator {
             mv.visitCode();
             mv.visitMethodInsn(INVOKESTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "getMinecraft", "()Ljava/lang/Object;", false);
             mv.visitTypeInsn(CHECKCAST, minecraft.getObfuscatedName());
-            mv.visitFieldInsn(GETFIELD, minecraft.getDescription(), minecraft.getFields().get("currentScreen"), guiScreen.getDescription());
+            mv.visitFieldInsn(GETFIELD, minecraft.getObfuscatedName(), minecraft.getFields().get("currentScreen"), guiScreen.getDescription());
             mv.visitInsn(ARETURN);
             mv.visitMaxs(4, 0);
             mv.visitEnd();
@@ -609,8 +616,8 @@ public final class HelperGenerator {
             mv.visitCode();
             mv.visitMethodInsn(INVOKESTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "getPlayer", "()Ljava/lang/Object;", false);
             mv.visitTypeInsn(CHECKCAST, entityPlayer.getObfuscatedName());
-            mv.visitFieldInsn(GETFIELD, entityPlayer.getDescription(), entityPlayer.getFields().get("inventoryPlayer"), inventoryPlayer.getDescription());
-            mv.visitFieldInsn(GETFIELD, inventoryPlayer.getDescription(), inventoryPlayer.getFields().get("currentSlot"), "I");
+            mv.visitFieldInsn(GETFIELD, entityPlayer.getObfuscatedName(), entityPlayer.getFields().get("inventoryPlayer"), inventoryPlayer.getDescription());
+            mv.visitFieldInsn(GETFIELD, inventoryPlayer.getObfuscatedName(), inventoryPlayer.getFields().get("currentSlot"), "I");
             mv.visitInsn(IRETURN);
             mv.visitMaxs(1, 0);
             mv.visitEnd();
@@ -618,9 +625,9 @@ public final class HelperGenerator {
         {
             mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "getMinecraftDataDir", "()Ljava/io/File;", null, null);
             mv.visitCode();
-            mv.visitMethodInsn(INVOKESTATIC, "Lme/curlpipesh/pipe/util/helpers/Helper;", "getMinecraft", "()Ljava/lang/Object;", false);
+            mv.visitMethodInsn(INVOKESTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "getMinecraft", "()Ljava/lang/Object;", false);
             mv.visitTypeInsn(CHECKCAST, minecraft.getObfuscatedName());
-            mv.visitFieldInsn(GETFIELD, minecraft.getDescription(), minecraft.getFields().get("mcDataDir"), "Ljava/io/File;");
+            mv.visitFieldInsn(GETFIELD, minecraft.getObfuscatedName(), minecraft.getFields().get("mcDataDir"), "Ljava/io/File;");
             mv.visitInsn(ARETURN);
             mv.visitMaxs(1, 0);
             mv.visitEnd();
@@ -628,7 +635,7 @@ public final class HelperGenerator {
         {
             mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "getMinecraftVersion", "()Ljava/lang/String;", null, null);
             mv.visitCode();
-            mv.visitMethodInsn(INVOKESTATIC, "Lme/curlpipesh/pipe/util/helpers/Helper;", "getMinecraft", "()Ljava/lang/Object;", false);
+            mv.visitMethodInsn(INVOKESTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "getMinecraft", "()Ljava/lang/Object;", false);
             mv.visitTypeInsn(CHECKCAST, minecraft.getObfuscatedName());
             mv.visitMethodInsn(INVOKEVIRTUAL, minecraft.getObfuscatedName(), minecraft.getMethod("getVersion").get().getName(), minecraft.getMethod("getVersion").get().getDesc(), false);
             mv.visitInsn(ARETURN);
@@ -645,6 +652,14 @@ public final class HelperGenerator {
             mv.visitMethodInsn(INVOKESTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "sendPacket", "(Ljava/lang/Object;)V", false);
             mv.visitInsn(RETURN);
             mv.visitMaxs(5, 5);
+            mv.visitEnd();
+        }
+        {
+            mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "getEntityRotation", "(Ljava/lang/Object;)Lme/curlpipesh/pipe/util/Vec2;", null, null);
+            mv.visitCode();
+            mv.visitInsn(ACONST_NULL);
+            mv.visitInsn(ARETURN);
+            mv.visitMaxs(3, 1);
             mv.visitEnd();
         }
         {
@@ -684,6 +699,9 @@ public final class HelperGenerator {
 
         cw.visitEnd();
 
-        return cw.toByteArray();
+        final byte[] bytes = cw.toByteArray();
+        CheckClassAdapter.verify(new ClassReader(bytes), false, new PrintWriter(System.err));
+
+        return bytes;
     }
 }

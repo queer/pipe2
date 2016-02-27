@@ -63,7 +63,8 @@ public final class Agent {
         final Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             ClassMap.getMappedClasses().addAll(gson.fromJson(Files.lines(new File(propertyMappings).toPath())
-                    .reduce((t, u) -> t + u).get(), new TypeToken<ArrayList<MappedClass>>(){}.getType()));
+                    .reduce((t, u) -> t + u).get(), new TypeToken<ArrayList<MappedClass>>() {
+            }.getType()));
         } catch(final IOException e) {
             Pipe.getLogger().severe("Class map reading failed!");
             throw new RuntimeException(e);
@@ -75,10 +76,14 @@ public final class Agent {
             inst.addTransformer(injector);
             Pipe.getLogger().info("Added Injector: " + injector.getClassToInject().getDeobfuscatedName() + " : " + injector.getClassToInject().getObfuscatedName());
         }
-        try {
-            Class.forName(ClassMap.getClassByName("EntityRenderer").getObfuscatedName());
-        } catch(ClassNotFoundException e) {
-            e.printStackTrace();
+
+        // TODO: More generic
+        if(Pipe.getInstance().getVersion() instanceof Version1_9_X) {
+            try {
+                Class.forName(ClassMap.getClassByName("EntityRenderer").getObfuscatedName());
+            } catch(final ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
 
         Pipe.getLogger().info("Attempting to redefine classes!");
