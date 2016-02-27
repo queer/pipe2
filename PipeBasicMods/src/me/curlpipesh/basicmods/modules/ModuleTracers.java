@@ -94,7 +94,7 @@ public class ModuleTracers extends ToggleModule {
                     p.z(0);
                     GL11.glEnable(GL11.GL_DEPTH_TEST);
                     GLRenderer.post();
-                    setStatus(count > 0 ? "§a" + count : "§cNot rendering");
+                    setStatus(count > 0 ? "\247a" + count : "\247cNot rendering");
                 }
             }
         });

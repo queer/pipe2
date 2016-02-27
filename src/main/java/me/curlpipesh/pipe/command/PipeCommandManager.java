@@ -89,7 +89,7 @@ public class PipeCommandManager implements CommandManager {
                                 final String commandName = message.split(" ")[0].replaceFirst(Pattern.quote(getCommandPrefix()), "")
                                         .toLowerCase().replaceAll("\\s+", "");
                                 if(findCommand(commandName) == null) {
-                                    Helper.addChatMessage("§7Command not found: '§c" + commandName + "§7'.");
+                                    Helper.addChatMessage("\2477Command not found: '\247c" + commandName + "\2477'.");
                                     final Collection<String> possibilities = new ArrayList<>();
                                     for(final CommandWrapper commandWrapper : commands) {
                                         final int distance = StringHelper.levenshteinDistance(commandName, commandWrapper.getCommand().getName().toLowerCase().replaceAll("\\s+", ""));
@@ -98,11 +98,11 @@ public class PipeCommandManager implements CommandManager {
                                         }
                                     }
                                     if(!possibilities.isEmpty()) {
-                                        Helper.addChatMessage("§7Did you perhaps mean: ");
-                                        possibilities.forEach(p -> Helper.addChatMessage("  §7* §c" + p));
+                                        Helper.addChatMessage("\2477Did you perhaps mean: ");
+                                        possibilities.forEach(p -> Helper.addChatMessage("  \2477* \247c" + p));
                                     }
                                 } else {
-                                    Helper.addChatMessage("§7Unable to run command '§c" + commandName + "§7'.");
+                                    Helper.addChatMessage("\2477Unable to run command '\247c" + commandName + "\2477'.");
                                 }
                             }
                         }

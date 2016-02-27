@@ -59,7 +59,7 @@ public final class ChatHelper {
      */
     public static void debug(final String... messages) {
         if(Pipe.getInstance().isInDebugMode()) {
-            Arrays.stream(messages).forEach(m -> logger.info("§8[§cDebug§8]§r " + m));
+            Arrays.stream(messages).forEach(m -> logger.info("\2478[\247cDebug\2478]\247r " + m));
         }
     }
 
@@ -78,11 +78,11 @@ public final class ChatHelper {
             @Override
             public void publish(final LogRecord logRecord) {
                 final String levelColor =
-                        logRecord.getLevel().equals(Level.SEVERE) ? "§4" :
-                                logRecord.getLevel().equals(Level.WARNING) ? "§c" :
-                                        logRecord.getLevel().equals(Level.INFO) ? "§e" : "§b";
+                        logRecord.getLevel().equals(Level.SEVERE) ? "\2474" :
+                                logRecord.getLevel().equals(Level.WARNING) ? "\247c" :
+                                        logRecord.getLevel().equals(Level.INFO) ? "\247e" : "\247b";
 
-                Helper.addChatMessage(String.format("§8[§dPipe§8]§r §7[%s%s§7]§r %s", levelColor, logRecord.getLevel(),
+                Helper.addChatMessage(String.format("\2478[\247dPipe\2478]\247r \2477[%s%s\2477]\247r %s", levelColor, logRecord.getLevel(),
                         logRecord.getMessage()));
             }
 

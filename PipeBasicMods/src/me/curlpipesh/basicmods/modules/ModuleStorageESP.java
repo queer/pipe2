@@ -83,7 +83,7 @@ public class ModuleStorageESP extends ToggleModule {
                     Helper.enableLightmap();
                     GL11.glEnable(GL11.GL_DEPTH_TEST);
                     GLRenderer.post();
-                    setStatus(count > 0 ? "§a" + count : "§cNot rendering");
+                    setStatus(count > 0 ? "\247a" + count : "\247cNot rendering");
                 }
             }
         });

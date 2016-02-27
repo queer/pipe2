@@ -58,7 +58,7 @@ public class ModuleOverlay extends BasicModule {
                     enabledModules.addAll(plugin.getProvidedModules().stream()
                             .filter(Module::isEnabled)
                             .filter(Module::isStatusShown)
-                            .map(module -> module.getName() + " (" + module.getStatus() + "§r)")
+                            .map(module -> module.getName() + " (" + module.getStatus() + "\247r)")
                             .collect(Collectors.toList()));
                 }
                 int width = Helper.getStringWidth(statusLine);

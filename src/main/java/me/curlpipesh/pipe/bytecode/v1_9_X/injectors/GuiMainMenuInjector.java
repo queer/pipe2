@@ -35,7 +35,7 @@ public class GuiMainMenuInjector extends Injector {
                         if(ldc.cst instanceof String) {
                             String cst = (String) ldc.cst;
                             if(cst.contains("Minecraft")) {
-                                cst += " (Pipe)"/* v§a" + Pipe.getVersion() + "§r)";*/;
+                                cst += " (Pipe)"/* v\247a" + Pipe.getVersion() + "\247r)";*/;
                             }
                             ldc.cst = cst;
                         }
