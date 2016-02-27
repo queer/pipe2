@@ -25,7 +25,7 @@ public abstract class BasicModule implements Module {
 
     @Getter
     @Setter
-    private String status = "§aOk§r";
+    private String status = "\247aOk\247r";
 
     @Getter
     @Setter
