@@ -24,12 +24,15 @@ public class CommandDebug implements CommandExecutor {
             switch(tokens.get(0)) {
                 case "--enable":
                     Pipe.getInstance().setInDebugMode(true);
+                    ChatHelper.log("Debug has been enabled!");
                     break;
                 case "--disable":
                     Pipe.getInstance().setInDebugMode(false);
+                    ChatHelper.log("Debug has been disabled!");
                     break;
                 case "--toggle":
                     Pipe.getInstance().setInDebugMode(!Pipe.getInstance().isInDebugMode());
+                    ChatHelper.log("Debug has been " + (Pipe.getInstance().isInDebugMode() ? "enabled" : "disabled") + "!");
                     break;
             }
             // TODO: Map to flags
