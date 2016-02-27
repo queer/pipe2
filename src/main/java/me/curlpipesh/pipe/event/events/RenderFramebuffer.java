@@ -10,5 +10,5 @@ public final class RenderFramebuffer {
     }
 
     @SuppressWarnings("StaticVariableOfConcreteClass")
-    public static final RenderFramebuffer INSTANCE = new RenderFramebuffer();
+    public static final RenderFramebuffer instance = new RenderFramebuffer();
 }

@@ -5,16 +5,19 @@ import me.curlpipesh.pipe.Pipe;
 import me.curlpipesh.pipe.event.Listener;
 import me.curlpipesh.pipe.event.events.Keypress;
 import me.curlpipesh.pipe.event.events.Render2D;
+import me.curlpipesh.pipe.event.events.RenderFramebuffer;
 import me.curlpipesh.pipe.plugin.Plugin;
 import me.curlpipesh.pipe.plugin.module.BasicModule;
 import me.curlpipesh.pipe.plugin.module.Module;
 import me.curlpipesh.pipe.util.GLRenderer;
 import me.curlpipesh.pipe.util.Keybind;
+import me.curlpipesh.pipe.util.Vec3;
 import me.curlpipesh.pipe.util.helpers.Helper;
 import me.curlpipesh.pipe.util.helpers.KeypressHelper;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,6 +76,24 @@ public class ModuleOverlay extends BasicModule {
                 Helper.drawString(statusLine, 2, 2, 0xFFFFFFFF, false);
                 for(final String e : enabledModules) {
                     Helper.drawString(e, 2, y += OFFSET, 0xFFFFFFFF, false);
+                }
+            }
+        });
+        Pipe.eventBus().register(getPlugin(), new Listener<RenderFramebuffer>() {
+            @SuppressWarnings({"Convert2streamapi", "ConstantConditions"})
+            @Override
+            public void event(final RenderFramebuffer event) {
+                if(!Helper.isWorldNull()) {
+                    for(final Object o : Helper.getLoadedEntities()) {
+                        if(!o.equals(Helper.getPlayer())) {
+                            final Vec3 vec = Helper.getEntityVec(o);
+                            final float[] screenCoords = GLRenderer.getScreenPos(vec.x(), vec.y(), vec.z());
+                            if(screenCoords != null) {
+                                GLRenderer.drawRect(screenCoords[0], screenCoords[1], 50, 50, 0xFFFFFFFF);
+                                System.out.println(Arrays.toString(screenCoords));
+                            }
+                        }
+                    }
                 }
             }
         });

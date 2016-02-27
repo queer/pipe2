@@ -31,7 +31,8 @@ public class Version1_8_X implements Version {
                 new MinecraftInjector(ClassMap.getClassByName("Minecraft")),
                 new NetworkManagerInjector(ClassMap.getClassByName("NetworkManager")),
                 new PacketBufferInjector(ClassMap.getClassByName("PacketBuffer")),
-                new WorldProviderInjector(ClassMap.getClassByName("WorldProvider"))
+                new WorldProviderInjector(ClassMap.getClassByName("WorldProvider")),
+                new FramebufferInjector(ClassMap.getClassByName("Framebuffer"))
         };
     }
 
