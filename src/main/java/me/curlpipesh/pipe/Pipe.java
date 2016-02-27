@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  * While <tt>Agent</tt> aims to take care of instrumenting the loaded bytecode,
  * this class is the actual "main" class of the mod, responsible for actually
  * handling everything.
- *
+ * <p>
  * TODO: Make not singleton?
  *
  * @author c
@@ -42,8 +42,8 @@ public final class Pipe {
 
     /**
      * The singleton instance of Pipe. Guaranteed to never change.
-     *
-     * TODO: Interface
+     * <p>
+     * TODO: Interface?
      */
     private static final Pipe instance = new Pipe();
 
@@ -95,6 +95,10 @@ public final class Pipe {
     private CommandManager commandManager;
 
     @Getter
+    @Setter
+    private boolean isInDebugMode;
+
+    @Getter
     @Setter(AccessLevel.PACKAGE)
     private Version version;
 
@@ -116,6 +120,7 @@ public final class Pipe {
         pluginManager.init();
         for(final Generator generator : version.getGenerators()) {
             Agent.defineClass(Pipe.class.getClassLoader(), generator.generate(), generator.getClassName());
+            logger.info("Generated: " + generator.getClassName());
         }
         eventBus.push(new ModFinishedLoading());
     }

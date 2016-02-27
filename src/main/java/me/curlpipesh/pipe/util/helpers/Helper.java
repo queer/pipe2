@@ -3,6 +3,7 @@ package me.curlpipesh.pipe.util.helpers;
 import me.curlpipesh.pipe.event.events.ChatMessage;
 import me.curlpipesh.pipe.gui.GuiModule;
 import me.curlpipesh.pipe.gui.GuiScreen;
+import me.curlpipesh.pipe.util.Vec2;
 import me.curlpipesh.pipe.util.Vec3;
 
 import java.io.File;
@@ -14,14 +15,12 @@ import java.util.List;
  * @author c
  * @since 5/2/15
  */
-@SuppressWarnings({"unused", "StaticVariableOfConcreteClass"})
-public final class Helper {
+@SuppressWarnings({"unused", "StaticVariableOfConcreteClass", "ClassWithOnlyPrivateConstructors", "NonFinalUtilityClass", "UtilityClassWithoutPrivateConstructor"})
+public class Helper {
     private static final Vec3 entityVec = new Vec3(0, 0, 0);
     private static final Vec3 entityPrevVec = new Vec3(0, 0, 0);
     private static final Vec3 blockEntityVec = new Vec3(0, 0, 0);
-
-    private Helper() {
-    }
+    private static final Vec2 rotVec = new Vec2(0, 0);
 
     /**
      * Returns true if the world is null, false otherwise
@@ -160,7 +159,7 @@ public final class Helper {
      * @return The light brightness table for the current world
      */
     public static float[] getLightBrightnessTable() {
-        return new float[]{};
+        return new float[] {};
     }
 
     /**
@@ -440,5 +439,16 @@ public final class Helper {
      *
      * @param toComplete The string to be completed
      */
-    public static void sendTabComplete(final String toComplete) {}
+    public static void sendTabComplete(final String toComplete) {
+    }
+
+    /**
+     * Returns the given entity's pitch/yaw.
+     *
+     * @param entity Entity to check
+     * @return The entity's rotations
+     */
+    public static Vec2 getEntityRotation(final Object entity) {
+        return null;
+    }
 }

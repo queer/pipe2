@@ -46,7 +46,7 @@ public class EntityRendererInjector extends Injector {
                     if(insn instanceof LdcInsnNode) {
                         final LdcInsnNode linsn = (LdcInsnNode) insn;
                         if(linsn.cst.equals("hand")) {
-                            injectInsn = insn.getPrevious().getPrevious().getPrevious();
+                            injectInsn = insn.getPrevious().getPrevious().getPrevious().getPrevious();
                         }
                     }
                 }

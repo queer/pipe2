@@ -7,7 +7,6 @@ import me.curlpipesh.pipe.Pipe;
 import me.curlpipesh.pipe.command.Command;
 import me.curlpipesh.pipe.plugin.module.Module;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -42,8 +41,8 @@ public abstract class BasicPlugin implements Plugin {
     private boolean enabled;
 
     @Getter
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-    private Collection<Module> providedModules = new CopyOnWriteArrayList<>();
+    @SuppressWarnings({"MismatchedQueryAndUpdateOfCollection", "TypeMayBeWeakened"})
+    private List<Module> providedModules = new CopyOnWriteArrayList<>();
 
     @Getter
     private List<Command> registeredCommands = new CopyOnWriteArrayList<>();

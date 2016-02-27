@@ -87,6 +87,10 @@ public class HelperGenerator implements Generator {
             fv.visitEnd();
         }
         {
+            fv = cw.visitField(ACC_PRIVATE + ACC_FINAL + ACC_STATIC, "rotVec", "Lme/curlpipesh/pipe/util/Vec2;", null, null);
+            fv.visitEnd();
+        }
+        {
             mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
             mv.visitCode();
             mv.visitVarInsn(ALOAD, 0);
@@ -108,7 +112,7 @@ public class HelperGenerator implements Generator {
             mv.visitFrame(F_SAME, 0, null, 0, null);
             mv.visitInsn(ICONST_0);
             mv.visitLabel(l2);
-            mv.visitFrame(F_SAME1, 0, null, 1, new Object[]{INTEGER});
+            mv.visitFrame(F_SAME1, 0, null, 1, new Object[] {INTEGER});
             mv.visitInsn(IRETURN);
             mv.visitMaxs(1, 0);
             mv.visitEnd();
@@ -116,7 +120,6 @@ public class HelperGenerator implements Generator {
         {
             mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "getMinecraft", "()Ljava/lang/Object;", null, null);
             mv.visitCode();
-            mv.visitLabel(new Label());
             mv.visitMethodInsn(INVOKESTATIC, minecraft.getObfuscatedName(), getMinecraft.getName(), getMinecraft.getDesc(), false);
             mv.visitInsn(ARETURN);
             mv.visitMaxs(1, 0);
@@ -216,68 +219,46 @@ public class HelperGenerator implements Generator {
         {
             mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "getEntityVec", "(Ljava/lang/Object;)Lme/curlpipesh/pipe/util/Vec3;", null, null);
             mv.visitCode();
-            final Label l0 = new Label();
-            mv.visitLabel(l0);
             mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "entityVec", "Lme/curlpipesh/pipe/util/Vec3;");
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(CHECKCAST, entity.getObfuscatedName());
             mv.visitFieldInsn(GETFIELD, entity.getObfuscatedName(), entity.getFields().get("curX"), "D");
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/util/Vec3", "x", "(D)V", false);
-            final Label l1 = new Label();
-            mv.visitLabel(l1);
             mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "entityVec", "Lme/curlpipesh/pipe/util/Vec3;");
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(CHECKCAST, entity.getObfuscatedName());
             mv.visitFieldInsn(GETFIELD, entity.getObfuscatedName(), entity.getFields().get("curY"), "D");
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/util/Vec3", "y", "(D)V", false);
-            final Label l2 = new Label();
-            mv.visitLabel(l2);
             mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "entityVec", "Lme/curlpipesh/pipe/util/Vec3;");
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(CHECKCAST, entity.getObfuscatedName());
             mv.visitFieldInsn(GETFIELD, entity.getObfuscatedName(), entity.getFields().get("curZ"), "D");
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/util/Vec3", "z", "(D)V", false);
-            final Label l3 = new Label();
-            mv.visitLabel(l3);
             mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "entityVec", "Lme/curlpipesh/pipe/util/Vec3;");
             mv.visitInsn(ARETURN);
-            final Label l4 = new Label();
-            mv.visitLabel(l4);
-            mv.visitLocalVariable("entity", "Ljava/lang/Object;", null, l0, l4, 0);
             mv.visitMaxs(3, 1);
             mv.visitEnd();
         }
         {
             mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "getEntityPrevVec", "(Ljava/lang/Object;)Lme/curlpipesh/pipe/util/Vec3;", null, null);
             mv.visitCode();
-            final Label l0 = new Label();
-            mv.visitLabel(l0);
             mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "entityPrevVec", "Lme/curlpipesh/pipe/util/Vec3;");
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(CHECKCAST, entity.getObfuscatedName());
             mv.visitFieldInsn(GETFIELD, entity.getObfuscatedName(), entity.getFields().get("prevX"), "D");
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/util/Vec3", "x", "(D)V", false);
-            final Label l1 = new Label();
-            mv.visitLabel(l1);
             mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "entityPrevVec", "Lme/curlpipesh/pipe/util/Vec3;");
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(CHECKCAST, entity.getObfuscatedName());
             mv.visitFieldInsn(GETFIELD, entity.getObfuscatedName(), entity.getFields().get("prevY"), "D");
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/util/Vec3", "y", "(D)V", false);
-            final Label l2 = new Label();
-            mv.visitLabel(l2);
             mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "entityPrevVec", "Lme/curlpipesh/pipe/util/Vec3;");
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(CHECKCAST, entity.getObfuscatedName());
             mv.visitFieldInsn(GETFIELD, entity.getObfuscatedName(), entity.getFields().get("prevZ"), "D");
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/util/Vec3", "z", "(D)V", false);
-            final Label l3 = new Label();
-            mv.visitLabel(l3);
             mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "entityPrevVec", "Lme/curlpipesh/pipe/util/Vec3;");
             mv.visitInsn(ARETURN);
-            final Label l4 = new Label();
-            mv.visitLabel(l4);
-            mv.visitLocalVariable("entity", "Ljava/lang/Object;", null, l0, l4, 0);
             mv.visitMaxs(3, 1);
             mv.visitEnd();
         }
@@ -341,8 +322,6 @@ public class HelperGenerator implements Generator {
         {
             mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "getBlockEntityVec", "(Ljava/lang/Object;)Lme/curlpipesh/pipe/util/Vec3;", null, null);
             mv.visitCode();
-            final Label l0 = new Label();
-            mv.visitLabel(l0);
             mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "blockEntityVec", "Lme/curlpipesh/pipe/util/Vec3;");
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(CHECKCAST, blockEntity.getObfuscatedName());
@@ -351,8 +330,6 @@ public class HelperGenerator implements Generator {
             mv.visitMethodInsn(INVOKEVIRTUAL, vec3i.getObfuscatedName(), vec3i.getMethod("getX").get().getName(), vec3i.getMethod("getX").get().getDesc(), false);
             mv.visitInsn(I2D);
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/util/Vec3", "x", "(D)V", false);
-            final Label l1 = new Label();
-            mv.visitLabel(l1);
             mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "blockEntityVec", "Lme/curlpipesh/pipe/util/Vec3;");
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(CHECKCAST, blockEntity.getObfuscatedName());
@@ -361,8 +338,6 @@ public class HelperGenerator implements Generator {
             mv.visitMethodInsn(INVOKEVIRTUAL, vec3i.getObfuscatedName(), vec3i.getMethod("getY").get().getName(), vec3i.getMethod("getY").get().getDesc(), false);
             mv.visitInsn(I2D);
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/util/Vec3", "y", "(D)V", false);
-            final Label l2 = new Label();
-            mv.visitLabel(l2);
             mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "blockEntityVec", "Lme/curlpipesh/pipe/util/Vec3;");
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(CHECKCAST, blockEntity.getObfuscatedName());
@@ -371,13 +346,8 @@ public class HelperGenerator implements Generator {
             mv.visitMethodInsn(INVOKEVIRTUAL, vec3i.getObfuscatedName(), vec3i.getMethod("getZ").get().getName(), vec3i.getMethod("getZ").get().getDesc(), false);
             mv.visitInsn(I2D);
             mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/util/Vec3", "z", "(D)V", false);
-            final Label l3 = new Label();
-            mv.visitLabel(l3);
             mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "blockEntityVec", "Lme/curlpipesh/pipe/util/Vec3;");
             mv.visitInsn(ARETURN);
-            final Label l4 = new Label();
-            mv.visitLabel(l4);
-            mv.visitLocalVariable("entity", "Ljava/lang/Object;", null, l0, l4, 0);
             mv.visitMaxs(3, 1);
             mv.visitEnd();
         }
@@ -401,7 +371,7 @@ public class HelperGenerator implements Generator {
             mv.visitFrame(F_SAME, 0, null, 0, null);
             mv.visitInsn(ICONST_0);
             mv.visitLabel(l3);
-            mv.visitFrame(F_SAME1, 0, null, 1, new Object[]{INTEGER});
+            mv.visitFrame(F_SAME1, 0, null, 1, new Object[] {INTEGER});
             mv.visitInsn(IRETURN);
             mv.visitMaxs(1, 1);
             mv.visitEnd();
@@ -650,10 +620,26 @@ public class HelperGenerator implements Generator {
             mv.visitEnd();
         }
         {
+            mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "getEntityRotation", "(Ljava/lang/Object;)Lme/curlpipesh/pipe/util/Vec2;", null, null);
+            mv.visitCode();
+            mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "rotVec", "Lme/curlpipesh/pipe/util/Vec2;");
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitTypeInsn(CHECKCAST, entity.getObfuscatedName());
+            mv.visitFieldInsn(GETFIELD, entity.getObfuscatedName(), entity.getFields().get("curX"), "D");
+            mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/util/Vec2", "x", "(D)V", false);
+            mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "rotVec", "Lme/curlpipesh/pipe/util/Vec2;");
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitTypeInsn(CHECKCAST, entity.getObfuscatedName());
+            mv.visitFieldInsn(GETFIELD, entity.getObfuscatedName(), entity.getFields().get("curY"), "D");
+            mv.visitMethodInsn(INVOKEVIRTUAL, "me/curlpipesh/pipe/util/Vec2", "y", "(D)V", false);
+            mv.visitFieldInsn(GETSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "rotVec", "Lme/curlpipesh/pipe/util/Vec2;");
+            mv.visitInsn(ARETURN);
+            mv.visitMaxs(3, 1);
+            mv.visitEnd();
+        }
+        {
             mv = cw.visitMethod(ACC_STATIC, "<clinit>", "()V", null, null);
             mv.visitCode();
-            final Label l0 = new Label();
-            mv.visitLabel(l0);
             mv.visitTypeInsn(NEW, "me/curlpipesh/pipe/util/Vec3");
             mv.visitInsn(DUP);
             mv.visitInsn(DCONST_0);
@@ -661,8 +647,6 @@ public class HelperGenerator implements Generator {
             mv.visitInsn(DCONST_0);
             mv.visitMethodInsn(INVOKESPECIAL, "me/curlpipesh/pipe/util/Vec3", "<init>", "(DDD)V", false);
             mv.visitFieldInsn(PUTSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "entityVec", "Lme/curlpipesh/pipe/util/Vec3;");
-            final Label l1 = new Label();
-            mv.visitLabel(l1);
             mv.visitTypeInsn(NEW, "me/curlpipesh/pipe/util/Vec3");
             mv.visitInsn(DUP);
             mv.visitInsn(DCONST_0);
@@ -670,8 +654,6 @@ public class HelperGenerator implements Generator {
             mv.visitInsn(DCONST_0);
             mv.visitMethodInsn(INVOKESPECIAL, "me/curlpipesh/pipe/util/Vec3", "<init>", "(DDD)V", false);
             mv.visitFieldInsn(PUTSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "entityPrevVec", "Lme/curlpipesh/pipe/util/Vec3;");
-            final Label l2 = new Label();
-            mv.visitLabel(l2);
             mv.visitTypeInsn(NEW, "me/curlpipesh/pipe/util/Vec3");
             mv.visitInsn(DUP);
             mv.visitInsn(DCONST_0);
@@ -679,6 +661,12 @@ public class HelperGenerator implements Generator {
             mv.visitInsn(DCONST_0);
             mv.visitMethodInsn(INVOKESPECIAL, "me/curlpipesh/pipe/util/Vec3", "<init>", "(DDD)V", false);
             mv.visitFieldInsn(PUTSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "blockEntityVec", "Lme/curlpipesh/pipe/util/Vec3;");
+            mv.visitTypeInsn(NEW, "me/curlpipesh/pipe/util/Vec2");
+            mv.visitInsn(DUP);
+            mv.visitInsn(DCONST_0);
+            mv.visitInsn(DCONST_0);
+            mv.visitMethodInsn(INVOKESPECIAL, "me/curlpipesh/pipe/util/Vec2", "<init>", "(DD)V", false);
+            mv.visitFieldInsn(PUTSTATIC, "me/curlpipesh/pipe/util/helpers/Helper", "rotVec", "Lme/curlpipesh/pipe/util/Vec2;");
             mv.visitInsn(RETURN);
             mv.visitMaxs(8, 0);
             mv.visitEnd();
@@ -687,7 +675,7 @@ public class HelperGenerator implements Generator {
         cw.visitEnd();
 
         final byte[] bytes = cw.toByteArray();
-        CheckClassAdapter.verify(new ClassReader(bytes), true, new PrintWriter(new StringWriter()));
+        CheckClassAdapter.verify(new ClassReader(bytes), false, new PrintWriter(System.err));
 
         return bytes;
     }

@@ -7,7 +7,10 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.util.CheckClassAdapter;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
@@ -37,7 +40,9 @@ public abstract class Injector implements ClassFileTransformer, Opcodes {
             final ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
             cn.accept(cw);
             Pipe.getLogger().info("Done!");
-            return cw.toByteArray();
+            final byte[] cwBytes = cw.toByteArray();
+            CheckClassAdapter.verify(new ClassReader(cwBytes), false, new PrintWriter(System.err));
+            return cwBytes;
         } else {
             throw new IllegalStateException("@Inject isn't present!?");
         }

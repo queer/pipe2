@@ -10,7 +10,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.jar.JarFile;
@@ -25,8 +24,9 @@ public class PluginManager {
      * The list of plugins that have been registered with the PluginManager
      * instance.
      */
+    @SuppressWarnings("TypeMayBeWeakened")
     @Getter
-    private final Collection<Plugin> plugins = new CopyOnWriteArrayList<>();
+    private final List<Plugin> plugins = new CopyOnWriteArrayList<>();
 
     private final Pipe pipe;
 
@@ -112,7 +112,6 @@ public class PluginManager {
                 });
             }
         }
-        Pipe.getLogger().info("Done!");
 
         plugins.forEach(p -> {
             try {

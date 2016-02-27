@@ -6,6 +6,7 @@ import lombok.Value;
 import me.curlpipesh.pipe.Pipe;
 import me.curlpipesh.pipe.bytecode.map.ClassMap;
 import me.curlpipesh.pipe.command.Command.Builder;
+import me.curlpipesh.pipe.command.internal.CommandDebug;
 import me.curlpipesh.pipe.command.internal.CommandSet;
 import me.curlpipesh.pipe.event.Listener;
 import me.curlpipesh.pipe.event.PipeEventBus;
@@ -115,6 +116,8 @@ public class PipeCommandManager implements CommandManager {
                 new Builder().setName("value")
                         .setDesc("Manipulates values for a module. <plugin>.<module>.<property>.")
                         .setExecutor(new CommandSet(getCommandPrefix())).build());
+        registerCommand(null, new Builder().setName("debug").setDesc("Debugging command flags")
+                .setExecutor(new CommandDebug()).build());
     }
 
     @Value

@@ -51,7 +51,7 @@ public final class Agent {
             throw new IllegalArgumentException("No mappings path passed! Restart with -Dpipe.mappings.path=/path/to/mapping.json");
         }
         if(propertyVersion.equals("null")) {
-            throw new IllegalArgumentException("No version passed! Restart with -Dpipe.game.version=MAJOR_MINOR_X (Ex. 1_8_X)");
+            throw new IllegalArgumentException("No version passed! Restart with -Dpipe.game.version=MAJOR_MINOR_X (Ex. 1_9_X)");
         }
         if(!versions.containsKey(propertyVersion)) {
             throw new IllegalArgumentException("Invalid version passed!");
@@ -73,6 +73,7 @@ public final class Agent {
 
         for(final Injector injector : Pipe.getInstance().getVersion().getInjectors()) {
             inst.addTransformer(injector);
+            Pipe.getLogger().info("Added Injector: " + injector.getClassToInject().getDeobfuscatedName() + " : " + injector.getClassToInject().getObfuscatedName());
         }
 
         Pipe.getLogger().info("Attempting to redefine classes!");

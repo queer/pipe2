@@ -58,7 +58,9 @@ public final class ChatHelper {
      * @param messages The messages to log
      */
     public static void debug(final String... messages) {
-        Arrays.stream(messages).forEach(m -> logger.info("§8[§cDebug§8]§r " + m));
+        if(Pipe.getInstance().isInDebugMode()) {
+            Arrays.stream(messages).forEach(m -> logger.info("§8[§cDebug§8]§r " + m));
+        }
     }
 
     /**

@@ -2,6 +2,7 @@ package me.curlpipesh.pipe.bytecode.v1_9_X.injectors;
 
 import me.curlpipesh.pipe.Pipe;
 import me.curlpipesh.pipe.bytecode.Injector;
+import me.curlpipesh.pipe.bytecode.map.ClassMap;
 import me.curlpipesh.pipe.bytecode.map.MappedClass;
 import me.curlpipesh.pipe.bytecode.map.MappedClass.MethodDef;
 import me.curlpipesh.pipe.event.events.Keypress;
