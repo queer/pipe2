@@ -67,7 +67,7 @@ public class CommandSet implements CommandExecutor {
                 Helper.addChatMessage("\2477Couldn't find: \247c" + split[0] + "\247r");
             }
         } else {
-            Helper.addChatMessage("Usage: " + commandPrefix + "value <plugin>[.<module>[.<property>]] [value]");
+            Helper.addChatMessage("\2477Usage: " + commandPrefix + "value <plugin>[.<module>[.<property>]] [value]");
         }
         return true;
     }
