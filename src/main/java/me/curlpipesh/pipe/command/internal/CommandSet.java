@@ -41,30 +41,30 @@ public class CommandSet implements CommandExecutor {
                                 if(args.length > 1 && !args[1].isEmpty()) {
                                     // Set
                                     option.set(args[1]);
-                                    Helper.addChatMessage("§7Value of §e" + pmp + "§7 is now: §c" + option + "§r");
+                                    Helper.addChatMessage("\2477Value of \247e" + pmp + "\2477 is now: \247c" + option + "\247r");
                                 } else {
-                                    Helper.addChatMessage("§7Value of §e" + pmp + "§7: §c" + option + "§r");
+                                    Helper.addChatMessage("\2477Value of \247e" + pmp + "\2477: \247c" + option + "\247r");
                                 }
                             } else {
-                                Helper.addChatMessage("§7Couldn't find: §c" + pmp + "§r");
+                                Helper.addChatMessage("\2477Couldn't find: \247c" + pmp + "\247r");
                             }
                         } else {
-                            Helper.addChatMessage("§e" + split[0] + '.' + split[1] + "§7 has the following properties:");
+                            Helper.addChatMessage("\247e" + split[0] + '.' + split[1] + "\2477 has the following properties:");
                             for(final Option<?> o : module.getOptions()) {
-                                Helper.addChatMessage("  §7*§e " + o.name());
+                                Helper.addChatMessage("  \2477*\247e " + o.name());
                             }
                         }
                     } else {
-                        Helper.addChatMessage("§7Couldn't find: §c" + split[0] + '.' + split[1] + "§r");
+                        Helper.addChatMessage("\2477Couldn't find: \247c" + split[0] + '.' + split[1] + "\247r");
                     }
                 } else {
-                    Helper.addChatMessage("§e" + split[0] + "§7 has the following modules:");
+                    Helper.addChatMessage("\247e" + split[0] + "\2477 has the following modules:");
                     for(final Module module : plugin.getProvidedModules()) {
-                        Helper.addChatMessage("  §7*§e " + module.getName());
+                        Helper.addChatMessage("  \2477*\247e " + module.getName());
                     }
                 }
             } else {
-                Helper.addChatMessage("§7Couldn't find: §c" + split[0] + "§r");
+                Helper.addChatMessage("\2477Couldn't find: \247c" + split[0] + "\247r");
             }
         } else {
             Helper.addChatMessage("Usage: " + commandPrefix + "value <plugin>[.<module>[.<property>]] [value]");
