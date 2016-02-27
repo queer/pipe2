@@ -15,6 +15,7 @@ import me.curlpipesh.pipe.util.helpers.KeypressHelper;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 public class ModuleOverlay extends BasicModule {
     private boolean enabled = true;
 
-    public ModuleOverlay(Plugin plugin) {
+    public ModuleOverlay(final Plugin plugin) {
         super(plugin, "Overlay", "Informational overlay");
     }
 
@@ -43,14 +44,14 @@ public class ModuleOverlay extends BasicModule {
         Pipe.eventBus().register(getPlugin(), new Listener<Render2D>() {
             @Override
             @SuppressWarnings("ConstantConditions")
-            public void event(Render2D render2D) {
+            public void event(final Render2D render2D) {
                 if(Helper.isIngameGuiInDebugMode() || !enabled) {
                     return;
                 }
                 final String statusLine = "MC " + Helper.getMinecraftVersion();
-                final List<String> enabledModules = new ArrayList<>();
+                final Collection<String> enabledModules = new ArrayList<>();
                 final List<Plugin> plugins = Pipe.getInstance().getPluginManager().getPlugins();
-                for(@NonNull Plugin plugin : plugins) {
+                for(@NonNull final Plugin plugin : plugins) {
                     enabledModules.addAll(plugin.getProvidedModules().stream()
                             .filter(Module::isEnabled)
                             .filter(Module::isStatusShown)
@@ -58,8 +59,8 @@ public class ModuleOverlay extends BasicModule {
                             .collect(Collectors.toList()));
                 }
                 int width = Helper.getStringWidth(statusLine);
-                for(String string : enabledModules) {
-                    int w = Helper.getStringWidth(string);
+                for(final String string : enabledModules) {
+                    final int w = Helper.getStringWidth(string);
                     if(w > width) {
                         width = w;
                     }
@@ -67,10 +68,10 @@ public class ModuleOverlay extends BasicModule {
                 width += 4;
                 final int OFFSET = Helper.getFontHeight() + 2;
                 int y = 2;
-                int height = OFFSET * (enabledModules.size() + 1);
+                final int height = OFFSET * (enabledModules.size() + 1);
                 GLRenderer.drawRect(0, 0, width, height, 0x77000000);
                 Helper.drawString(statusLine, 2, 2, 0xFFFFFFFF, false);
-                for(String e : enabledModules) {
+                for(final String e : enabledModules) {
                     Helper.drawString(e, 2, y += OFFSET, 0xFFFFFFFF, false);
                 }
             }

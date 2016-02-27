@@ -75,6 +75,11 @@ public final class Agent {
             inst.addTransformer(injector);
             Pipe.getLogger().info("Added Injector: " + injector.getClassToInject().getDeobfuscatedName() + " : " + injector.getClassToInject().getObfuscatedName());
         }
+        try {
+            Class.forName(ClassMap.getClassByName("EntityRenderer").getObfuscatedName());
+        } catch(ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         Pipe.getLogger().info("Attempting to redefine classes!");
         try {
