@@ -1,7 +1,6 @@
 package me.curlpipesh.pipe.util.helpers;
 
 import me.curlpipesh.pipe.Pipe;
-import me.curlpipesh.pipe.bytecode.v1_8_X.injectors.GuiChatInjector;
 import me.curlpipesh.pipe.event.events.ChatMessage;
 import me.curlpipesh.pipe.event.events.ChatMessage.ChatMode;
 
@@ -11,15 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-/**
- * Used in {@link GuiChatInjector} for
- * redirecting the chat messages to our custom "handler," so that we can push
- * {@link ChatMessage} events without too much pain.
- *
- * @author c
- * @since 5/27/15
- */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "ConfusingOctalEscapeSequence"})
 public final class ChatHelper {
     /**
      * The {@link Logger} implementation for this class. Uses a custom

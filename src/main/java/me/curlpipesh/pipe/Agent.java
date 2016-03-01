@@ -8,7 +8,6 @@ import me.curlpipesh.pipe.bytecode.Redefiner;
 import me.curlpipesh.pipe.bytecode.Version;
 import me.curlpipesh.pipe.bytecode.map.ClassMap;
 import me.curlpipesh.pipe.bytecode.map.MappedClass;
-import me.curlpipesh.pipe.bytecode.version.Version1_8_X;
 import me.curlpipesh.pipe.bytecode.version.Version1_9_X;
 
 import java.io.File;
@@ -34,8 +33,6 @@ public final class Agent {
     private static final Map<String, Version> versions = new HashMap<>();
 
     static {
-        versions.put("1_8_X", new Version1_8_X());
-        versions.put("1.8.X", new Version1_8_X());
         versions.put("1_9_X", new Version1_9_X());
         versions.put("1.9.X", new Version1_9_X());
     }

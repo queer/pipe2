@@ -19,6 +19,7 @@ import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,13 +52,14 @@ public class ModuleOverlay extends BasicModule {
                 if (Helper.isIngameGuiInDebugMode() || !enabled) {
                     return;
                 }
-                final List<String> displayList = new ArrayList<>();
+                final Collection<String> displayList = new ArrayList<>();
+                // TODO: Build properly so that not appending a useless empty string. More verbose, but...
                 displayList.add("MC " + Helper.getMinecraftVersion() + (Pipe.getInstance().isInDebugMode() ? " DEBUG" : ""));
                 if (Pipe.getInstance().isInDebugMode()) {
-                    Vec3 playerVec = Helper.getEntityVec(Helper.getPlayer());
+                    final Vec3 playerVec = Helper.getEntityVec(Helper.getPlayer());
                     displayList.add((int) playerVec.x() + ", " + (int) playerVec.y() + ", " + (int) playerVec.z());
 
-                    Vec2 rotationVec = Helper.getEntityRotation(Helper.getPlayer());
+                    final Vec2 rotationVec = Helper.getEntityRotation(Helper.getPlayer());
                     displayList.add((int) rotationVec.x() + ", " + (int) rotationVec.y());
                 }
 
@@ -66,7 +68,8 @@ public class ModuleOverlay extends BasicModule {
                     displayList.addAll(plugin.getProvidedModules().stream()
                             .filter(Module::isEnabled)
                             .filter(Module::isStatusShown)
-                            .map(module -> module.getName() + (module.getStatus().length() > 0 ? (" (" + module.getStatus() + "\247r)") : ""))
+                            // TODO: Build properly so that not appending a useless empty string. More verbose, but...
+                            .map(module -> module.getName() + (!module.getStatus().isEmpty() ? " (" + module.getStatus() + "\247r)" : ""))
                             .collect(Collectors.toList()));
                 }
 
