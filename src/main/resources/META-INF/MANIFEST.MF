@@ -1,4 +1,4 @@
-Premain-Class: me.curlpipesh.pipe.Agent
+Premain-Class: lgbt.audrey.pipe.Agent
 Can-Redefine-Classes: true
 Can-Retransform-Classes: true
 Can-Set-Native-Method-Prefix: true
