@@ -36,8 +36,8 @@ public class MinecraftInjector extends Injector {
         for(final MethodNode m : (List<MethodNode>) cn.methods) {
             if(m.name.equals(startGame.getName()) && m.desc.equals(startGame.getDesc())) {
                 final InsnList list = new InsnList();
-                list.add(new MethodInsnNode(INVOKESTATIC, "me/curlpipesh/pipe/Pipe", "getInstance", "()Lme/curlpipesh/pipe/Pipe;", false));
-                list.add(new MethodInsnNode(INVOKEVIRTUAL, "me/curlpipesh/pipe/Pipe", "init", "()V", false));
+                list.add(new MethodInsnNode(INVOKESTATIC, "lgbt/audrey/pipe/Pipe", "getInstance", "()Llgbt/audrey/pipe/Pipe;", false));
+                list.add(new MethodInsnNode(INVOKEVIRTUAL, "lgbt/audrey/pipe/Pipe", "init", "()V", false));
                 final Iterator<AbstractInsnNode> i = m.instructions.iterator();
                 AbstractInsnNode node = null;
                 while(i.hasNext()) {
@@ -54,21 +54,21 @@ public class MinecraftInjector extends Injector {
             } else if(m.name.equals(runGame.getName()) && m.desc.equals(runGame.getDesc())) {
                 // Tick event
                 final InsnList list = new InsnList();
-                list.add(new MethodInsnNode(INVOKESTATIC, "me/curlpipesh/pipe/Pipe", "getInstance", "()Lme/curlpipesh/pipe/Pipe;", false));
-                list.add(new MethodInsnNode(INVOKEVIRTUAL, "me/curlpipesh/pipe/Pipe", "getEventBus", "()Lme/curlpipesh/pipe/event/EventBus;", false));
-                list.add(new FieldInsnNode(GETSTATIC, "me/curlpipesh/pipe/event/events/Tick", "instance", "Lme/curlpipesh/pipe/event/events/Tick;"));
-                list.add(new MethodInsnNode(INVOKEINTERFACE, "me/curlpipesh/pipe/event/EventBus", "push", "(Ljava/lang/Object;)Ljava/lang/Object;", true));
+                list.add(new MethodInsnNode(INVOKESTATIC, "lgbt/audrey/pipe/Pipe", "getInstance", "()Llgbt/audrey/pipe/Pipe;", false));
+                list.add(new MethodInsnNode(INVOKEVIRTUAL, "lgbt/audrey/pipe/Pipe", "getEventBus", "()Llgbt/audrey/pipe/event/EventBus;", false));
+                list.add(new FieldInsnNode(GETSTATIC, "lgbt/audrey/pipe/event/events/Tick", "instance", "Llgbt/audrey/pipe/event/events/Tick;"));
+                list.add(new MethodInsnNode(INVOKEINTERFACE, "lgbt/audrey/pipe/event/EventBus", "push", "(Ljava/lang/Object;)Ljava/lang/Object;", true));
                 m.instructions.insert(list);
 
                 // Key press event
                 list.clear();
-                list.add(new MethodInsnNode(INVOKESTATIC, "me/curlpipesh/pipe/Pipe", "getInstance", "()Lme/curlpipesh/pipe/Pipe;", false));
-                list.add(new MethodInsnNode(INVOKEVIRTUAL, "me/curlpipesh/pipe/Pipe", "getEventBus", "()Lme/curlpipesh/pipe/event/EventBus;", false));
-                list.add(new TypeInsnNode(NEW, "me/curlpipesh/pipe/event/events/Keypress"));
+                list.add(new MethodInsnNode(INVOKESTATIC, "lgbt/audrey/pipe/Pipe", "getInstance", "()Llgbt/audrey/pipe/Pipe;", false));
+                list.add(new MethodInsnNode(INVOKEVIRTUAL, "lgbt/audrey/pipe/Pipe", "getEventBus", "()Llgbt/audrey/pipe/event/EventBus;", false));
+                list.add(new TypeInsnNode(NEW, "lgbt/audrey/pipe/event/events/Keypress"));
                 list.add(new InsnNode(DUP));
                 list.add(new MethodInsnNode(INVOKESTATIC, "org/lwjgl/input/Keyboard", "getEventKey", "()I", false));
-                list.add(new MethodInsnNode(INVOKESPECIAL, "me/curlpipesh/pipe/event/events/Keypress", "<init>", "(I)V", false));
-                list.add(new MethodInsnNode(INVOKEINTERFACE, "me/curlpipesh/pipe/event/EventBus", "push", "(Ljava/lang/Object;)Ljava/lang/Object;", true));
+                list.add(new MethodInsnNode(INVOKESPECIAL, "lgbt/audrey/pipe/event/events/Keypress", "<init>", "(I)V", false));
+                list.add(new MethodInsnNode(INVOKEINTERFACE, "lgbt/audrey/pipe/event/EventBus", "push", "(Ljava/lang/Object;)Ljava/lang/Object;", true));
                 list.add(new InsnNode(POP));
 
                 final Iterator<AbstractInsnNode> i = m.instructions.iterator();

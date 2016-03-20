@@ -1,6 +1,6 @@
 {
-  "name": "Basic Mods",
+  "name": "Commands Plugin",
   "author": "audrey",
-  "description": "Provides commands for the client",
+  "description": "Provides basic commands for the client",
   "main": "lgbt.audrey.commandPlugin.CommandPlugin"
 }

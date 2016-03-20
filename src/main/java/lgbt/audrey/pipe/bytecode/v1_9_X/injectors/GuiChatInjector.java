@@ -25,7 +25,7 @@ public class GuiChatInjector extends Injector {
             if(m.name.equals("a") && m.desc.equals("(CI)V")) {
                 final InsnList list = new InsnList();
                 list.add(new VarInsnNode(ALOAD, 3));
-                list.add(new MethodInsnNode(INVOKESTATIC, "me/curlpipesh/pipe/util/helpers/ChatHelper", "handle", "(Ljava/lang/String;)V", false));
+                list.add(new MethodInsnNode(INVOKESTATIC, "lgbt/audrey/pipe/util/helpers/ChatHelper", "handle", "(Ljava/lang/String;)V", false));
                 AbstractInsnNode insn = null;
                 final Iterator<AbstractInsnNode> i = m.instructions.iterator();
 

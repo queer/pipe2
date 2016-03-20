@@ -1,9 +1,5 @@
-package lgbt.audrey.pipe.command.internal;
+package lgbt.audrey.commandPlugin.internal;
 
-import lgbt.audrey.pipe.Pipe;
-import lgbt.audrey.pipe.command.Command;
-import lgbt.audrey.pipe.command.CommandExecutor;
-import lgbt.audrey.pipe.util.helpers.ChatHelper;
 import lgbt.audrey.pipe.Pipe;
 import lgbt.audrey.pipe.command.Command;
 import lgbt.audrey.pipe.command.CommandExecutor;

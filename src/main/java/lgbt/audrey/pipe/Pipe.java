@@ -9,21 +9,12 @@ import lgbt.audrey.pipe.event.EventBus;
 import lgbt.audrey.pipe.event.PipeEventBus;
 import lgbt.audrey.pipe.event.events.ModFinishedLoading;
 import lgbt.audrey.pipe.plugin.PluginManager;
-import lgbt.audrey.pipe.plugin.serialization.ManifestDeserializer;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import lgbt.audrey.pipe.bytecode.Generator;
-import lgbt.audrey.pipe.bytecode.Version;
-import lgbt.audrey.pipe.command.CommandManager;
-import lgbt.audrey.pipe.command.PipeCommandManager;
-import lgbt.audrey.pipe.event.EventBus;
-import lgbt.audrey.pipe.event.PipeEventBus;
-import lgbt.audrey.pipe.event.events.ModFinishedLoading;
-import lgbt.audrey.pipe.plugin.PluginManager;
 import lgbt.audrey.pipe.plugin.PluginManifest;
 import lgbt.audrey.pipe.plugin.serialization.ManifestDeserializer;
 import lgbt.audrey.pipe.util.helpers.Helper;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.File;
 import java.util.logging.Handler;
@@ -41,7 +32,7 @@ import java.util.logging.Logger;
  * @author c
  * @since 7/10/15
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "Singleton"})
 public final class Pipe {
     /**
      * The logger for the entire mod.
@@ -53,6 +44,7 @@ public final class Pipe {
      * <p>
      * TODO: Interface?
      */
+    @SuppressWarnings("StaticVariableOfConcreteClass")
     private static final Pipe instance = new Pipe();
 
     static {
@@ -124,18 +116,12 @@ public final class Pipe {
     public void init() {
         logger.info("Starting up Pipe...");
         setupDirectories();
-        setupCommandManager();
         pluginManager.init();
         for(final Generator generator : version.getGenerators()) {
             Agent.defineClass(Pipe.class.getClassLoader(), generator.generate(), generator.getClassName());
             logger.info("Generated: " + generator.getClassName());
         }
         eventBus.push(new ModFinishedLoading());
-    }
-
-    private void setupCommandManager() {
-        commandManager = new PipeCommandManager();
-        commandManager.init();
     }
 
     /**

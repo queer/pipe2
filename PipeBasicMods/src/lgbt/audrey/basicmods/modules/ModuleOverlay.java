@@ -57,10 +57,11 @@ public class ModuleOverlay extends BasicModule {
                 displayList.add("MC " + Helper.getMinecraftVersion() + (Pipe.getInstance().isInDebugMode() ? " DEBUG" : ""));
                 if (Pipe.getInstance().isInDebugMode()) {
                     final Vec3 playerVec = Helper.getEntityVec(Helper.getPlayer());
-                    displayList.add((int) playerVec.x() + ", " + (int) playerVec.y() + ", " + (int) playerVec.z());
+                    displayList.add("Position: " + (int) playerVec.x() + ", " + (int) playerVec.y() + ", " + (int) playerVec.z());
 
+                    // TODO: This is wrong!
                     final Vec2 rotationVec = Helper.getEntityRotation(Helper.getPlayer());
-                    displayList.add((int) rotationVec.x() + ", " + (int) rotationVec.y());
+                    displayList.add("Rotation: " + (int) rotationVec.x() + ", " + (int) rotationVec.y());
                 }
 
                 final List<Plugin> plugins = Pipe.getInstance().getPluginManager().getPlugins();

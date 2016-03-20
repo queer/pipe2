@@ -35,13 +35,13 @@ public class EntityRendererInjector extends Injector {
         for(final MethodNode m : (List<MethodNode>) classNode.methods) {
             if(m.name.equals(doWorldRender.getName()) && m.desc.equals(doWorldRender.getDesc())) {
                 final InsnList list = new InsnList();
-                list.add(new MethodInsnNode(INVOKESTATIC, "me/curlpipesh/pipe/Pipe", "getInstance", "()Lme/curlpipesh/pipe/Pipe;", false));
-                list.add(new MethodInsnNode(INVOKEVIRTUAL, "me/curlpipesh/pipe/Pipe", "getEventBus", "()Lme/curlpipesh/pipe/event/EventBus;", false));
-                list.add(new TypeInsnNode(NEW, "me/curlpipesh/pipe/event/events/Render3D"));
+                list.add(new MethodInsnNode(INVOKESTATIC, "lgbt/audrey/pipe/Pipe", "getInstance", "()Llgbt/audrey/pipe/Pipe;", false));
+                list.add(new MethodInsnNode(INVOKEVIRTUAL, "lgbt/audrey/pipe/Pipe", "getEventBus", "()Llgbt/audrey/pipe/event/EventBus;", false));
+                list.add(new TypeInsnNode(NEW, "lgbt/audrey/pipe/event/events/Render3D"));
                 list.add(new InsnNode(DUP));
                 list.add(new VarInsnNode(FLOAD, 2));
-                list.add(new MethodInsnNode(INVOKESPECIAL, "me/curlpipesh/pipe/event/events/Render3D", "<init>", "(F)V", false));
-                list.add(new MethodInsnNode(INVOKEINTERFACE, "me/curlpipesh/pipe/event/EventBus", "push", "(Ljava/lang/Object;)Ljava/lang/Object;", true));
+                list.add(new MethodInsnNode(INVOKESPECIAL, "lgbt/audrey/pipe/event/events/Render3D", "<init>", "(F)V", false));
+                list.add(new MethodInsnNode(INVOKEINTERFACE, "lgbt/audrey/pipe/event/EventBus", "push", "(Ljava/lang/Object;)Ljava/lang/Object;", true));
                 list.add(new InsnNode(POP));
                 final Iterator<AbstractInsnNode> i = m.instructions.iterator();
                 AbstractInsnNode injectInsn = null;

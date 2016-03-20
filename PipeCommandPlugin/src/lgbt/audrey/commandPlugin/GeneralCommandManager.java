@@ -1,29 +1,16 @@
-package lgbt.audrey.pipe.command;
+package lgbt.audrey.commandPlugin;
 
 import lgbt.audrey.pipe.Pipe;
 import lgbt.audrey.pipe.bytecode.map.ClassMap;
-import lgbt.audrey.pipe.command.internal.CommandDebug;
-import lgbt.audrey.pipe.command.internal.CommandSet;
+import lgbt.audrey.pipe.command.Command;
+import lgbt.audrey.pipe.command.CommandManager;
 import lgbt.audrey.pipe.event.Listener;
-import lgbt.audrey.pipe.event.PipeEventBus;
 import lgbt.audrey.pipe.event.events.PacketSend;
 import lgbt.audrey.pipe.plugin.Plugin;
-import lgbt.audrey.pipe.util.helpers.Helper;
+import lgbt.audrey.pipe.util.helpers.ChatHelper;
 import lgbt.audrey.pipe.util.helpers.StringHelper;
+import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lgbt.audrey.pipe.Pipe;
-import lgbt.audrey.pipe.bytecode.map.ClassMap;
-import lgbt.audrey.pipe.command.Command.Builder;
-import lgbt.audrey.pipe.command.internal.CommandDebug;
-import lgbt.audrey.pipe.command.internal.CommandSet;
-import lgbt.audrey.pipe.event.Listener;
-import lgbt.audrey.pipe.event.PipeEventBus;
-import lgbt.audrey.pipe.event.events.PacketSend;
-import lgbt.audrey.pipe.plugin.Plugin;
-import lgbt.audrey.pipe.util.helpers.Helper;
-import lgbt.audrey.pipe.util.helpers.StringHelper;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -33,14 +20,18 @@ import java.util.regex.Pattern;
 
 /**
  * @author audrey
- * @since 10/10/15.
+ * @since 3/20/16.
  */
-public class PipeCommandManager implements CommandManager {
+@SuppressWarnings({"unused", "ConfusingOctalEscapeSequence"})
+public class GeneralCommandManager implements CommandManager {
     private final List<CommandWrapper> commands;
     @SuppressWarnings("FieldMayBeFinal")
     private int threshold = 4;
 
-    public PipeCommandManager() {
+    private final Plugin commandPlugin;
+
+    public GeneralCommandManager(final Plugin commandPlugin) {
+        this.commandPlugin = commandPlugin;
         commands = new ArrayList<>();
     }
 
@@ -48,12 +39,6 @@ public class PipeCommandManager implements CommandManager {
     public boolean executeCommand(@NonNull final String commandString) {
         final String[] split = commandString.split(" ");
         final Command command = findCommand(split[0].replaceFirst(Pattern.quote(getCommandPrefix()), ""));
-        if(command != null) {
-            Pipe.getLogger().info("Found command: " + command.getName());
-            if(command.getExecutor() != null) {
-                Pipe.getLogger().info(" * With executor");
-            }
-        }
         return command != null && command.getExecutor() != null && command.getExecutor().executeCommand(command, commandString, StringHelper.removeFirst(split));
     }
 
@@ -85,8 +70,7 @@ public class PipeCommandManager implements CommandManager {
     @Override
     public void init() {
         //noinspection deprecation
-        Pipe.eventBus().register(null, null);
-        ((PipeEventBus) Pipe.eventBus()).addDirectListener(new Listener<PacketSend>() {
+        Pipe.eventBus().register(commandPlugin, new Listener<PacketSend>() {
             @Override
             public void event(final PacketSend event) {
                 if(event.getPacket().getClass().getSimpleName().equals(ClassMap.getClassByName("PacketClientChatMessage").getObfuscatedName())) {
@@ -100,7 +84,7 @@ public class PipeCommandManager implements CommandManager {
                                 final String commandName = message.split(" ")[0].replaceFirst(Pattern.quote(getCommandPrefix()), "")
                                         .toLowerCase().replaceAll("\\s+", "");
                                 if(findCommand(commandName) == null) {
-                                    Helper.addChatMessage("\2477Command not found: '\247c" + commandName + "\2477'.");
+                                    ChatHelper.warn("\2477Command not found: '\247c" + commandName + "\2477'.");
                                     final Collection<String> possibilities = new ArrayList<>();
                                     for(final CommandWrapper commandWrapper : commands) {
                                         final int distance = StringHelper.levenshteinDistance(commandName, commandWrapper.getCommand().getName().toLowerCase().replaceAll("\\s+", ""));
@@ -109,11 +93,11 @@ public class PipeCommandManager implements CommandManager {
                                         }
                                     }
                                     if(!possibilities.isEmpty()) {
-                                        Helper.addChatMessage("\2477Did you perhaps mean: ");
-                                        possibilities.forEach(p -> Helper.addChatMessage("  \2477* \247c" + p));
+                                        ChatHelper.warn("\2477Did you perhaps mean: ");
+                                        possibilities.forEach(p -> ChatHelper.warn("  \2477* \247c" + p));
                                     }
                                 } else {
-                                    Helper.addChatMessage("\2477Unable to run command '\247c" + commandName + "\2477'.");
+                                    ChatHelper.warn("\2477Unable to run command '\247c" + commandName + "\2477'.");
                                 }
                             }
                         }
@@ -123,18 +107,17 @@ public class PipeCommandManager implements CommandManager {
                 }
             }
         });
-        registerCommand(null,
-                new Command.Builder().setName("value")
-                        .setDesc("Manipulates values for a module. <plugin>.<module>.<property>.")
-                        .setExecutor(new CommandSet(getCommandPrefix())).build());
-        registerCommand(null, new Command.Builder().setName("debug").setDesc("Debugging command flags")
-                .setExecutor(new CommandDebug()).build());
     }
 
-    @Value
-    @RequiredArgsConstructor
     private final class CommandWrapper {
-        private Plugin plugin;
-        private Command command;
+        @Getter
+        private final Plugin plugin;
+        @Getter
+        private final Command command;
+
+        private CommandWrapper(final Plugin plugin, final Command command) {
+            this.plugin = plugin;
+            this.command = command;
+        }
     }
 }

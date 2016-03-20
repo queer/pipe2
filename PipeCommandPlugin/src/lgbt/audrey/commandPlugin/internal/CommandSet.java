@@ -1,4 +1,4 @@
-package lgbt.audrey.pipe.command.internal;
+package lgbt.audrey.commandPlugin.internal;
 
 import lgbt.audrey.pipe.Pipe;
 import lgbt.audrey.pipe.command.Command;
@@ -6,13 +6,7 @@ import lgbt.audrey.pipe.command.CommandExecutor;
 import lgbt.audrey.pipe.config.Option;
 import lgbt.audrey.pipe.plugin.Plugin;
 import lgbt.audrey.pipe.plugin.module.Module;
-import lgbt.audrey.pipe.Pipe;
-import lgbt.audrey.pipe.command.Command;
-import lgbt.audrey.pipe.command.CommandExecutor;
-import lgbt.audrey.pipe.config.Option;
-import lgbt.audrey.pipe.plugin.Plugin;
-import lgbt.audrey.pipe.plugin.module.Module;
-import lgbt.audrey.pipe.util.helpers.Helper;
+import lgbt.audrey.pipe.util.helpers.ChatHelper;
 
 import java.util.Optional;
 
@@ -20,6 +14,7 @@ import java.util.Optional;
  * @author audrey
  * @since 1/26/16.
  */
+@SuppressWarnings("ConfusingOctalEscapeSequence")
 public class CommandSet implements CommandExecutor {
     private final String commandPrefix;
 
@@ -47,33 +42,31 @@ public class CommandSet implements CommandExecutor {
                                 if(args.length > 1 && !args[1].isEmpty()) {
                                     // Set
                                     option.set(args[1]);
-                                    Helper.addChatMessage("\2477Value of \247e" + pmp + "\2477 is now: \247c" + option + "\247r");
+                                    ChatHelper.log("\2477Value of \247e" + pmp + "\2477 is now: \247c" + option + "\247r");
                                 } else {
-                                    Helper.addChatMessage("\2477Value of \247e" + pmp + "\2477: \247c" + option + "\247r");
+                                    ChatHelper.log("\2477Value of \247e" + pmp + "\2477: \247c" + option + "\247r");
                                 }
                             } else {
-                                Helper.addChatMessage("\2477Couldn't find: \247c" + pmp + "\247r");
+                                ChatHelper.warn("\2477Couldn't find: \247c" + pmp + "\247r");
                             }
                         } else {
-                            Helper.addChatMessage("\247e" + split[0] + '.' + split[1] + "\2477 has the following properties:");
+                            ChatHelper.log("\247e" + split[0] + '.' + split[1] + "\2477 has the following properties:");
                             for(final Option<?> o : module.getOptions()) {
-                                Helper.addChatMessage("  \2477*\247e " + o.name());
+                                ChatHelper.log("  \2477*\247e " + o.name());
                             }
                         }
                     } else {
-                        Helper.addChatMessage("\2477Couldn't find: \247c" + split[0] + '.' + split[1] + "\247r");
+                        ChatHelper.warn("\2477Couldn't find: \247c" + split[0] + '.' + split[1] + "\247r");
                     }
                 } else {
-                    Helper.addChatMessage("\247e" + split[0] + "\2477 has the following modules:");
-                    for(final Module module : plugin.getProvidedModules()) {
-                        Helper.addChatMessage("  \2477*\247e " + module.getName());
-                    }
+                    ChatHelper.log("\247e" + split[0] + "\2477 has the following modules:");
+                    plugin.getProvidedModules().forEach(module -> ChatHelper.log("  \2477*\247e " + module.getName()));
                 }
             } else {
-                Helper.addChatMessage("\2477Couldn't find: \247c" + split[0] + "\247r");
+                ChatHelper.warn("\2477Couldn't find: \247c" + split[0] + "\247r");
             }
         } else {
-            Helper.addChatMessage("\2477Usage: " + commandPrefix + "value <plugin>[.<module>[.<property>]] [value]");
+            ChatHelper.log("\2477Usage: " + commandPrefix + "value <plugin>[.<module>[.<property>]] [value]");
         }
         return true;
     }
