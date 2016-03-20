@@ -31,7 +31,6 @@ limitations under the License.
 Installation:
 
 Before building, one must first `mvn install` the following libraries:
- - [Bytecode Tools](https://github.com/curlpipesh/BytecodeTools)
  - [pipe-gl](https://github.com/curlpipesh/pipe-gl)
  
 Note that, due to inadequate foresight on my part, `Event` and `pipe-gl` do not have a pom.xml that you can `mvn install` with. This must be created on your own for now.
