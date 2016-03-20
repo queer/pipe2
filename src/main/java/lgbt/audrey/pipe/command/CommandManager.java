@@ -18,4 +18,6 @@ public interface CommandManager {
     void registerCommand(@NonNull Plugin plugin, @NonNull Command command);
 
     void init();
+
+    void shutdown();
 }

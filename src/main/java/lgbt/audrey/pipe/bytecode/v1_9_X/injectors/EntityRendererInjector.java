@@ -35,6 +35,7 @@ public class EntityRendererInjector extends Injector {
         for(final MethodNode m : (List<MethodNode>) classNode.methods) {
             if(m.name.equals(doWorldRender.getName()) && m.desc.equals(doWorldRender.getDesc())) {
                 final InsnList list = new InsnList();
+                list.add(new MethodInsnNode(INVOKESTATIC, "org/lwjgl/opengl/GL11", "glPushMatrix", "()V", false));
                 list.add(new MethodInsnNode(INVOKESTATIC, "lgbt/audrey/pipe/Pipe", "getInstance", "()Llgbt/audrey/pipe/Pipe;", false));
                 list.add(new MethodInsnNode(INVOKEVIRTUAL, "lgbt/audrey/pipe/Pipe", "getEventBus", "()Llgbt/audrey/pipe/event/EventBus;", false));
                 list.add(new TypeInsnNode(NEW, "lgbt/audrey/pipe/event/events/Render3D"));
@@ -43,6 +44,7 @@ public class EntityRendererInjector extends Injector {
                 list.add(new MethodInsnNode(INVOKESPECIAL, "lgbt/audrey/pipe/event/events/Render3D", "<init>", "(F)V", false));
                 list.add(new MethodInsnNode(INVOKEINTERFACE, "lgbt/audrey/pipe/event/EventBus", "push", "(Ljava/lang/Object;)Ljava/lang/Object;", true));
                 list.add(new InsnNode(POP));
+                list.add(new MethodInsnNode(INVOKESTATIC, "org/lwjgl/opengl/GL11", "glPopMatrix", "()V", false));
                 final Iterator<AbstractInsnNode> i = m.instructions.iterator();
                 AbstractInsnNode injectInsn = null;
                 while(i.hasNext()) {
@@ -50,7 +52,7 @@ public class EntityRendererInjector extends Injector {
                     if(insn instanceof LdcInsnNode) {
                         final LdcInsnNode linsn = (LdcInsnNode) insn;
                         if(linsn.cst.equals("hand")) {
-                            injectInsn = insn.getPrevious().getPrevious().getPrevious().getPrevious();
+                            injectInsn = insn.getNext();
                         }
                     }
                 }

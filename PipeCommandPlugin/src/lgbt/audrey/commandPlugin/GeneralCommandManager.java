@@ -109,6 +109,11 @@ public class GeneralCommandManager implements CommandManager {
         });
     }
 
+    @Override
+    public void shutdown() {
+        commands.clear();
+    }
+
     private final class CommandWrapper {
         @Getter
         private final Plugin plugin;

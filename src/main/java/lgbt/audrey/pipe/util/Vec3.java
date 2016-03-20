@@ -254,6 +254,11 @@ public class Vec3 implements Cloneable {
         this.z = z;
     }
 
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    public Vec3 clone() {
+        return new Vec3(x, y, z);
+    }
+
     /**
      * Returns a String representation of this vector
      *
@@ -290,4 +295,5 @@ public class Vec3 implements Cloneable {
     public static Vec3 up() {
         return UP_VEC;
     }
+
 }
