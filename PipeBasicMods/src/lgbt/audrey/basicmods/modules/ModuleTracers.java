@@ -9,6 +9,7 @@ import lgbt.audrey.pipe.plugin.Plugin;
 import lgbt.audrey.pipe.plugin.module.ToggleModule;
 import lgbt.audrey.pipe.util.GLRenderer;
 import lgbt.audrey.pipe.util.Keybind;
+import lgbt.audrey.pipe.util.Vec2;
 import lgbt.audrey.pipe.util.Vec3;
 import lgbt.audrey.pipe.util.helpers.Helper;
 import org.lwjgl.input.Keyboard;
@@ -18,9 +19,7 @@ import org.lwjgl.opengl.GL11;
  * @author audrey
  * @since 10/6/15.
  */
-@SuppressWarnings("ClassTooDeepInInheritanceTree")
 public class ModuleTracers extends ToggleModule {
-    private final Vec3 offset = new Vec3(0, 0, 0);
     private final Vec3 half = new Vec3(0.5D, 0.5D, 0.5D);
     private final Vec3 p = new Vec3(0, 0, 0);
     private final Vec3 v = new Vec3(0, 0, 0);
@@ -30,8 +29,8 @@ public class ModuleTracers extends ToggleModule {
     private final ColorOption colorMonster = new ColorOption("colorMonster", 0xFF0000);
     private final ColorOption colorPlayer = new ColorOption("colorPlayer", 0xFF5555);
     private final ColorOption colorOther = new ColorOption("colorOther", 0x0000FF);
-    private final RangeOption<Integer> opacityTracers = new RangeOption<>("opacityTracers", 0x33, 0xFF, 0x00, 0x01);
-    private final RangeOption<Integer> opacityBox = new RangeOption<>("opacityBox", 0x56, 0xFF, 0x00, 0x01);
+    private final RangeOption<Integer> opacityTracers = new RangeOption<>("opacityTracers", 0x55, 0xFF, 0x00, 0x01);
+    private final RangeOption<Integer> opacityBox = new RangeOption<>("opacityBox", 0x22, 0xFF, 0x00, 0x01);
     private final RangeOption<Float> thicknessTracers = new RangeOption<>("thicknessTracers", 2.2F, 5.0F, 1.0F, 0.1F);
 
     public ModuleTracers(final Plugin plugin) {
@@ -56,10 +55,11 @@ public class ModuleTracers extends ToggleModule {
             public void event(final Render3D render3D) {
                 if(isEnabled()) {
                     // Sneak bug fix
-                    offset.y(Helper.isEntitySneaking(Helper.getPlayer()) ? 1.54D : 1.62D);
+                    final double offset = Helper.isEntitySneaking(Helper.getPlayer()) ? 1.54D : 1.62D;
                     int count = 0;
                     final Vec3 prev = Helper.getEntityPrevVec(Helper.getPlayer());
                     final Vec3 cur = Helper.getEntityVec(Helper.getPlayer());
+                    final Vec2 rot = Helper.getEntityRotation(Helper.getPlayer());
                     p.x(prev.x() + (cur.x() - prev.x()) * render3D.getPartialTickTime());
                     p.y(prev.y() + (cur.y() - prev.y()) * render3D.getPartialTickTime());
                     p.z(prev.z() + (cur.z() - prev.z()) * render3D.getPartialTickTime());
@@ -71,7 +71,12 @@ public class ModuleTracers extends ToggleModule {
                                 final Vec3 e = Helper.getEntityVec(o);
                                 if(e != null) {
                                     e.sub(p);
-                                    GLRenderer.drawLine(e, offset,
+                                    final double rv = Math.abs(rot.y()) <= 10 ? 0.5 * Math.sin(Math.toRadians(rot.y()))
+                                            : 0.5 * -(1 - Math.cos(Math.toRadians(rot.y())));
+                                    GLRenderer.drawLine(e.x(), e.y(), e.z(),
+                                            Math.cos(Math.toRadians(rot.x() + 90)) * 0.5,
+                                            offset - rv,
+                                            Math.sin(Math.toRadians(rot.x() + 90)) * 0.5,
                                             Helper.isEntityAnimal(o) ? colorAnimal.get() | opacityTracers.get() << 24 :
                                                     Helper.isEntityMonster(o) ? colorMonster.get() | opacityTracers.get() << 24 :
                                                             Helper.isEntityPlayer(o) ? colorPlayer.get() | opacityTracers.get() << 24 :

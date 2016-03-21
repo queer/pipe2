@@ -3,10 +3,6 @@ package lgbt.audrey.pipe.bytecode.v1_9_X.injectors;
 import lgbt.audrey.pipe.bytecode.AccessHelper;
 import lgbt.audrey.pipe.bytecode.Injector;
 import lgbt.audrey.pipe.bytecode.map.MappedClass;
-import lgbt.audrey.pipe.event.events.Render3D;
-import lgbt.audrey.pipe.bytecode.AccessHelper;
-import lgbt.audrey.pipe.bytecode.Injector;
-import lgbt.audrey.pipe.bytecode.map.MappedClass;
 import lgbt.audrey.pipe.bytecode.map.MappedClass.MethodDef;
 import lgbt.audrey.pipe.event.events.Render3D;
 import org.objectweb.asm.ClassReader;
@@ -29,8 +25,8 @@ public class EntityRendererInjector extends Injector {
     @Override
     @SuppressWarnings("unchecked")
     protected void inject(final ClassReader classReader, final ClassNode classNode) {
-        final MappedClass.MethodDef doWorldRender = getClassToInject().getMethod("doWorldRender").get();
-        final MappedClass.MethodDef applyViewBobbing = getClassToInject().getMethod("applyViewBobbing").get();
+        final MethodDef doWorldRender = getClassToInject().getMethod("doWorldRender").get();
+        final MethodDef applyViewBobbing = getClassToInject().getMethod("applyViewBobbing").get();
 
         for(final MethodNode m : (List<MethodNode>) classNode.methods) {
             if(m.name.equals(doWorldRender.getName()) && m.desc.equals(doWorldRender.getDesc())) {
@@ -51,8 +47,11 @@ public class EntityRendererInjector extends Injector {
                     final AbstractInsnNode insn = i.next();
                     if(insn instanceof LdcInsnNode) {
                         final LdcInsnNode linsn = (LdcInsnNode) insn;
-                        if(linsn.cst.equals("hand")) {
-                            injectInsn = insn.getNext();
+                        if(linsn.cst.equals(/*"hand"*/"entities")) {
+                            //injectInsn = insn.getNext();
+                            injectInsn = insn.getNext().getNext().getNext().getNext().getNext().getNext().getNext()
+                                    .getNext().getNext().getNext().getNext().getNext().getNext().getNext().getNext()
+                                    .getNext().getNext().getNext().getNext().getNext();
                         }
                     }
                 }

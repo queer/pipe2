@@ -11,7 +11,6 @@ import lgbt.audrey.pipe.event.events.ModFinishedLoading;
 import lgbt.audrey.pipe.plugin.PluginManager;
 import lgbt.audrey.pipe.plugin.PluginManifest;
 import lgbt.audrey.pipe.plugin.serialization.ManifestDeserializer;
-import lgbt.audrey.pipe.util.helpers.ChatHelper;
 import lgbt.audrey.pipe.util.helpers.Helper;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -163,6 +162,7 @@ public final class Pipe {
         setCommandManager(null);
         getEventBus().clear();
         getPluginManager().shutdown();
+
         getPluginManager().init();
     }
 

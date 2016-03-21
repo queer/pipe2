@@ -1,7 +1,8 @@
 package lgbt.audrey.pipe.bytecode;
 
-import java.io.File;
-import java.io.IOException;
+import org.objectweb.asm.ClassReader;
+
+import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -106,11 +107,33 @@ public final class ClassEnumerator {
                 if (jarEntry.isDirectory() || !jarEntry.getName().toLowerCase().trim().endsWith(".class")) {
                     continue;
                 }
-                classes.add(classLoader.loadClass(jarEntry.getName().replace(".class", "")
-                        .replace("/", ".")));
+                try {
+                    classes.add(classLoader.loadClass(jarEntry.getName().replace(".class", "").replace("/", ".")));
+                } catch(final NullPointerException e) {
+                    System.out.println("Classes:     " + classes);
+                    System.out.println("ClassLoader: " + classLoader);
+                    System.out.println("JarEntry:    " + jarEntry);
+                    System.out.println("Name:        " + jarEntry.getName());
+                    e.printStackTrace();
+                } catch(final ClassNotFoundException e) {
+                    final InputStream is = jarFile.getInputStream(jarEntry);
+                    final ByteArrayOutputStream os = new ByteArrayOutputStream();
+                    final byte[] buffer = new byte[0xFFFF];
+                    for (int len; (len = is.read(buffer)) != -1;) {
+                        os.write(buffer, 0, len);
+                    }
+                    os.flush();
+                    final byte[] bytes = os.toByteArray();
+                    os.close();
+                    is.close();
+                    System.out.println("Class file:    " + jarEntry.getName());
+                    System.out.println("Expected name: " + jarEntry.getName().replace(".class", "").replace("/", "."));
+                    System.out.println("Actual name:   " + new ClassReader(bytes).getClassName());
+                    e.printStackTrace();
+                }
             }
             jarFile.close();
-        } catch (final IOException | ClassNotFoundException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
         return classes;

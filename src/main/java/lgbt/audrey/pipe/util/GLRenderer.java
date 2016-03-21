@@ -1,15 +1,9 @@
 package lgbt.audrey.pipe.util;
 
+import lgbt.audrey.pipe.util.helpers.Helper;
 import me.curlpipesh.gl.tessellation.Tessellator;
 import me.curlpipesh.gl.tessellation.impl.VAOTessellator;
-import lgbt.audrey.pipe.util.helpers.Helper;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.Project;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
@@ -23,9 +17,6 @@ import static org.lwjgl.opengl.GL13.GL_SAMPLE_ALPHA_TO_COVERAGE;
  * @since 4/30/15
  */
 public final class GLRenderer {
-    private static final FloatBuffer matModelView;
-    private static final FloatBuffer matProjection;
-
     /**
      * The {@link Tessellator} to be used for rendering. By default, this is a
      * {@link VAOTessellator}.
@@ -288,39 +279,83 @@ public final class GLRenderer {
         Helper.drawString(s, x, y, c, false);
     }
 
-    public static float[] getScreenPos(final double x, final double y, final double z) {
-        final float[] nResult = new float[2];
-        final IntBuffer viewPort = createDirectIntBuffer(16);
-        final FloatBuffer screen = createDirectFloatBuffer(4);
-        glGetInteger(2978, viewPort);
+    /*
+     * Modified Copypasta from: https://github.com/lowell/SaferHUD/blob/master/src/main/java/com/zyin/zyinhud/helper/HUDEntityTrackerHelper.java
+     */
+    /*public float[] worldToScreen(Object entity, float ySum){
 
-        if(Project.gluProject((float) x, (float) y, (float) z, matModelView, matProjection, viewPort, screen)) {
-            if(screen.get(2) < 1.0F) {
-                return null;
-            }
-            nResult[0] = screen.get(0);
-            nResult[1] = screen.get(1);
-
-            return nResult;
+        EntityClientPlayerMP me = mc.thePlayer;
+        double meX = me.lastTickPosX + (me.posX - me.lastTickPosX) * partialTickTime;
+        double meY = me.lastTickPosY + (me.posY - me.lastTickPosY) * partialTickTime;
+        double meZ = me.lastTickPosZ + (me.posZ - me.lastTickPosZ) * partialTickTime;
+        double pitch = ((me.rotationPitch + 90) * Math.PI) / 180;
+        double yaw = ((me.rotationYaw + 90) * Math.PI) / 180;
+        // direction the player is facing
+        Vec3 lookDir = Vec3.createVectorHelper(Math.sin(pitch) * Math.cos(yaw), Math.cos(pitch), Math.sin(pitch) * Math.sin(yaw));
+        if (mc.gameSettings.thirdPersonView == 2){
+            // reversed 3rd-person view; flip the look direction
+            lookDir.xCoord *= -1;
+            lookDir.yCoord *= -1;
+            lookDir.zCoord *= -1;
         }
 
-        return null;
-    }
+        IntBuffer viewport = BufferUtils.createIntBuffer(16);
+        GL11.glGetInteger(GL11.GL_VIEWPORT, viewport);
 
-    public static IntBuffer createDirectIntBuffer(final int a) {
-        return createDirectByteBuffer(a << 2).asIntBuffer();
-    }
+        ScaledResolution res = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
+        int width = res.getScaledWidth();
+        int height = res.getScaledHeight();
 
-    public static FloatBuffer createDirectFloatBuffer(final int a) {
-        return createDirectByteBuffer(a << 2).asFloatBuffer();
-    }
 
-    public static ByteBuffer createDirectByteBuffer(final int a) {
-        return ByteBuffer.allocateDirect(a).order(ByteOrder.nativeOrder());
-    }
+        double entityX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTickTime;
+        double entityY = (entity.lastTickPosY + ySum) + ((entity.posY + ySum) - (entity.lastTickPosY + ySum)) * partialTickTime;
+        double entityZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTickTime;
+        // direction to target entity
+        Vec3 toEntity = Vec3.createVectorHelper(entityX - meX, entityY - meY, entityZ - meZ);
+        float x = (float)toEntity.xCoord;
+        float y = (float)toEntity.yCoord;
+        float z = (float)toEntity.zCoord;
+        double dist = toEntity.lengthVector();
+        toEntity = toEntity.normalize();
 
-    static {
-        matModelView = createDirectFloatBuffer(16);
-        matProjection = createDirectFloatBuffer(16);
-    }
+        if (lookDir.dotProduct(toEntity) <= 0.02){
+            // angle between vectors is greater than about 89 degrees, so
+            // create a dummy target location that is 89 degrees away from look direction
+            // along the arc between look direction and direction to target entity
+            final double angle = 89.0 * pi / 180;
+            final double sin = Math.sin(angle);
+            final double cos = Math.cos(angle);
+            Vec3 ortho = lookDir.crossProduct(toEntity); // vector orthogonal to look direction and direction to target entity
+            double ox = ortho.xCoord;
+            double oy = ortho.yCoord;
+            double oz = ortho.zCoord;
+            // build a rotation matrix to rotate around a vector (ortho) by an angle (89 degrees)
+            // from http://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle
+            double m00 = cos + ox*ox*(1-cos);
+            double m01 = ox*oy*(1-cos) - oz*sin;
+            double m02 = ox*oz*(1-cos) + oy*sin;
+            double m10 = oy*ox*(1-cos) + oz*sin;
+            double m11 = cos + oy*oy*(1-cos);
+            double m12 = oy*oz*(1-cos) - ox*sin;
+            double m20 = oz*ox*(1-cos) - oy*sin;
+            double m21 = oz*oy*(1-cos) + ox*sin;
+            double m22 = cos + oz*oz*(1-cos);
+            // transform (multiply) look direction vector with rotation matrix and scale by distance to target entity;
+            // this produces the coordinates for the dummy target
+            x = (float)(dist * (m00*lookDir.xCoord + m01*lookDir.yCoord + m02*lookDir.zCoord));
+            y = (float)(dist * (m10*lookDir.xCoord + m11*lookDir.yCoord + m12*lookDir.zCoord));
+            z = (float)(dist * (m20*lookDir.xCoord + m21*lookDir.yCoord + m22*lookDir.zCoord));
+        }
+
+        FloatBuffer screenCoords = BufferUtils.createFloatBuffer(3);
+        modelMatrix.rewind();
+        projMatrix.rewind();
+        // map target's object coordinates into window coordinates
+        // using world render transform matrices stored by StoreMatrices()
+        GLU.gluProject(x, y, z, ActiveRenderInfo.modelview, ActiveRenderInfo.projection, ActiveRenderInfo.viewport, screenCoords);
+        float hudX = screenCoords.get(0) / res.getScaleFactor();
+        float hudY = height - screenCoords.get(1) / res.getScaleFactor();
+        //System.out.println(hudX + " : " + hudY);
+        return new float[] { hudX, hudY };
+    }*/
 }

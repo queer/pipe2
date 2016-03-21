@@ -624,12 +624,14 @@ public class HelperGenerator implements Generator {
             mv.visitFieldInsn(GETSTATIC, "lgbt/audrey/pipe/util/helpers/Helper", "rotVec", "Llgbt/audrey/pipe/util/Vec2;");
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(CHECKCAST, entity.getObfuscatedName());
-            mv.visitFieldInsn(GETFIELD, entity.getObfuscatedName(), entity.getFields().get("curX"), "D");
+            mv.visitFieldInsn(GETFIELD, entity.getObfuscatedName(), entity.getFields().get("rotationYaw"), "F");
+            mv.visitInsn(F2D);
             mv.visitMethodInsn(INVOKEVIRTUAL, "lgbt/audrey/pipe/util/Vec2", "x", "(D)V", false);
             mv.visitFieldInsn(GETSTATIC, "lgbt/audrey/pipe/util/helpers/Helper", "rotVec", "Llgbt/audrey/pipe/util/Vec2;");
             mv.visitVarInsn(ALOAD, 0);
             mv.visitTypeInsn(CHECKCAST, entity.getObfuscatedName());
-            mv.visitFieldInsn(GETFIELD, entity.getObfuscatedName(), entity.getFields().get("curY"), "D");
+            mv.visitFieldInsn(GETFIELD, entity.getObfuscatedName(), entity.getFields().get("rotationPitch"), "F");
+            mv.visitInsn(F2D);
             mv.visitMethodInsn(INVOKEVIRTUAL, "lgbt/audrey/pipe/util/Vec2", "y", "(D)V", false);
             mv.visitFieldInsn(GETSTATIC, "lgbt/audrey/pipe/util/helpers/Helper", "rotVec", "Llgbt/audrey/pipe/util/Vec2;");
             mv.visitInsn(ARETURN);
