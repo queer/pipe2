@@ -4,13 +4,17 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lgbt.audrey.pipe.bytecode.Generator;
 import lgbt.audrey.pipe.bytecode.Version;
+import lgbt.audrey.pipe.command.Command.Builder;
 import lgbt.audrey.pipe.command.CommandManager;
 import lgbt.audrey.pipe.event.EventBus;
 import lgbt.audrey.pipe.event.PipeEventBus;
 import lgbt.audrey.pipe.event.events.ModFinishedLoading;
+import lgbt.audrey.pipe.plugin.BasicPlugin;
+import lgbt.audrey.pipe.plugin.Plugin;
 import lgbt.audrey.pipe.plugin.PluginManager;
 import lgbt.audrey.pipe.plugin.PluginManifest;
 import lgbt.audrey.pipe.plugin.serialization.ManifestDeserializer;
+import lgbt.audrey.pipe.util.helpers.ChatHelper;
 import lgbt.audrey.pipe.util.helpers.Helper;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -102,6 +106,34 @@ public final class Pipe {
     @Setter(AccessLevel.PACKAGE)
     private Version version;
 
+    @SuppressWarnings("AnonymousInnerClassWithTooManyMethods")
+    private final Plugin internalPlugin = new BasicPlugin() {
+        @Override
+        public String getName() {
+            return "Internal plugin";
+        }
+
+        @Override
+        public String getDescription() {
+            return "Used for some internal stuff";
+        }
+
+        @Override
+        public String getAuthor() {
+            return "audrey";
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return false;
+        }
+
+        @Override
+        public boolean isLoaded() {
+            return false;
+        }
+    };
+
     private Pipe() {
         pluginManager = new PluginManager(this);
         gson = new GsonBuilder()
@@ -117,6 +149,14 @@ public final class Pipe {
         logger.info("Starting up Pipe...");
         setupDirectories();
         pluginManager.init();
+        commandManager.registerCommand(internalPlugin,  new Builder()
+                .setName("reload").setDesc("Reloads all plugins.")
+                .setExecutor((command, commandString, args) -> {
+                    ChatHelper.log("Reloading all plugins...");
+                    reload();
+                    ChatHelper.log("Plugins reloaded!");
+                    return true;
+                }).build());
         for(final Generator generator : version.getGenerators()) {
             Agent.defineClass(Pipe.class.getClassLoader(), generator.generate(), generator.getClassName());
             logger.info("Generated: " + generator.getClassName());

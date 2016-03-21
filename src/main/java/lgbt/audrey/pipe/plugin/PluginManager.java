@@ -45,7 +45,7 @@ public class PluginManager {
                 final List<Class<?>> classes;
                 try {
                     classes = ClassEnumerator.getClassesFromJar(file, URLClassLoader.newInstance(new URL[] {
-                            new URL("jar:file:" + file.getAbsoluteFile().getAbsolutePath() + "!/")
+                            new URL("jar:file:" + file.getAbsoluteFile().getAbsolutePath() + "!/").toURI().toURL()
                     }, Pipe.class.getClassLoader()));
                 } catch(final Exception e) {
                     e.printStackTrace();

@@ -1,11 +1,12 @@
 package lgbt.audrey.pipe.event;
 
-import lombok.NonNull;
 import lgbt.audrey.pipe.plugin.Plugin;
+import lgbt.audrey.pipe.util.Cancellable;
+import lombok.NonNull;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -17,7 +18,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class PipeEventBus implements EventBus {
     private final Map<Plugin, List<Listener<?>>> listeners = new ConcurrentHashMap<>();
-    private final Collection<Listener<?>> directListeners = new CopyOnWriteArrayList<>();
 
     @Override
     public void register(@NonNull final Plugin plugin, @NonNull final Listener<?> listener) {
@@ -47,25 +47,23 @@ public class PipeEventBus implements EventBus {
         // that a listener is looking for an event of type T if its class is
         // equal to event.getClass(), because that's essentially T.class.
         // listeners.stream().filter(l -> l.getType().equals(event.getClass())).forEach(l -> ((Listener<T>) l).event(event));
-        listeners.entrySet().stream()
-                .forEach(l -> l.getValue().stream().filter(i -> i.getType().equals(event.getClass()))
-                        .forEach(i -> ((Listener<T>) i).event(event)));
-        directListeners.stream().filter(l -> l.getType().equals(event.getClass())).forEach(l -> ((Listener<T>) l).event(event));
+        outerLoop: for(final Entry<Plugin, List<Listener<?>>> pluginListEntry : listeners.entrySet()) {
+            for(final Listener<?> listener : pluginListEntry.getValue()) {
+                if(listener.getType().equals(event.getClass())) {
+                    ((Listener<T>) listener).event(event);
+                    if(event instanceof Cancellable) {
+                        if(((Cancellable) event).isCancelled()) {
+                            break outerLoop;
+                        }
+                    }
+                }
+            }
+        }
         return event;
-    }
-
-    /**
-     * Intended for internal use only.
-     * @param listener Listener to add
-     */
-    @Deprecated
-    public void addDirectListener(final Listener<?> listener) {
-        directListeners.add(listener);
     }
 
     @Override
     public void clear() {
         listeners.clear();
-        directListeners.clear();
     }
 }

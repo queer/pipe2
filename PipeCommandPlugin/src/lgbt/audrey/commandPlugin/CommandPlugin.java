@@ -20,14 +20,6 @@ public class CommandPlugin extends BasicPlugin {
 
     @Override
     public void onEnable() {
-        Pipe.getInstance().getCommandManager().registerCommand(this, new Builder()
-                .setName("reload").setDesc("Reloads all plugins, this one included.")
-                .setExecutor((command, commandString, args) -> {
-                    ChatHelper.log("Reloading all plugins...");
-                    Pipe.getInstance().reload();
-                    ChatHelper.log("Plugins reloaded!");
-                    return true;
-                }).build());
         Pipe.getInstance().getCommandManager().registerCommand(null, new Builder().setName("value")
                 .setDesc("Manipulates values for a module. <plugin>.<module>.<property>.")
                 .setExecutor(new CommandSet(Pipe.getInstance().getCommandManager().getCommandPrefix())).build());

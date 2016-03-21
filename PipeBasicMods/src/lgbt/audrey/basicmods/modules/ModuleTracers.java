@@ -72,7 +72,7 @@ public class ModuleTracers extends ToggleModule {
                                 if(e != null) {
                                     e.sub(p);
                                     final double rv = Math.abs(rot.y()) <= 10 ? 0.5 * Math.sin(Math.toRadians(rot.y()))
-                                            : 0.5 * -(1 - Math.cos(Math.toRadians(rot.y())));
+                                            : 0.55 * Math.sin(Math.toRadians(rot.y()));
                                     GLRenderer.drawLine(e.x(), e.y(), e.z(),
                                             Math.cos(Math.toRadians(rot.x() + 90)) * 0.5,
                                             offset - rv,
