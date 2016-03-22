@@ -85,16 +85,4 @@ public interface Plugin extends Loadable, Toggleable {
      * once.
      */
     void loadManifestData();
-
-    /**
-     * Finishes up whatever the plugin needs to do after onEnable(). This may
-     * include anything from registering routes to adding event handlers. Note
-     * that {@link BasicPlugin} uses this for:
-     * <pre>
-     *     Registering {@link Module} routes
-     *     Initializting Modules
-     *     Setting up all event listeners
-     * </pre>
-     */
-    void finishEnabling();
 }

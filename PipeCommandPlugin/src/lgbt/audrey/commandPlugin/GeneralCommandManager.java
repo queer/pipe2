@@ -3,6 +3,7 @@ package lgbt.audrey.commandPlugin;
 import lgbt.audrey.pipe.Pipe;
 import lgbt.audrey.pipe.bytecode.map.ClassMap;
 import lgbt.audrey.pipe.command.Command;
+import lgbt.audrey.pipe.command.CommandException;
 import lgbt.audrey.pipe.command.CommandManager;
 import lgbt.audrey.pipe.event.Listener;
 import lgbt.audrey.pipe.event.events.PacketSend;
@@ -36,7 +37,7 @@ public class GeneralCommandManager implements CommandManager {
     }
 
     @Override
-    public boolean executeCommand(@NonNull final String commandString) {
+    public boolean executeCommand(@NonNull final String commandString) throws CommandException {
         final String[] split = commandString.split(" ");
         final Command command = findCommand(split[0].replaceFirst(Pattern.quote(getCommandPrefix()), ""));
         return command != null && command.getExecutor() != null && command.getExecutor().executeCommand(command, commandString, StringHelper.removeFirst(split));
@@ -80,25 +81,31 @@ public class GeneralCommandManager implements CommandManager {
                         final String message = (String) msg.get(event.getPacket());
                         if(message.startsWith(getCommandPrefix())) {
                             event.setCancelled(true);
-                            if(!executeCommand(message)) {
-                                final String commandName = message.split(" ")[0].replaceFirst(Pattern.quote(getCommandPrefix()), "")
-                                        .toLowerCase().replaceAll("\\s+", "");
-                                if(findCommand(commandName) == null) {
-                                    ChatHelper.warn("\2477Command not found: '\247c" + commandName + "\2477'.");
-                                    final Collection<String> possibilities = new ArrayList<>();
-                                    for(final CommandWrapper commandWrapper : commands) {
-                                        final int distance = StringHelper.levenshteinDistance(commandName, commandWrapper.getCommand().getName().toLowerCase().replaceAll("\\s+", ""));
-                                        if(distance < threshold) {
-                                            possibilities.add(commandWrapper.getCommand().getName().toLowerCase().replaceAll("\\s+", ""));
+                            try {
+                                if(!executeCommand(message)) {
+                                    final String commandName = message.split(" ")[0].replaceFirst(Pattern.quote(getCommandPrefix()), "")
+                                            .toLowerCase().replaceAll("\\s+", "");
+                                    if(findCommand(commandName) == null) {
+                                        ChatHelper.warn("\2477Command not found: '\247c" + commandName + "\2477'.");
+                                        final Collection<String> possibilities = new ArrayList<>();
+                                        for(final CommandWrapper commandWrapper : commands) {
+                                            final int distance = StringHelper.levenshteinDistance(commandName, commandWrapper.getCommand().getName().toLowerCase().replaceAll("\\s+", ""));
+                                            if(distance < threshold) {
+                                                possibilities.add(commandWrapper.getCommand().getName().toLowerCase().replaceAll("\\s+", ""));
+                                            }
                                         }
+                                        if(!possibilities.isEmpty()) {
+                                            ChatHelper.warn("\2477Did you perhaps mean: ");
+                                            possibilities.forEach(p -> ChatHelper.warn("  \2477* \247c" + p));
+                                        }
+                                    } else {
+                                        ChatHelper.warn("\2477Unable to run command '\247c" + commandName + "\2477'.");
                                     }
-                                    if(!possibilities.isEmpty()) {
-                                        ChatHelper.warn("\2477Did you perhaps mean: ");
-                                        possibilities.forEach(p -> ChatHelper.warn("  \2477* \247c" + p));
-                                    }
-                                } else {
-                                    ChatHelper.warn("\2477Unable to run command '\247c" + commandName + "\2477'.");
                                 }
+                            } catch(final CommandException e) {
+                                ChatHelper.warn("\247cCouldn't run command '\2474" + message + "\247c':",
+                                        "\247c" + e.getMessage());
+                                e.printStackTrace();
                             }
                         }
                     } catch(NoSuchFieldException | IllegalAccessException e) {

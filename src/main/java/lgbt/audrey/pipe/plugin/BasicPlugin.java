@@ -92,9 +92,4 @@ public abstract class BasicPlugin implements Plugin {
             Pipe.getLogger().warning(String.format("[%s] Ignoring unregister for non-registered module \"%s\"!", name, module.getName()));
         }
     }
-
-    @Override
-    public final void finishEnabling() {
-        providedModules.forEach(Module::init);
-    }
 }

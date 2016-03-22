@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lgbt.audrey.pipe.bytecode.Generator;
 import lgbt.audrey.pipe.bytecode.Version;
-import lgbt.audrey.pipe.command.Command.Builder;
+import lgbt.audrey.pipe.command.Command.CommandBuilder;
 import lgbt.audrey.pipe.command.CommandManager;
 import lgbt.audrey.pipe.event.EventBus;
 import lgbt.audrey.pipe.event.PipeEventBus;
@@ -132,6 +132,23 @@ public final class Pipe {
         public boolean isLoaded() {
             return false;
         }
+
+        @Override
+        public void onEnable() {
+            super.onEnable();
+            if(commandManager != null) {
+                commandManager.registerCommand(internalPlugin,  new CommandBuilder()
+                        .setName("reload").setDesc("Reloads all plugins.")
+                        .setExecutor((command, commandString, args) -> {
+                            ChatHelper.log("Reloading all plugins...");
+                            reload();
+                            ChatHelper.log("Plugins reloaded!");
+                            return true;
+                        }).build());
+            } else {
+                getLogger().warning("No command manager available; reload command will not be added.");
+            }
+        }
     };
 
     private Pipe() {
@@ -149,14 +166,7 @@ public final class Pipe {
         logger.info("Starting up Pipe...");
         setupDirectories();
         pluginManager.init();
-        commandManager.registerCommand(internalPlugin,  new Builder()
-                .setName("reload").setDesc("Reloads all plugins.")
-                .setExecutor((command, commandString, args) -> {
-                    ChatHelper.log("Reloading all plugins...");
-                    reload();
-                    ChatHelper.log("Plugins reloaded!");
-                    return true;
-                }).build());
+        internalPlugin.onEnable();
         for(final Generator generator : version.getGenerators()) {
             Agent.defineClass(Pipe.class.getClassLoader(), generator.generate(), generator.getClassName());
             logger.info("Generated: " + generator.getClassName());
@@ -204,6 +214,7 @@ public final class Pipe {
         getPluginManager().shutdown();
 
         getPluginManager().init();
+        internalPlugin.onEnable();
     }
 
     /**

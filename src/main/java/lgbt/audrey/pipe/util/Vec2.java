@@ -174,6 +174,11 @@ public class Vec2 {
         this.y = y;
     }
 
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    public Vec2 clone() {
+        return new Vec2(x, y);
+    }
+
     /**
      * Returns a String representation of this vector
      *

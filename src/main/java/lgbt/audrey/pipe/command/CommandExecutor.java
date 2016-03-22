@@ -1,7 +1,6 @@
 package lgbt.audrey.pipe.command;
 
 import lgbt.audrey.pipe.util.ArgumentTokenizer;
-import lgbt.audrey.pipe.util.ArgumentTokenizer;
 
 import java.util.List;
 
@@ -11,7 +10,7 @@ import java.util.List;
  */
 @FunctionalInterface
 public interface CommandExecutor {
-    boolean executeCommand(Command command, String commandString, String[] args);
+    boolean executeCommand(Command command, String commandString, String[] args) throws CommandException;
 
     default List<String> tokenize(final String commandString) {
         return ArgumentTokenizer.tokenize(commandString, true);

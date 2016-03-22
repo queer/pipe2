@@ -87,7 +87,6 @@ public abstract class ArgumentTokenizer {
      * @return A list of parsed and properly escaped arguments.
      */
     public static List<String> tokenize(final CharSequence arguments, final boolean stringify) {
-
         final AbstractSequentialList<String> argList = new LinkedList<>();
         StringBuilder currArg = new StringBuilder();
         boolean escaped = false;

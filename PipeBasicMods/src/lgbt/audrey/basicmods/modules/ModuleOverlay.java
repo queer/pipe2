@@ -57,9 +57,13 @@ public class ModuleOverlay extends BasicModule {
                     final Vec3 playerVec = Helper.getEntityVec(Helper.getPlayer());
                     displayList.add("Position: " + (int) playerVec.x() + ", " + (int) playerVec.y() + ", " + (int) playerVec.z());
 
-                    // TODO: This is wrong!
-                    final Vec2 rotationVec = Helper.getEntityRotation(Helper.getPlayer());
-                    displayList.add("Rotation: " + (int) rotationVec.x() + ", " + (int) rotationVec.y());
+                    final Vec2 rot = Helper.getEntityRotation(Helper.getPlayer());
+                    displayList.add("Rotation: " + (int) rot.x() + ", " + (int) rot.y());
+                    final double r = 1;
+                    final double x = r * Math.cos(Math.toRadians(rot.x())) * Math.sin(Math.toRadians(rot.y()));
+                    final double y = r * Math.sin(Math.toRadians(rot.x())) * Math.cos(Math.toRadians(rot.y()));
+                    final double z = r * Math.cos(Math.toRadians(rot.y()));
+                    displayList.add("r, x, y, z: " + String.format("%.2f, %.2f, %.2f, %.2f", r, x, y, z));
                 }
 
                 final List<Plugin> plugins = Pipe.getInstance().getPluginManager().getPlugins();
@@ -70,8 +74,8 @@ public class ModuleOverlay extends BasicModule {
                             // TODO: Build properly so that not appending a useless empty string. More verbose, but...
                             .map(module ->
                                     (Pipe.getInstance().isInDebugMode() ? module.getPlugin().getName().toLowerCase().replace(" ", "") + ':' : "")
-                                    + (Pipe.getInstance().isInDebugMode() ? module.getName().toLowerCase().replace(" ", "") : module.getName())
-                                    + ' ' + (!module.getStatus().isEmpty() ? '(' + module.getStatus() + "\247r)" : ""))
+                                            + (Pipe.getInstance().isInDebugMode() ? module.getName().toLowerCase().replace(" ", "") : module.getName())
+                                            + ' ' + (!module.getStatus().isEmpty() ? '(' + module.getStatus() + "\247r)" : ""))
                             .collect(Collectors.toList()));
                 }
 

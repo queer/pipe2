@@ -4,12 +4,13 @@ import lgbt.audrey.pipe.Pipe;
 import lgbt.audrey.pipe.config.ColorOption;
 import lgbt.audrey.pipe.config.RangeOption;
 import lgbt.audrey.pipe.event.Listener;
+import lgbt.audrey.pipe.event.events.Render2D;
 import lgbt.audrey.pipe.event.events.Render3D;
+import lgbt.audrey.pipe.event.events.RenderFramebuffer;
 import lgbt.audrey.pipe.plugin.Plugin;
 import lgbt.audrey.pipe.plugin.module.ToggleModule;
 import lgbt.audrey.pipe.util.GLRenderer;
 import lgbt.audrey.pipe.util.Keybind;
-import lgbt.audrey.pipe.util.Vec2;
 import lgbt.audrey.pipe.util.Vec3;
 import lgbt.audrey.pipe.util.helpers.Helper;
 import org.lwjgl.input.Keyboard;
@@ -55,11 +56,10 @@ public class ModuleTracers extends ToggleModule {
             public void event(final Render3D render3D) {
                 if(isEnabled()) {
                     // Sneak bug fix
-                    final double offset = Helper.isEntitySneaking(Helper.getPlayer()) ? 1.54D : 1.62D;
+                    //final double offset = Helper.isEntitySneaking(Helper.getPlayer()) ? 1.54D : 1.62D;
                     int count = 0;
                     final Vec3 prev = Helper.getEntityPrevVec(Helper.getPlayer());
                     final Vec3 cur = Helper.getEntityVec(Helper.getPlayer());
-                    final Vec2 rot = Helper.getEntityRotation(Helper.getPlayer());
                     p.x(prev.x() + (cur.x() - prev.x()) * render3D.getPartialTickTime());
                     p.y(prev.y() + (cur.y() - prev.y()) * render3D.getPartialTickTime());
                     p.z(prev.z() + (cur.z() - prev.z()) * render3D.getPartialTickTime());
@@ -70,22 +70,14 @@ public class ModuleTracers extends ToggleModule {
                             if(Helper.isEntityLiving(o) || Helper.isEntityPlayer(o)) {
                                 final Vec3 e = Helper.getEntityVec(o);
                                 if(e != null) {
-                                    e.sub(p);
-                                    final double absRotY = Math.abs(rot.y());
-                                    final double sinY = Math.sin(Math.toRadians(rot.y()));
-                                    final double rv = absRotY <= 10 ? 0.5 * sinY
-                                            : absRotY <= 18 ? 0.52 * sinY
-                                            : absRotY <= 25 ? 0.55 * sinY
-                                            : 0.57 * sinY;
+                                    /*e.sub(p);
                                     GLRenderer.drawLine(e.x(), e.y(), e.z(),
-                                            Math.cos(Math.toRadians(rot.x() + 90)) * 0.5,
-                                            offset - rv,
-                                            Math.sin(Math.toRadians(rot.x() + 90)) * 0.5,
+                                            0, 0, 0,
                                             Helper.isEntityAnimal(o) ? colorAnimal.get() | opacityTracers.get() << 24 :
                                                     Helper.isEntityMonster(o) ? colorMonster.get() | opacityTracers.get() << 24 :
                                                             Helper.isEntityPlayer(o) ? colorPlayer.get() | opacityTracers.get() << 24 :
                                                                     colorOther.get() | opacityTracers.get() << 24, thicknessTracers.get());
-                                    e.add(p);
+                                    e.add(p);*/
                                     v.set(e);
                                     v2.set(e);
                                     v.sub(p).sub(half);
@@ -106,6 +98,28 @@ public class ModuleTracers extends ToggleModule {
                     GL11.glEnable(GL11.GL_DEPTH_TEST);
                     GLRenderer.post();
                     setStatus(count > 0 ? "\247a" + count : "\247cNot rendering");
+                }
+            }
+        });
+        Pipe.eventBus().register(getPlugin(), new Listener<RenderFramebuffer>() {
+            @SuppressWarnings("ConstantConditions")
+            @Override
+            public void event(final RenderFramebuffer event) {
+                if(isEnabled()) {
+                    GL11.glPushMatrix();
+                    GLRenderer.pre();
+                    Helper.getLoadedEntities().stream().filter(o -> !o.equals(Helper.getPlayer()))
+                            .filter(o -> Helper.isEntityLiving(o) || Helper.isEntityPlayer(o)).forEach(o -> {
+                        final float[] coords = GLRenderer.worldToScreen(o, 1.62F, 0);
+                        GLRenderer.drawLine(coords[0], coords[1], 0,
+                                Helper.getWidth() / 4, Helper.getHeight() / 4, 0,
+                                Helper.isEntityAnimal(o) ? colorAnimal.get() | opacityTracers.get() << 24 :
+                                        Helper.isEntityMonster(o) ? colorMonster.get() | opacityTracers.get() << 24 :
+                                                Helper.isEntityPlayer(o) ? colorPlayer.get() | opacityTracers.get() << 24 :
+                                                        colorOther.get() | opacityTracers.get() << 24, thicknessTracers.get());
+                    });
+                    GLRenderer.post();
+                    GL11.glPopMatrix();
                 }
             }
         });

@@ -9,7 +9,7 @@ import lgbt.audrey.pipe.plugin.Plugin;
  * @since 10/8/15.
  */
 public interface CommandManager {
-    boolean executeCommand(@NonNull String commandString);
+    boolean executeCommand(@NonNull String commandString) throws CommandException;
 
     Command findCommand(@NonNull String commandName);
 

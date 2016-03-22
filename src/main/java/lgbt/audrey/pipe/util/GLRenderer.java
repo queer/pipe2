@@ -3,7 +3,12 @@ package lgbt.audrey.pipe.util;
 import lgbt.audrey.pipe.util.helpers.Helper;
 import me.curlpipesh.gl.tessellation.Tessellator;
 import me.curlpipesh.gl.tessellation.impl.VAOTessellator;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
+
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
@@ -16,12 +21,17 @@ import static org.lwjgl.opengl.GL13.GL_SAMPLE_ALPHA_TO_COVERAGE;
  * @author c
  * @since 4/30/15
  */
+@SuppressWarnings("unused")
 public final class GLRenderer {
     /**
      * The {@link Tessellator} to be used for rendering. By default, this is a
      * {@link VAOTessellator}.
      */
     private static final Tessellator tess = new VAOTessellator(16777216);
+
+    private static final FloatBuffer modelview = BufferUtils.createFloatBuffer(16);
+    private static final FloatBuffer projection = BufferUtils.createFloatBuffer(16);
+    private static final IntBuffer viewport = BufferUtils.createIntBuffer(16);
 
     private GLRenderer() {
     }
@@ -282,80 +292,88 @@ public final class GLRenderer {
     /*
      * Modified Copypasta from: https://github.com/lowell/SaferHUD/blob/master/src/main/java/com/zyin/zyinhud/helper/HUDEntityTrackerHelper.java
      */
-    /*public float[] worldToScreen(Object entity, float ySum){
+    @SuppressWarnings("ConstantConditions")
+    public static float[] worldToScreen(final Object entity, final float ySum, final float partialTickTime) {
+        final Vec3 lastPlayerPos = Helper.getEntityPrevVec(Helper.getPlayer()).clone();
+        final Vec3 playerPos = Helper.getEntityVec(Helper.getPlayer()).clone();
+        final Vec2 pRot = Helper.getEntityRotation(Helper.getPlayer()).clone();
+        final Vec3 lastEntityPos = Helper.getEntityPrevVec(entity).clone();
+        final Vec3 entityPos = Helper.getEntityVec(entity).clone();
+        final Vec2 eRot = Helper.getEntityRotation(entity).clone();
 
-        EntityClientPlayerMP me = mc.thePlayer;
-        double meX = me.lastTickPosX + (me.posX - me.lastTickPosX) * partialTickTime;
-        double meY = me.lastTickPosY + (me.posY - me.lastTickPosY) * partialTickTime;
-        double meZ = me.lastTickPosZ + (me.posZ - me.lastTickPosZ) * partialTickTime;
-        double pitch = ((me.rotationPitch + 90) * Math.PI) / 180;
-        double yaw = ((me.rotationYaw + 90) * Math.PI) / 180;
+        final double meX = lastPlayerPos.x() + (playerPos.x() - lastPlayerPos.x()) * partialTickTime;
+        final double meY = lastPlayerPos.y() + (playerPos.y() - lastPlayerPos.y()) * partialTickTime;
+        final double meZ = lastPlayerPos.z() + (playerPos.z() - lastPlayerPos.z()) * partialTickTime;
+        final double pitch = (pRot.x() + 90) * Math.PI / 180;
+        final double yaw = (pRot.y() + 90) * Math.PI / 180;
         // direction the player is facing
-        Vec3 lookDir = Vec3.createVectorHelper(Math.sin(pitch) * Math.cos(yaw), Math.cos(pitch), Math.sin(pitch) * Math.sin(yaw));
-        if (mc.gameSettings.thirdPersonView == 2){
+        final Vec3 lookDir = new Vec3(Math.sin(pitch) * Math.cos(yaw), Math.cos(pitch), Math.sin(pitch) * Math.sin(yaw));
+        //Vec3.createVectorHelper(Math.sin(pitch) * Math.cos(yaw), Math.cos(pitch), Math.sin(pitch) * Math.sin(yaw));
+        /*if (mc.gameSettings.thirdPersonView == 2){
             // reversed 3rd-person view; flip the look direction
-            lookDir.xCoord *= -1;
-            lookDir.yCoord *= -1;
-            lookDir.zCoord *= -1;
-        }
+            lookDir.x() *= -1;
+            lookDir.y() *= -1;
+            lookDir.z() *= -1;
+        }*/
 
-        IntBuffer viewport = BufferUtils.createIntBuffer(16);
-        GL11.glGetInteger(GL11.GL_VIEWPORT, viewport);
+        glGetFloat(GL_MODELVIEW_MATRIX, modelview);
+        glGetFloat(GL_PROJECTION_MATRIX, projection);
+        glGetInteger(GL_VIEWPORT, viewport);
 
-        ScaledResolution res = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
-        int width = res.getScaledWidth();
-        int height = res.getScaledHeight();
+        final int width = Helper.getWidth();
+        final int height = Helper.getHeight();
 
 
-        double entityX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTickTime;
-        double entityY = (entity.lastTickPosY + ySum) + ((entity.posY + ySum) - (entity.lastTickPosY + ySum)) * partialTickTime;
-        double entityZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTickTime;
+        final double entityX = lastEntityPos.x() + (entityPos.x() - lastEntityPos.x()) * partialTickTime;
+        final double entityY = lastEntityPos.y() + ySum + (entityPos.y() + ySum - (lastEntityPos.y() + ySum)) * partialTickTime;
+        final double entityZ = lastEntityPos.z() + (entityPos.z() - lastEntityPos.z()) * partialTickTime;
         // direction to target entity
-        Vec3 toEntity = Vec3.createVectorHelper(entityX - meX, entityY - meY, entityZ - meZ);
-        float x = (float)toEntity.xCoord;
-        float y = (float)toEntity.yCoord;
-        float z = (float)toEntity.zCoord;
-        double dist = toEntity.lengthVector();
+        //Vec3 toEntity = Vec3.createVectorHelper(entityX - meX, entityY - meY, entityZ - meZ);
+        Vec3 toEntity = new Vec3(entityX - meX, entityY - meY, entityZ - meZ);
+        float x = (float) toEntity.x();
+        float y = (float) toEntity.y();
+        float z = (float) toEntity.z();
+        final double dist = toEntity.length();
         toEntity = toEntity.normalize();
 
-        if (lookDir.dotProduct(toEntity) <= 0.02){
+        if(lookDir.dot(toEntity) <= 0.02) {
             // angle between vectors is greater than about 89 degrees, so
             // create a dummy target location that is 89 degrees away from look direction
             // along the arc between look direction and direction to target entity
-            final double angle = 89.0 * pi / 180;
+            final double angle = 89.0 * Math.PI / 180;
             final double sin = Math.sin(angle);
             final double cos = Math.cos(angle);
-            Vec3 ortho = lookDir.crossProduct(toEntity); // vector orthogonal to look direction and direction to target entity
-            double ox = ortho.xCoord;
-            double oy = ortho.yCoord;
-            double oz = ortho.zCoord;
+            final Vec3 ortho = lookDir.cross(toEntity); // vector orthogonal to look direction and direction to target entity
+            final double ox = ortho.x();
+            final double oy = ortho.y();
+            final double oz = ortho.z();
             // build a rotation matrix to rotate around a vector (ortho) by an angle (89 degrees)
             // from http://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle
-            double m00 = cos + ox*ox*(1-cos);
-            double m01 = ox*oy*(1-cos) - oz*sin;
-            double m02 = ox*oz*(1-cos) + oy*sin;
-            double m10 = oy*ox*(1-cos) + oz*sin;
-            double m11 = cos + oy*oy*(1-cos);
-            double m12 = oy*oz*(1-cos) - ox*sin;
-            double m20 = oz*ox*(1-cos) - oy*sin;
-            double m21 = oz*oy*(1-cos) + ox*sin;
-            double m22 = cos + oz*oz*(1-cos);
+            final double m00 = cos + ox * ox * (1 - cos);
+            final double m01 = ox * oy * (1 - cos) - oz * sin;
+            final double m02 = ox * oz * (1 - cos) + oy * sin;
+            final double m10 = oy * ox * (1 - cos) + oz * sin;
+            final double m11 = cos + oy * oy * (1 - cos);
+            final double m12 = oy * oz * (1 - cos) - ox * sin;
+            final double m20 = oz * ox * (1 - cos) - oy * sin;
+            final double m21 = oz * oy * (1 - cos) + ox * sin;
+            final double m22 = cos + oz * oz * (1 - cos);
             // transform (multiply) look direction vector with rotation matrix and scale by distance to target entity;
             // this produces the coordinates for the dummy target
-            x = (float)(dist * (m00*lookDir.xCoord + m01*lookDir.yCoord + m02*lookDir.zCoord));
-            y = (float)(dist * (m10*lookDir.xCoord + m11*lookDir.yCoord + m12*lookDir.zCoord));
-            z = (float)(dist * (m20*lookDir.xCoord + m21*lookDir.yCoord + m22*lookDir.zCoord));
+            x = (float) (dist * (m00 * lookDir.x() + m01 * lookDir.y() + m02 * lookDir.z()));
+            y = (float) (dist * (m10 * lookDir.x() + m11 * lookDir.y() + m12 * lookDir.z()));
+            z = (float) (dist * (m20 * lookDir.x() + m21 * lookDir.y() + m22 * lookDir.z()));
         }
 
-        FloatBuffer screenCoords = BufferUtils.createFloatBuffer(3);
-        modelMatrix.rewind();
-        projMatrix.rewind();
+        final FloatBuffer screenCoords = BufferUtils.createFloatBuffer(3);
+        //modelMatrix.rewind();
+        //projMatrix.rewind();
         // map target's object coordinates into window coordinates
         // using world render transform matrices stored by StoreMatrices()
-        GLU.gluProject(x, y, z, ActiveRenderInfo.modelview, ActiveRenderInfo.projection, ActiveRenderInfo.viewport, screenCoords);
-        float hudX = screenCoords.get(0) / res.getScaleFactor();
-        float hudY = height - screenCoords.get(1) / res.getScaleFactor();
+        GLU.gluProject(x, y, z, modelview, projection, viewport, screenCoords);
+        final float hudX = screenCoords.get(0) / Helper.getScale();//res.getScaleFactor();
+        final float hudY = height - screenCoords.get(1) / Helper.getScale();//res.getScaleFactor();
         //System.out.println(hudX + " : " + hudY);
-        return new float[] { hudX, hudY };
-    }*/
+        return new float[] {hudX, hudY};
+    }
 }

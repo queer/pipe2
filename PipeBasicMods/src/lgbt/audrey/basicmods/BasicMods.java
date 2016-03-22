@@ -21,7 +21,7 @@ public class BasicMods extends BasicPlugin {
         getProvidedModules().stream().filter(module -> module instanceof ToggleModule).forEach(module -> {
             //noinspection UnnecessarilyQualifiedInnerClassAccess
             Pipe.getInstance().getCommandManager()
-                    .registerCommand(this, new Command.Builder()
+                    .registerCommand(this, new Command.CommandBuilder()
                             .setName(module.getName().toLowerCase().replaceAll("\\s+", ""))
                             .setExecutor((command1, s, strings) -> {
                                 ((ToggleModule) module).toggle();

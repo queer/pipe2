@@ -32,23 +32,12 @@ public class CommandDebug implements CommandExecutor {
                     break;
                 case "--toggle":
                     Pipe.getInstance().setInDebugMode(!Pipe.getInstance().isInDebugMode());
-                    ChatHelper.log("Debug has been " + (Pipe.getInstance().isInDebugMode() ? "enabled" : "disabled") + "!");
+                    ChatHelper.log("Debug has been " + (Pipe.getInstance().isInDebugMode() ? "enabled" : "disabled") + '!');
+                    break;
+                default:
+                    ChatHelper.warn("Invalid debug flag: " + tokens.get(0));
                     break;
             }
-            // TODO: Map to flags
-            /*for(int i = 0; i < tokens.size(); i++) {
-                if(tokens.get(i).equalsIgnoreCase("--debug")) {
-                    if(!tokens.get(i + 1).startsWith("-")) {
-                        ++i;
-                        ChatHelper.log(tokens.get(i));
-                    } else {
-                        ChatHelper.warn("Invalid token: '" + tokens.get(i + 1) + '\'');
-                    }
-                } else {
-                    ChatHelper.warn("Invalid syntax.", "--debug <info>");
-                    break;
-                }
-            }*/
         } else {
             ChatHelper.log("Usage: ", "--<enable|disable|toggle>");
         }

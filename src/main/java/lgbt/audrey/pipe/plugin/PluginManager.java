@@ -2,6 +2,7 @@ package lgbt.audrey.pipe.plugin;
 
 import lgbt.audrey.pipe.Pipe;
 import lgbt.audrey.pipe.bytecode.ClassEnumerator;
+import lgbt.audrey.pipe.plugin.module.Module;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -119,7 +120,7 @@ public class PluginManager {
             try {
                 p.loadManifestData();
                 p.onEnable();
-                p.finishEnabling();
+                p.getProvidedModules().forEach(Module::init);
                 p.setEnabled(true);
                 Pipe.getLogger().info("Enabled plugin: " + p.getName());
             } catch(final Exception e) {
