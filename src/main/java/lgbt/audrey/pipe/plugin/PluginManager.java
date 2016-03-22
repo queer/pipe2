@@ -1,9 +1,9 @@
 package lgbt.audrey.pipe.plugin;
 
-import lombok.Getter;
-import lombok.NonNull;
 import lgbt.audrey.pipe.Pipe;
 import lgbt.audrey.pipe.bytecode.ClassEnumerator;
+import lombok.Getter;
+import lombok.NonNull;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -45,9 +45,11 @@ public class PluginManager {
                 final List<Class<?>> classes;
                 try {
                     classes = ClassEnumerator.getClassesFromJar(file, URLClassLoader.newInstance(new URL[] {
-                            new URL("jar:file:" + file.getAbsoluteFile().getAbsolutePath() + "!/").toURI().toURL()
-                    }, Pipe.class.getClassLoader()));
+                            file.toURI().toURL()
+                            //new URL("jar:file:" + file.getAbsoluteFile().getAbsolutePath() + "!/").toURI().toURL()
+                    }));
                 } catch(final Exception e) {
+                    Pipe.getLogger().warning("Error loading JAR (" + file.getName() + "):");
                     e.printStackTrace();
                     continue;
                 }

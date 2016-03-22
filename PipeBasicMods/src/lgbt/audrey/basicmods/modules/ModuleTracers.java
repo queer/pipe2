@@ -71,8 +71,12 @@ public class ModuleTracers extends ToggleModule {
                                 final Vec3 e = Helper.getEntityVec(o);
                                 if(e != null) {
                                     e.sub(p);
-                                    final double rv = Math.abs(rot.y()) <= 10 ? 0.5 * Math.sin(Math.toRadians(rot.y()))
-                                            : 0.55 * Math.sin(Math.toRadians(rot.y()));
+                                    final double absRotY = Math.abs(rot.y());
+                                    final double sinY = Math.sin(Math.toRadians(rot.y()));
+                                    final double rv = absRotY <= 10 ? 0.5 * sinY
+                                            : absRotY <= 18 ? 0.52 * sinY
+                                            : absRotY <= 25 ? 0.55 * sinY
+                                            : 0.57 * sinY;
                                     GLRenderer.drawLine(e.x(), e.y(), e.z(),
                                             Math.cos(Math.toRadians(rot.x() + 90)) * 0.5,
                                             offset - rv,

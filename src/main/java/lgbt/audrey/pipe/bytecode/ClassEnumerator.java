@@ -2,7 +2,10 @@ package lgbt.audrey.pipe.bytecode;
 
 import org.objectweb.asm.ClassReader;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,6 +29,7 @@ public final class ClassEnumerator {
      * Recurses through if necessary
      *
      * @param directory directory to parse
+     *
      * @return class array
      */
     @SuppressWarnings("ConstantConditions")
@@ -39,26 +43,26 @@ public final class ClassEnumerator {
         final List<Class<?>> classes = new ArrayList<>();
         final ClassLoader classLoader;
         try {
-            classLoader = new URLClassLoader(new URL[]{
+            classLoader = new URLClassLoader(new URL[] {
                     directory.toURI().toURL()
             }, ClassEnumerator.class.getClassLoader());
-        } catch (final MalformedURLException e) {
+        } catch(final MalformedURLException e) {
             throw new RuntimeException(e);
         }
         if(directory.listFiles() != null) {
-            for (final File file : directory.listFiles()) {
+            for(final File file : directory.listFiles()) {
                 try {
-                    if (file.getName().toLowerCase().trim().endsWith(".class")) {
+                    if(file.getName().toLowerCase().trim().endsWith(".class")) {
                         classes.add(classLoader.loadClass(file.getName().replace(".class", "")
                                 .replace("/", ".")));
                     }
-                    if (file.getName().toLowerCase().trim().endsWith(".jar")) {
+                    if(file.getName().toLowerCase().trim().endsWith(".jar")) {
                         classes.addAll(getClassesFromJar(file, classLoader));
                     }
-                    if (file.isDirectory()) {
+                    if(file.isDirectory()) {
                         classes.addAll(getClassesFromExternalDirectory(file));
                     }
-                } catch (final ClassNotFoundException e) {
+                } catch(final ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             }
@@ -72,6 +76,7 @@ public final class ClassEnumerator {
      * Returns the class array of all classes within a package
      *
      * @param classe class to get code source location for
+     *
      * @return class array
      */
     public static Class<?>[] getClassesFromPackage(final Class<?> classe) {
@@ -79,10 +84,10 @@ public final class ClassEnumerator {
         URI uri = null;
         try {
             uri = classe.getProtectionDomain().getCodeSource().getLocation().toURI();
-        } catch (final URISyntaxException e) {
+        } catch(final URISyntaxException e) {
             e.printStackTrace();
         }
-        if (uri == null) {
+        if(uri == null) {
             throw new RuntimeException("No uri for "
                     + classe.getProtectionDomain().getCodeSource().getLocation());
         }
@@ -95,6 +100,7 @@ public final class ClassEnumerator {
      *
      * @param file        jar file
      * @param classLoader classloader created previously using the jar file
+     *
      * @return class list
      */
     public static List<Class<?>> getClassesFromJar(final File file, final ClassLoader classLoader) {
@@ -102,9 +108,9 @@ public final class ClassEnumerator {
         try {
             final JarFile jarFile = new JarFile(file);
             final Enumeration<JarEntry> enumeration = jarFile.entries();
-            while (enumeration.hasMoreElements()) {
+            while(enumeration.hasMoreElements()) {
                 final JarEntry jarEntry = enumeration.nextElement();
-                if (jarEntry.isDirectory() || !jarEntry.getName().toLowerCase().trim().endsWith(".class")) {
+                if(jarEntry.isDirectory() || !jarEntry.getName().toLowerCase().trim().endsWith(".class")) {
                     continue;
                 }
                 try {
@@ -119,7 +125,7 @@ public final class ClassEnumerator {
                     final InputStream is = jarFile.getInputStream(jarEntry);
                     final ByteArrayOutputStream os = new ByteArrayOutputStream();
                     final byte[] buffer = new byte[0xFFFF];
-                    for (int len; (len = is.read(buffer)) != -1;) {
+                    for(int len; (len = is.read(buffer)) != -1; ) {
                         os.write(buffer, 0, len);
                     }
                     os.flush();
@@ -133,7 +139,7 @@ public final class ClassEnumerator {
                 }
             }
             jarFile.close();
-        } catch (final IOException e) {
+        } catch(final IOException e) {
             e.printStackTrace();
         }
         return classes;
@@ -146,18 +152,19 @@ public final class ClassEnumerator {
      * Recurses if necessary
      *
      * @param directory directory file to traverse
+     *
      * @return list of classes
      */
     private static Collection<Class<?>> processDirectory(final File directory, final String append) {
         final Collection<Class<?>> classes = new ArrayList<>();
         final String[] files = directory.list();
         if(files != null) {
-            for (final String fileName : files) {
+            for(final String fileName : files) {
                 String className = null;
-                if (fileName.endsWith(".class")) {
+                if(fileName.endsWith(".class")) {
                     className = append + '.' + fileName.replace(".class", "");
                 }
-                if (className != null) {
+                if(className != null) {
                     try {
                         classes.add(Class.forName(className.substring(1)));
                     } catch(final ClassNotFoundException e) {
@@ -166,7 +173,7 @@ public final class ClassEnumerator {
                     continue;
                 }
                 final File subdir = new File(directory, fileName);
-                if (subdir.isDirectory()) {
+                if(subdir.isDirectory()) {
                     classes.addAll(processDirectory(subdir, append + '.' + fileName));
                 }
             }
