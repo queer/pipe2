@@ -6,7 +6,6 @@ import lgbt.audrey.pipe.config.RangeOption;
 import lgbt.audrey.pipe.event.Listener;
 import lgbt.audrey.pipe.event.events.Render2D;
 import lgbt.audrey.pipe.event.events.Render3D;
-import lgbt.audrey.pipe.event.events.RenderFramebuffer;
 import lgbt.audrey.pipe.plugin.Plugin;
 import lgbt.audrey.pipe.plugin.module.ToggleModule;
 import lgbt.audrey.pipe.util.GLRenderer;
@@ -33,6 +32,9 @@ public class ModuleTracers extends ToggleModule {
     private final RangeOption<Integer> opacityTracers = new RangeOption<>("opacityTracers", 0x55, 0xFF, 0x00, 0x01);
     private final RangeOption<Integer> opacityBox = new RangeOption<>("opacityBox", 0x22, 0xFF, 0x00, 0x01);
     private final RangeOption<Float> thicknessTracers = new RangeOption<>("thicknessTracers", 2.2F, 5.0F, 1.0F, 0.1F);
+
+    public static double x;
+    public static double y;
 
     public ModuleTracers(final Plugin plugin) {
         super(plugin, "Tracers", "Draws pretty lines from here to there");
@@ -101,21 +103,23 @@ public class ModuleTracers extends ToggleModule {
                 }
             }
         });
-        Pipe.eventBus().register(getPlugin(), new Listener<RenderFramebuffer>() {
+        Pipe.eventBus().register(getPlugin(), new Listener<Render2D>() {
             @SuppressWarnings("ConstantConditions")
             @Override
-            public void event(final RenderFramebuffer event) {
+            public void event(final Render2D event) {
                 if(isEnabled()) {
                     GL11.glPushMatrix();
                     GLRenderer.pre();
                     Helper.getLoadedEntities().stream().filter(o -> !o.equals(Helper.getPlayer()))
                             .filter(o -> Helper.isEntityLiving(o) || Helper.isEntityPlayer(o)).forEach(o -> {
-                        final float[] coords = GLRenderer.worldToScreen(o, 1.62F, 0);
-                        GLRenderer.drawLine(coords[0], coords[1], 0,
+                        final float[] coords = GLRenderer.worldToScreen(o, 0, 0);
+                        x = coords[0];
+                        y = coords[1];
+                        GLRenderer.drawLine(x, y, 0,
                                 Helper.getWidth() / 4, Helper.getHeight() / 4, 0,
                                 Helper.isEntityAnimal(o) ? colorAnimal.get() | opacityTracers.get() << 24 :
                                         Helper.isEntityMonster(o) ? colorMonster.get() | opacityTracers.get() << 24 :
-                                                Helper.isEntityPlayer(o) ? colorPlayer.get() | opacityTracers.get() << 24 :
+                                                Helper.isEntitgyPlayer(o) ? colorPlayer.get() | opacityTracers.get() << 24 :
                                                         colorOther.get() | opacityTracers.get() << 24, thicknessTracers.get());
                     });
                     GLRenderer.post();

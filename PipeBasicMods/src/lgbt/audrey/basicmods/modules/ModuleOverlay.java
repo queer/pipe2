@@ -59,11 +59,7 @@ public class ModuleOverlay extends BasicModule {
 
                     final Vec2 rot = Helper.getEntityRotation(Helper.getPlayer());
                     displayList.add("Rotation: " + (int) rot.x() + ", " + (int) rot.y());
-                    final double r = 1;
-                    final double x = r * Math.cos(Math.toRadians(rot.x())) * Math.sin(Math.toRadians(rot.y()));
-                    final double y = r * Math.sin(Math.toRadians(rot.x())) * Math.cos(Math.toRadians(rot.y()));
-                    final double z = r * Math.cos(Math.toRadians(rot.y()));
-                    displayList.add("r, x, y, z: " + String.format("%.2f, %.2f, %.2f, %.2f", r, x, y, z));
+                    displayList.add("x, y: " + String.format("%.2f, %.2f", ModuleTracers.x, ModuleTracers.y));
                 }
 
                 final List<Plugin> plugins = Pipe.getInstance().getPluginManager().getPlugins();
