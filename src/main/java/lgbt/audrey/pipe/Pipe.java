@@ -7,13 +7,16 @@ import lgbt.audrey.pipe.bytecode.Version;
 import lgbt.audrey.pipe.command.Command.CommandBuilder;
 import lgbt.audrey.pipe.command.CommandManager;
 import lgbt.audrey.pipe.event.EventBus;
+import lgbt.audrey.pipe.event.Listener;
 import lgbt.audrey.pipe.event.PipeEventBus;
 import lgbt.audrey.pipe.event.events.ModFinishedLoading;
+import lgbt.audrey.pipe.event.events.Render3D;
 import lgbt.audrey.pipe.plugin.BasicPlugin;
 import lgbt.audrey.pipe.plugin.Plugin;
 import lgbt.audrey.pipe.plugin.PluginManager;
 import lgbt.audrey.pipe.plugin.PluginManifest;
 import lgbt.audrey.pipe.plugin.serialization.ManifestDeserializer;
+import lgbt.audrey.pipe.util.GLRenderer;
 import lgbt.audrey.pipe.util.helpers.ChatHelper;
 import lgbt.audrey.pipe.util.helpers.Helper;
 import lombok.AccessLevel;
@@ -36,7 +39,7 @@ import java.util.logging.Logger;
  * @author c
  * @since 7/10/15
  */
-@SuppressWarnings({"unused", "Singleton"})
+@SuppressWarnings({"unused", "Singleton", "InnerClassTooDeeplyNested"})
 public final class Pipe {
     /**
      * The logger for the entire mod.
@@ -148,6 +151,12 @@ public final class Pipe {
             } else {
                 getLogger().warning("No command manager available; reload command will not be added.");
             }
+            eventBus.register(this, new Listener<Render3D>() {
+                @Override
+                public void event(final Render3D event) {
+                    GLRenderer.updateMatrices();
+                }
+            });
         }
     };
 

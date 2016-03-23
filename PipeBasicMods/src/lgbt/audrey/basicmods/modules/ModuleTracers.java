@@ -119,7 +119,7 @@ public class ModuleTracers extends ToggleModule {
                                 Helper.getWidth() / 4, Helper.getHeight() / 4, 0,
                                 Helper.isEntityAnimal(o) ? colorAnimal.get() | opacityTracers.get() << 24 :
                                         Helper.isEntityMonster(o) ? colorMonster.get() | opacityTracers.get() << 24 :
-                                                Helper.isEntitgyPlayer(o) ? colorPlayer.get() | opacityTracers.get() << 24 :
+                                                Helper.isEntityPlayer(o) ? colorPlayer.get() | opacityTracers.get() << 24 :
                                                         colorOther.get() | opacityTracers.get() << 24, thicknessTracers.get());
                     });
                     GLRenderer.post();

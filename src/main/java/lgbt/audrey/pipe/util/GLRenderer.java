@@ -316,8 +316,6 @@ public final class GLRenderer {
             lookDir.z() *= -1;
         }*/
 
-        glGetFloat(GL_MODELVIEW_MATRIX, modelview);
-        glGetFloat(GL_PROJECTION_MATRIX, projection);
         glGetInteger(GL_VIEWPORT, viewport);
 
         final int width = Helper.getWidth();
@@ -375,5 +373,12 @@ public final class GLRenderer {
         final float hudY = height - screenCoords.get(1) / Helper.getScale();//res.getScaleFactor();
         //System.out.println(hudX + " : " + hudY);
         return new float[] {hudX, hudY};
+    }
+
+    public static void updateMatrices() {
+        modelview.rewind();
+        glGetFloat(GL_MODELVIEW_MATRIX, modelview);
+        projection.rewind();
+        glGetFloat(GL_PROJECTION_MATRIX, projection);
     }
 }
