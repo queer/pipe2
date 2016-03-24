@@ -4,6 +4,7 @@ import lgbt.audrey.pipe.util.helpers.Helper;
 import me.curlpipesh.gl.tessellation.Tessellator;
 import me.curlpipesh.gl.tessellation.impl.VAOTessellator;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
@@ -293,19 +294,18 @@ public final class GLRenderer {
      * Modified Copypasta from: https://github.com/lowell/SaferHUD/blob/master/src/main/java/com/zyin/zyinhud/helper/HUDEntityTrackerHelper.java
      */
     @SuppressWarnings("ConstantConditions")
-    public static float[] worldToScreen(final Object entity, final float ySum, final float partialTickTime) {
+    public static float[] worldToScreen(final Object entity, final float partialTickTime) {
         final Vec3 lastPlayerPos = Helper.getEntityPrevVec(Helper.getPlayer()).clone();
         final Vec3 playerPos = Helper.getEntityVec(Helper.getPlayer()).clone();
         final Vec2 pRot = Helper.getEntityRotation(Helper.getPlayer()).clone();
         final Vec3 lastEntityPos = Helper.getEntityPrevVec(entity).clone();
         final Vec3 entityPos = Helper.getEntityVec(entity).clone();
-        final Vec2 eRot = Helper.getEntityRotation(entity).clone();
 
         final double meX = lastPlayerPos.x() + (playerPos.x() - lastPlayerPos.x()) * partialTickTime;
         final double meY = lastPlayerPos.y() + (playerPos.y() - lastPlayerPos.y()) * partialTickTime;
         final double meZ = lastPlayerPos.z() + (playerPos.z() - lastPlayerPos.z()) * partialTickTime;
-        final double pitch = (pRot.x() + 90) * Math.PI / 180;
-        final double yaw = (pRot.y() + 90) * Math.PI / 180;
+        final double pitch = Math.toRadians(pRot.x() + 90);
+        final double yaw = Math.toRadians(pRot.y() + 90);
         // direction the player is facing
         final Vec3 lookDir = new Vec3(Math.sin(pitch) * Math.cos(yaw), Math.cos(pitch), Math.sin(pitch) * Math.sin(yaw));
         //Vec3.createVectorHelper(Math.sin(pitch) * Math.cos(yaw), Math.cos(pitch), Math.sin(pitch) * Math.sin(yaw));
@@ -318,12 +318,8 @@ public final class GLRenderer {
 
         glGetInteger(GL_VIEWPORT, viewport);
 
-        final int width = Helper.getWidth();
-        final int height = Helper.getHeight();
-
-
         final double entityX = lastEntityPos.x() + (entityPos.x() - lastEntityPos.x()) * partialTickTime;
-        final double entityY = lastEntityPos.y() + ySum + (entityPos.y() + ySum - (lastEntityPos.y() + ySum)) * partialTickTime;
+        final double entityY = lastEntityPos.y() + (entityPos.y() + lastEntityPos.y()) * partialTickTime;
         final double entityZ = lastEntityPos.z() + (entityPos.z() - lastEntityPos.z()) * partialTickTime;
         // direction to target entity
         //Vec3 toEntity = Vec3.createVectorHelper(entityX - meX, entityY - meY, entityZ - meZ);
@@ -331,7 +327,7 @@ public final class GLRenderer {
         float x = (float) toEntity.x();
         float y = (float) toEntity.y();
         float z = (float) toEntity.z();
-        final double dist = toEntity.length();
+        /*final double dist = toEntity.length();
         toEntity = toEntity.normalize();
 
         if(lookDir.dot(toEntity) <= 0.02) {
@@ -361,22 +357,55 @@ public final class GLRenderer {
             x = (float) (dist * (m00 * lookDir.x() + m01 * lookDir.y() + m02 * lookDir.z()));
             y = (float) (dist * (m10 * lookDir.x() + m11 * lookDir.y() + m12 * lookDir.z()));
             z = (float) (dist * (m20 * lookDir.x() + m21 * lookDir.y() + m22 * lookDir.z()));
-        }
+        }*/
 
         final FloatBuffer screenCoords = BufferUtils.createFloatBuffer(3);
-        //modelMatrix.rewind();
-        //projMatrix.rewind();
+        modelview.rewind();
+        projection.rewind();
         // map target's object coordinates into window coordinates
         // using world render transform matrices stored by StoreMatrices()
         GLU.gluProject(x, y, z, modelview, projection, viewport, screenCoords);
-        final float hudX = screenCoords.get(0) / Helper.getScale();//res.getScaleFactor();
-        final float hudY = height - screenCoords.get(1) / Helper.getScale();//res.getScaleFactor();
+        //float hudX = screenCoords.get(0) / Helper.getScale();//res.getScaleFactor();
+        //float hudY = height - screenCoords.get(1) / Helper.getScale();//res.getScaleFactor();
         //System.out.println(hudX + " : " + hudY);
-        return new float[] {hudX, hudY};
+
+        final int width = Display.getWidth();
+        final int height = Display.getHeight();
+
+        int hudX = Math.round(screenCoords.get(0)); // res.getScaleFactor();
+        int hudY = height - Math.round(screenCoords.get(1)); // res.getScaleFactor();
+
+        // if <hudX, hudY> is outside the screen, scale the coordinates so they're
+        // at the edge of the screen (to preserve angle)
+
+        int newHudX = hudX;
+        int newHudY = hudY;
+
+        //use X overshoot to scale Y
+        if (hudX < 0) {
+            newHudY = (int) ((hudY - height / 2) / (1 - 2 * (float) hudX / width) + height / 2);
+        } else if (hudX > width) {
+            newHudY = (int) ((hudY - height / 2) / (2 * (float) hudX / width - 1) + height / 2);
+        }
+
+        //use Y overshoot to scale X
+        if (hudY < 0) {
+            newHudX = (int) ((hudX - width / 2) / (1 - 2 * (float) hudY / height) + width / 2);
+        } else if (hudY > height) {
+            newHudX = (int) ((hudX - width / 2) / (2 * (float) hudY / height - 1) + width / 2);
+        }
+
+        hudX = newHudX;
+        hudY = newHudY;
+
+        return new float[] {hudX / Helper.getScale(), hudY / Helper.getScale()};
     }
 
+    /**
+     * DO NOT CALL THIS METHOD.
+     */
     public static void updateMatrices() {
-        modelview.rewind();
+        modelview.  rewind();
         glGetFloat(GL_MODELVIEW_MATRIX, modelview);
         projection.rewind();
         glGetFloat(GL_PROJECTION_MATRIX, projection);

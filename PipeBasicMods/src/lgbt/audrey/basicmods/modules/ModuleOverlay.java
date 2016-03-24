@@ -4,6 +4,7 @@ import lgbt.audrey.pipe.Pipe;
 import lgbt.audrey.pipe.event.Listener;
 import lgbt.audrey.pipe.event.events.Keypress;
 import lgbt.audrey.pipe.event.events.Render2D;
+import lgbt.audrey.pipe.event.events.Tick;
 import lgbt.audrey.pipe.plugin.Plugin;
 import lgbt.audrey.pipe.plugin.module.BasicModule;
 import lgbt.audrey.pipe.plugin.module.Module;
@@ -11,6 +12,7 @@ import lgbt.audrey.pipe.util.GLRenderer;
 import lgbt.audrey.pipe.util.Keybind;
 import lgbt.audrey.pipe.util.Vec2;
 import lgbt.audrey.pipe.util.Vec3;
+import lgbt.audrey.pipe.util.helpers.EntityHelper;
 import lgbt.audrey.pipe.util.helpers.Helper;
 import lgbt.audrey.pipe.util.helpers.KeypressHelper;
 import lombok.NonNull;
@@ -27,6 +29,8 @@ import java.util.stream.Collectors;
  */
 public class ModuleOverlay extends BasicModule {
     private boolean enabled = true;
+
+    private int counter;
 
     public ModuleOverlay(final Plugin plugin) {
         super(plugin, "Overlay", "Informational overlay");
@@ -59,7 +63,7 @@ public class ModuleOverlay extends BasicModule {
 
                     final Vec2 rot = Helper.getEntityRotation(Helper.getPlayer());
                     displayList.add("Rotation: " + (int) rot.x() + ", " + (int) rot.y());
-                    displayList.add("x, y: " + String.format("%.2f, %.2f", ModuleTracers.x, ModuleTracers.y));
+                    displayList.add("Counter: " + counter);
                 }
 
                 final List<Plugin> plugins = Pipe.getInstance().getPluginManager().getPlugins();
@@ -89,6 +93,49 @@ public class ModuleOverlay extends BasicModule {
                 GLRenderer.drawRect(0, 0, width, height, 0x77000000);
                 for(final String e : displayList) {
                     Helper.drawString(e, 2, y += OFFSET, 0xFFFFFFFF, false);
+                }
+
+                if(Pipe.getInstance().isInDebugMode()) {
+                    for(final Object o : Helper.getLoadedEntities()) {
+                        if(!Helper.getPlayer().equals(o) && Helper.isEntityLiving(o)) {
+                            if(EntityHelper.getDistanceFromMouse(o) <= 90) {
+                                final float[] coords = GLRenderer.worldToScreen(o, 0);
+                                final Vec3 pos = Helper.getEntityVec(o).clone();
+                                final Vec2 rot = Helper.getEntityRotation(o).clone();
+                                final Collection<String> stuff = new ArrayList<>();
+                                stuff.add("Class: " + o.getClass().getName());
+                                stuff.add(String.format("Pos: %.2f, %.2f, %.2f", pos.x(), pos.y(), pos.z()));
+                                stuff.add(String.format("Rotations: %.2f, %.2f", rot.x(), rot.y()));
+                                int w = -1;
+                                for(final String s : stuff) {
+                                    if(Helper.getStringWidth(s) > w) {
+                                        w = Helper.getStringWidth(s);
+                                    }
+                                }
+                                GLRenderer.drawRect(coords[0], coords[1], w, Helper.getFontHeight() * stuff.size(), 0x77000000);
+                                int yOffset = 0;
+                                for(final String e : stuff) {
+                                    Helper.drawString(e, coords[0], coords[1] + yOffset, 0xFFFFFFFF, false);
+                                    yOffset += Helper.getFontHeight();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        Pipe.eventBus().register(getPlugin(), new Listener<Tick>() {
+            @SuppressWarnings("ConstantConditions")
+            @Override
+            public void event(final Tick event) {
+                counter = 0;
+                //noinspection Convert2streamapi
+                for(final Object o : Helper.getLoadedEntities()) {
+                    if(!Helper.getPlayer().equals(o)) {
+                        if(EntityHelper.getDistanceFromMouse(o) <= 90) {
+                            ++counter;
+                        }
+                    }
                 }
             }
         });

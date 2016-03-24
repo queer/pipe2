@@ -1,9 +1,8 @@
 package lgbt.audrey.pipe.bytecode;
 
 import lgbt.audrey.pipe.Pipe;
-import lombok.Getter;
-import lgbt.audrey.pipe.Pipe;
 import lgbt.audrey.pipe.bytecode.map.MappedClass;
+import lombok.Getter;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
@@ -11,7 +10,6 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.util.CheckClassAdapter;
 
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
@@ -45,7 +43,7 @@ public abstract class Injector implements ClassFileTransformer, Opcodes {
             CheckClassAdapter.verify(new ClassReader(cwBytes), false, new PrintWriter(System.err));
             return cwBytes;
         } else {
-            throw new IllegalStateException("@Inject isn't present!?");
+            throw new IllegalStateException("Wrong class...");
         }
     }
 

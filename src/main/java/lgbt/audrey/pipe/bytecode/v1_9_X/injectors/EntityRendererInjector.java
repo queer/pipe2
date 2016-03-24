@@ -59,6 +59,7 @@ public class EntityRendererInjector extends Injector {
                 if(injectInsn == null) {
                     throw new IllegalStateException("Instruction was null?!");
                 }
+                // TODO: Useless? ;-;
                 m.instructions.insertBefore(injectInsn, list);
             } else if(m.name.equals(applyViewBobbing.getName()) && m.desc.equals(applyViewBobbing.getDesc()) && AccessHelper.isPrivate(m.access)) {
                 m.instructions.clear();

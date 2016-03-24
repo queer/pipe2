@@ -3,9 +3,6 @@ package lgbt.audrey.pipe;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import lgbt.audrey.pipe.bytecode.Version;
-import lgbt.audrey.pipe.bytecode.map.ClassMap;
-import lgbt.audrey.pipe.bytecode.version.Version1_9_X;
 import lgbt.audrey.pipe.bytecode.Injector;
 import lgbt.audrey.pipe.bytecode.Redefiner;
 import lgbt.audrey.pipe.bytecode.Version;
@@ -22,6 +19,7 @@ import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -81,6 +79,7 @@ public final class Agent {
         if(Pipe.getInstance().getVersion() instanceof Version1_9_X) {
             try {
                 Class.forName(ClassMap.getClassByName("EntityRenderer").getObfuscatedName());
+                Class.forName(ClassMap.getClassByName("RenderGlobal").getObfuscatedName());
             } catch(final ClassNotFoundException e) {
                 e.printStackTrace();
             }

@@ -15,6 +15,8 @@ import lgbt.audrey.pipe.util.helpers.Helper;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * @author audrey
  * @since 10/6/15.
@@ -33,8 +35,8 @@ public class ModuleTracers extends ToggleModule {
     private final RangeOption<Integer> opacityBox = new RangeOption<>("opacityBox", 0x22, 0xFF, 0x00, 0x01);
     private final RangeOption<Float> thicknessTracers = new RangeOption<>("thicknessTracers", 2.2F, 5.0F, 1.0F, 0.1F);
 
-    public static double x;
-    public static double y;
+    public static int x;
+    public static int y;
 
     public ModuleTracers(final Plugin plugin) {
         super(plugin, "Tracers", "Draws pretty lines from here to there");
@@ -112,11 +114,13 @@ public class ModuleTracers extends ToggleModule {
                     GLRenderer.pre();
                     Helper.getLoadedEntities().stream().filter(o -> !o.equals(Helper.getPlayer()))
                             .filter(o -> Helper.isEntityLiving(o) || Helper.isEntityPlayer(o)).forEach(o -> {
-                        final float[] coords = GLRenderer.worldToScreen(o, 0, 0);
-                        x = coords[0];
-                        y = coords[1];
-                        GLRenderer.drawLine(x, y, 0,
-                                Helper.getWidth() / 4, Helper.getHeight() / 4, 0,
+                        final float[] coords = GLRenderer.worldToScreen(o, 0);
+                        final float x = coords[0];
+                        final float y = coords[1];
+                        ModuleTracers.x = (int) x;
+                        ModuleTracers.y = (int) y;
+                        GLRenderer.drawLine(Helper.getWidth() / 4, Helper.getHeight() / 4, 0,
+                                x, y, 0,
                                 Helper.isEntityAnimal(o) ? colorAnimal.get() | opacityTracers.get() << 24 :
                                         Helper.isEntityMonster(o) ? colorMonster.get() | opacityTracers.get() << 24 :
                                                 Helper.isEntityPlayer(o) ? colorPlayer.get() | opacityTracers.get() << 24 :
