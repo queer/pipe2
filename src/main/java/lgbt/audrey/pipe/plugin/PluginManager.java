@@ -3,6 +3,7 @@ package lgbt.audrey.pipe.plugin;
 import lgbt.audrey.pipe.Pipe;
 import lgbt.audrey.pipe.bytecode.ClassEnumerator;
 import lgbt.audrey.pipe.plugin.module.Module;
+import lgbt.audrey.pipe.plugin.module.ToggleModule;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -160,6 +161,10 @@ public class PluginManager {
     }
 
     private void disablePlugin(final Plugin plugin) {
+        plugin.getProvidedModules().stream().filter(module -> module instanceof ToggleModule).forEach(module -> {
+            module.setEnabled(false);
+            ((ToggleModule) module).onDisable();
+        });
         plugin.onDisable();
         pipe.getEventBus().unregister(plugin);
     }

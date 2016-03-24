@@ -97,25 +97,29 @@ public class ModuleOverlay extends BasicModule {
 
                 if(Pipe.getInstance().isInDebugMode()) {
                     for(final Object o : Helper.getLoadedEntities()) {
-                        if(!Helper.getPlayer().equals(o) && Helper.isEntityLiving(o)) {
+                        if(!Helper.getPlayer().equals(o) && (Helper.isEntityLiving(o) || Helper.isEntityPlayer(o))) {
                             if(EntityHelper.getDistanceFromMouse(o) <= 90) {
                                 final float[] coords = GLRenderer.worldToScreen(o, 0);
                                 final Vec3 pos = Helper.getEntityVec(o).clone();
                                 final Vec2 rot = Helper.getEntityRotation(o).clone();
                                 final Collection<String> stuff = new ArrayList<>();
                                 stuff.add("Class: " + o.getClass().getName());
-                                stuff.add(String.format("Pos: %.2f, %.2f, %.2f", pos.x(), pos.y(), pos.z()));
-                                stuff.add(String.format("Rotations: %.2f, %.2f", rot.x(), rot.y()));
+                                stuff.add(String.format("X: %.2f", pos.x()));
+                                stuff.add(String.format("Y: %.2f", pos.y()));
+                                stuff.add(String.format("Z: %.2f", pos.z()));
+                                stuff.add(String.format("Rot: %.2f, %.2f", rot.x(), rot.y()));
                                 int w = -1;
                                 for(final String s : stuff) {
                                     if(Helper.getStringWidth(s) > w) {
                                         w = Helper.getStringWidth(s);
                                     }
                                 }
-                                GLRenderer.drawRect(coords[0], coords[1], w, Helper.getFontHeight() * stuff.size(), 0x77000000);
                                 int yOffset = 0;
+                                final float initialX = coords[0] - w / 2;
+                                final float initialY = coords[1] - stuff.size()*Helper.getFontHeight() /2;
+                                GLRenderer.drawRect(initialX, initialY, w, Helper.getFontHeight() * stuff.size(), 0x77000000);
                                 for(final String e : stuff) {
-                                    Helper.drawString(e, coords[0], coords[1] + yOffset, 0xFFFFFFFF, false);
+                                    Helper.drawString(e, initialX, initialY + yOffset, 0xFFFFFFFF, false);
                                     yOffset += Helper.getFontHeight();
                                 }
                             }
@@ -124,6 +128,9 @@ public class ModuleOverlay extends BasicModule {
                 }
             }
         });
+
+        // https://audrey.lgbt/i/U6k0i3sD.png
+
         Pipe.eventBus().register(getPlugin(), new Listener<Tick>() {
             @SuppressWarnings("ConstantConditions")
             @Override
