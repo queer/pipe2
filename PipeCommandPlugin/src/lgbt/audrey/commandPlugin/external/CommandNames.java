@@ -36,10 +36,10 @@ public class CommandNames implements CommandExecutor {
         if(args.length > 0) {
             new Thread(() -> {
                 try {
-                    String historyJson = sendGetRequest(UUID_TO_NAME_HISTORY_API
-                            .replace("%uuid%", sendGetRequest(NAME_TO_UUID_API
-                                    .replace("%name%", args[0]).replace("%time%", "" + System.currentTimeMillis()))
-                                    .replaceAll("\\{\"id\":\"", "").replaceAll("\",(.*)$", "")));
+                    String uuid = sendGetRequest(NAME_TO_UUID_API
+                            .replace("%name%", args[0]).replace("%time%", "" + System.currentTimeMillis()))
+                            .replaceAll("\\{\"id\":\"", "").replaceAll("\",(.*)$", "");
+                    String historyJson = sendGetRequest(UUID_TO_NAME_HISTORY_API.replace("%uuid%", uuid));
                     final JsonArray actualArray = new JsonParser().parse(historyJson).getAsJsonArray();
                     
                     final Deque<String> nameDeque = new ArrayDeque<>();
@@ -55,6 +55,7 @@ public class CommandNames implements CommandExecutor {
                         nameDeque.push(info);
                     }
                     //noinspection ConfusingOctalEscapeSequence
+                    nameDeque.push("\2477UUID: \247c" + uuid);
                     nameDeque.push("\2477Names for: \247c" + args[0]);
 
                     while(!nameDeque.isEmpty()) {
