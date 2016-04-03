@@ -323,10 +323,10 @@ public final class GLRenderer {
         final double entityZ = lastEntityPos.z() + (entityPos.z() - lastEntityPos.z()) * partialTickTime;
         // direction to target entity
         //Vec3 toEntity = Vec3.createVectorHelper(entityX - meX, entityY - meY, entityZ - meZ);
-        Vec3 toEntity = new Vec3(entityX - meX, entityY - meY, entityZ - meZ);
-        float x = (float) toEntity.x();
-        float y = (float) toEntity.y();
-        float z = (float) toEntity.z();
+        final Vec3 toEntity = new Vec3(entityX - meX, entityY - meY, entityZ - meZ);
+        final float x = (float) toEntity.x();
+        final float y = (float) toEntity.y();
+        final float z = (float) toEntity.z();
         /*final double dist = toEntity.length();
         toEntity = toEntity.normalize();
 
@@ -382,16 +382,16 @@ public final class GLRenderer {
         int newHudY = hudY;
 
         //use X overshoot to scale Y
-        if (hudX < 0) {
+        if(hudX < 0) {
             newHudY = (int) ((hudY - height / 2) / (1 - 2 * (float) hudX / width) + height / 2);
-        } else if (hudX > width) {
+        } else if(hudX > width) {
             newHudY = (int) ((hudY - height / 2) / (2 * (float) hudX / width - 1) + height / 2);
         }
 
         //use Y overshoot to scale X
-        if (hudY < 0) {
+        if(hudY < 0) {
             newHudX = (int) ((hudX - width / 2) / (1 - 2 * (float) hudY / height) + width / 2);
-        } else if (hudY > height) {
+        } else if(hudY > height) {
             newHudX = (int) ((hudX - width / 2) / (2 * (float) hudY / height - 1) + width / 2);
         }
 
@@ -405,7 +405,7 @@ public final class GLRenderer {
      * DO NOT CALL THIS METHOD.
      */
     public static void updateMatrices() {
-        modelview.  rewind();
+        modelview.rewind();
         glGetFloat(GL_MODELVIEW_MATRIX, modelview);
         projection.rewind();
         glGetFloat(GL_PROJECTION_MATRIX, projection);

@@ -97,8 +97,9 @@ public class ModuleOverlay extends BasicModule {
 
                 if(Pipe.getInstance().isInDebugMode()) {
                     for(final Object o : Helper.getLoadedEntities()) {
-                        if(!Helper.getPlayer().equals(o) && (Helper.isEntityLiving(o) || Helper.isEntityPlayer(o))) {
-                            if(EntityHelper.getDistanceFromMouse(o) <= 90) {
+                        if(!Helper.getPlayer().equals(o) && Helper.isEntityLiving(o)) {
+                            final float distanceFromMouse = EntityHelper.getDistanceFromMouse(o);
+                            if(distanceFromMouse <= 90 && distanceFromMouse >= 0) {
                                 final float[] coords = GLRenderer.worldToScreen(o, 0);
                                 final Vec3 pos = Helper.getEntityVec(o).clone();
                                 final Vec2 rot = Helper.getEntityRotation(o).clone();
@@ -116,7 +117,7 @@ public class ModuleOverlay extends BasicModule {
                                 }
                                 int yOffset = 0;
                                 final float initialX = coords[0] - w / 2;
-                                final float initialY = coords[1] - stuff.size()*Helper.getFontHeight() /2;
+                                final float initialY = coords[1] - stuff.size() * Helper.getFontHeight() / 2;
                                 GLRenderer.drawRect(initialX, initialY, w, Helper.getFontHeight() * stuff.size(), 0x77000000);
                                 for(final String e : stuff) {
                                     Helper.drawString(e, initialX, initialY + yOffset, 0xFFFFFFFF, false);
