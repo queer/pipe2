@@ -1,4 +1,4 @@
-package lgbt.audrey.commandPlugin.internal;
+package lgbt.audrey.pipe.command.internal;
 
 import lgbt.audrey.pipe.Pipe;
 import lgbt.audrey.pipe.command.Command;

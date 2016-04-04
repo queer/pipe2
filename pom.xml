@@ -228,6 +228,13 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.6</version>
                 <configuration>
+                    <!-- See http://stackoverflow.com/a/6773868 -->
+                    <archive>
+                        <manifest>
+                            <mainClass>lgbt.audrey.pipe.Pipe</mainClass>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                    </archive>
                     <excludes>
                         <!--exclude>**/me/curlpipesh/pipe/util/helpers/Helper.class</exclude-->
                         <exclude>**/me/curlpipesh/pipe/gui/GuiScreen.class</exclude>

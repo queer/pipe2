@@ -34,6 +34,7 @@ public class CommandNames implements CommandExecutor {
     @Override
     public boolean executeCommand(final Command command, final String commandString, final String[] args) throws CommandException {
         if(args.length > 0) {
+            // Ugly ;-;
             new Thread(() -> {
                 try {
                     String uuid = sendGetRequest(NAME_TO_UUID_API
@@ -56,6 +57,7 @@ public class CommandNames implements CommandExecutor {
                     }
                     //noinspection ConfusingOctalEscapeSequence
                     nameDeque.push("\2477UUID: \247c" + uuid);
+                    //noinspection ConfusingOctalEscapeSequence
                     nameDeque.push("\2477Names for: \247c" + args[0]);
 
                     while(!nameDeque.isEmpty()) {

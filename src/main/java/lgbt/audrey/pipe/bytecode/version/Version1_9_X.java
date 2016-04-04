@@ -26,7 +26,7 @@ public class Version1_9_X implements Version {
                 new EntityRendererInjector(ClassMap.getClassByName("EntityRenderer")),
                 //new GuiChatInjector(ClassMap.getClassByName("GuiChat")),
                 new GuiIngameInjector(ClassMap.getClassByName("GuiIngame")),
-                //new GuiMainMenuInjector(ClassMap.getClassByName("GuiMainMenu")),
+                new GuiMainMenuInjector(ClassMap.getClassByName("GuiMainMenu")),
                 new MinecraftInjector(ClassMap.getClassByName("Minecraft")),
                 new NetworkManagerInjector(ClassMap.getClassByName("NetworkManager")),
                 new PacketBufferInjector(ClassMap.getClassByName("PacketBuffer")),

@@ -1,9 +1,9 @@
 package lgbt.audrey.pipe.bytecode.v1_9_X.injectors;
 
 import lgbt.audrey.pipe.bytecode.Injector;
+import lgbt.audrey.pipe.bytecode.map.ClassMap;
 import lgbt.audrey.pipe.bytecode.map.MappedClass;
-import lgbt.audrey.pipe.bytecode.Injector;
-import lgbt.audrey.pipe.bytecode.map.MappedClass;
+import lgbt.audrey.pipe.bytecode.map.MappedClass.MethodDef;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -27,8 +27,10 @@ public class GuiMainMenuInjector extends Injector {
     @Override
     @SuppressWarnings("unchecked")
     protected void inject(final ClassReader classReader, final ClassNode classNode) {
+        final MethodDef drawScreen = ClassMap.getClassByName("GuiScreen").getMethod("drawScreen").get();
+
         for(final MethodNode m : (List<MethodNode>)classNode.methods) {
-            if(m.name.equals("a") && m.desc.equals("(IIF)V")) {
+            if(m.name.equals(drawScreen.getName()) && m.desc.equals(drawScreen.getDesc())) {
                 final Iterator<AbstractInsnNode> i = m.instructions.iterator();
                 while(i.hasNext()) {
                     final AbstractInsnNode insn = i.next();

@@ -19,7 +19,6 @@ import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -61,8 +60,7 @@ public final class Agent {
         final Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             ClassMap.getMappedClasses().addAll(gson.fromJson(Files.lines(new File(propertyMappings).toPath())
-                    .reduce((t, u) -> t + u).get(), new TypeToken<ArrayList<MappedClass>>() {
-            }.getType()));
+                    .reduce((t, u) -> t + u).get(), new TypeToken<ArrayList<MappedClass>>() {}.getType()));
         } catch(final IOException e) {
             Pipe.getLogger().severe("Class map reading failed!");
             throw new RuntimeException(e);
@@ -76,10 +74,14 @@ public final class Agent {
         }
 
         // TODO: More generic
+        // It's sad that we have to do this, but for some reason, the instrumentation agent
+        // doesn't see these classes when we try to do shit, so we have to forcibly load them
+        // so that they get changed.
         if(Pipe.getInstance().getVersion() instanceof Version1_9_X) {
             try {
                 Class.forName(ClassMap.getClassByName("EntityRenderer").getObfuscatedName());
                 Class.forName(ClassMap.getClassByName("RenderGlobal").getObfuscatedName());
+                Class.forName(ClassMap.getClassByName("GuiMainMenu").getObfuscatedName());
             } catch(final ClassNotFoundException e) {
                 e.printStackTrace();
             }

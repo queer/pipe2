@@ -55,8 +55,9 @@ public class ModuleOverlay extends BasicModule {
                     return;
                 }
                 final Collection<String> displayList = new ArrayList<>();
-                // TODO: Build properly so that not appending a useless empty string. More verbose, but...
                 displayList.add("MC " + Helper.getMinecraftVersion() + (Pipe.getInstance().isInDebugMode() ? " DEBUG" : ""));
+                // See maven-jar-plugin <configuration> block in pom.xml
+                displayList.add("Pipe v" + Pipe.class.getPackage().getImplementationVersion());
                 if(Pipe.getInstance().isInDebugMode()) {
                     final Vec3 playerVec = Helper.getEntityVec(Helper.getPlayer());
                     displayList.add("Position: " + (int) playerVec.x() + ", " + (int) playerVec.y() + ", " + (int) playerVec.z());
@@ -71,7 +72,6 @@ public class ModuleOverlay extends BasicModule {
                     displayList.addAll(plugin.getProvidedModules().stream()
                             .filter(Module::isEnabled)
                             .filter(Module::isStatusShown)
-                            // TODO: Build properly so that not appending a useless empty string. More verbose, but...
                             .map(module ->
                                     (Pipe.getInstance().isInDebugMode() ? module.getPlugin().getName().toLowerCase().replace(" ", "") + ':' : "")
                                             + (Pipe.getInstance().isInDebugMode() ? module.getName().toLowerCase().replace(" ", "") : module.getName())
@@ -130,8 +130,8 @@ public class ModuleOverlay extends BasicModule {
             }
         });
 
-        // https://audrey.lgbt/i/U6k0i3sD.png
-
+        // Debug info for rendering debug overlays on entities
+        // @see https://audrey.lgbt/i/U6k0i3sD.png
         Pipe.eventBus().register(getPlugin(), new Listener<Tick>() {
             @SuppressWarnings("ConstantConditions")
             @Override

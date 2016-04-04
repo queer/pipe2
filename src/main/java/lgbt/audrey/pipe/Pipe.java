@@ -6,6 +6,8 @@ import lgbt.audrey.pipe.bytecode.Generator;
 import lgbt.audrey.pipe.bytecode.Version;
 import lgbt.audrey.pipe.command.Command.CommandBuilder;
 import lgbt.audrey.pipe.command.CommandManager;
+import lgbt.audrey.pipe.command.internal.CommandDebug;
+import lgbt.audrey.pipe.command.internal.CommandSet;
 import lgbt.audrey.pipe.event.EventBus;
 import lgbt.audrey.pipe.event.Listener;
 import lgbt.audrey.pipe.event.PipeEventBus;
@@ -90,7 +92,7 @@ public final class Pipe {
     @Getter
     private File pipeDataDir;
 
-    // TODO Better way to reference the two directories below?
+    // TODO: Better way to reference the two directories below?
     @Getter
     private File pipePluginDir;
 
@@ -113,7 +115,7 @@ public final class Pipe {
     private final Plugin internalPlugin = new BasicPlugin() {
         @Override
         public String getName() {
-            return "Internal plugin";
+            return "Pipe Core";
         }
 
         @Override
@@ -148,12 +150,18 @@ public final class Pipe {
                             ChatHelper.log("Plugins reloaded!");
                             return true;
                         }).build());
+                commandManager.registerCommand(this, new CommandBuilder().setName("value")
+                        .setDesc("Manipulates values for a module. <plugin>.<module>.<property>.")
+                        .setExecutor(new CommandSet()).build());
+                commandManager.registerCommand(this, new CommandBuilder().setName("debug")
+                        .setDesc("Debugging command flags").setExecutor(new CommandDebug()).build());
             } else {
-                getLogger().warning("No command manager available; reload command will not be added.");
+                getLogger().warning("No command manager available; internal commands will not be added.");
             }
             eventBus.register(this, new Listener<Render3D>() {
                 @Override
                 public void event(final Render3D event) {
+                    // This allows gluProject to work
                     GLRenderer.updateMatrices();
                 }
             });
@@ -176,6 +184,7 @@ public final class Pipe {
         setupDirectories();
         pluginManager.init();
         internalPlugin.onEnable();
+        // TODO: Problem if plugins rely on it?
         for(final Generator generator : version.getGenerators()) {
             Agent.defineClass(Pipe.class.getClassLoader(), generator.generate(), generator.getClassName());
             logger.info("Generated: " + generator.getClassName());
@@ -216,6 +225,10 @@ public final class Pipe {
         }
     }
 
+    /**
+     * Reloads everything. Gets rid of plugins, removes all events, throws out
+     * all commands, ...
+     */
     public void reload() {
         getCommandManager().shutdown();
         setCommandManager(null);

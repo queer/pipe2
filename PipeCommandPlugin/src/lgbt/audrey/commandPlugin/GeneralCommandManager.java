@@ -82,6 +82,8 @@ public class GeneralCommandManager implements CommandManager {
                         if(message.startsWith(getCommandPrefix())) {
                             event.setCancelled(true);
                             try {
+                                // TODO: Make more friendly to things like printing help
+                                // TODO: Make EnumCommandResult so that we can be more explicit?
                                 if(!executeCommand(message)) {
                                     final String commandName = message.split(" ")[0].replaceFirst(Pattern.quote(getCommandPrefix()), "")
                                             .toLowerCase().replaceAll("\\s+", "");

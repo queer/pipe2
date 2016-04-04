@@ -2,8 +2,6 @@ package lgbt.audrey.pipe.util.helpers;
 
 import lgbt.audrey.pipe.Pipe;
 import lgbt.audrey.pipe.event.events.ChatMessage;
-import lgbt.audrey.pipe.Pipe;
-import lgbt.audrey.pipe.event.events.ChatMessage;
 import lgbt.audrey.pipe.event.events.ChatMessage.ChatMode;
 
 import java.util.Arrays;
@@ -30,7 +28,7 @@ public final class ChatHelper {
      * @param message The message to tinker with.
      */
     public static void handle(final String message) {
-        if(!Pipe.getInstance().getEventBus().push(new ChatMessage(message, ChatMessage.ChatMode.SEND)).isCancelled()) {
+        if(!Pipe.getInstance().getEventBus().push(new ChatMessage(message, ChatMode.SEND)).isCancelled()) {
             Helper._sendChatMessage(message);
             // TODO: Add to sent chat messages
         }
