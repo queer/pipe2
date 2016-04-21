@@ -18,9 +18,9 @@ public class ModuleBrightness extends ToggleModule {
      * A backup of the field <tt>lightBrightnessTable</tt> from Minecraft's
      * "WorldProvider" class.
      */
-    private float[] lightBrightnessTableBackup = new float[16];
+    private final float[] lightBrightnessTableBackup = new float[16];
 
-    public ModuleBrightness(Plugin plugin) {
+    public ModuleBrightness(final Plugin plugin) {
         super(plugin, "Brightness", "Brightens up the world");
     }
 
@@ -29,8 +29,9 @@ public class ModuleBrightness extends ToggleModule {
         setKeybind(new Keybind(Keyboard.KEY_F));
         Pipe.getInstance().getEventBus().register(getPlugin(), new Listener<Tick>() {
             @Override
-            public void event(Tick tick) {
-                if(ModuleBrightness.this.isEnabled()) {
+            public void event(final Tick tick) {
+                if(isEnabled()) {
+                    //noinspection ConstantConditions
                     if(!Helper.isWorldNull()) {
                         for(int i = 0; i < 16; i++) {
                             Helper.getLightBrightnessTable()[i] = 1.0F;

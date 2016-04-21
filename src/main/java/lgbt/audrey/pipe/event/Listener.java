@@ -24,9 +24,9 @@ public abstract class Listener<T> {
      */
     @SuppressWarnings("unchecked")
     public Listener() {
-        Type type = getClass().getGenericSuperclass();
+        final Type type = getClass().getGenericSuperclass();
         if(type instanceof ParameterizedType) {
-            this.type = (Class<T>) (((ParameterizedType)type).getActualTypeArguments()[0]);
+            this.type = (Class<T>) ((ParameterizedType)type).getActualTypeArguments()[0];
         }
     }
 

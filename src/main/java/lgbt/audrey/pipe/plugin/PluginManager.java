@@ -161,7 +161,9 @@ public class PluginManager {
     }
 
     private void disablePlugin(final Plugin plugin) {
-        plugin.getProvidedModules().stream().filter(module -> module instanceof ToggleModule).forEach(module -> {
+        plugin.getProvidedModules().stream().filter(module -> module instanceof ToggleModule)
+                .filter(Module::isEnabled)
+                .forEach(module -> {
             module.setEnabled(false);
             ((ToggleModule) module).onDisable();
         });

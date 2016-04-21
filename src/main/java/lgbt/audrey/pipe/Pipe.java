@@ -92,7 +92,6 @@ public final class Pipe {
     @Getter
     private File pipeDataDir;
 
-    // TODO: Better way to reference the two directories below?
     @Getter
     private File pipePluginDir;
 
@@ -109,7 +108,7 @@ public final class Pipe {
 
     @Getter
     @Setter(AccessLevel.PACKAGE)
-    private Version version;
+    private Version gameVersion;
 
     @SuppressWarnings("AnonymousInnerClassWithTooManyMethods")
     private final Plugin internalPlugin = new BasicPlugin() {
@@ -185,7 +184,7 @@ public final class Pipe {
         pluginManager.init();
         internalPlugin.onEnable();
         // TODO: Problem if plugins rely on it?
-        for(final Generator generator : version.getGenerators()) {
+        for(final Generator generator : gameVersion.getGenerators()) {
             Agent.defineClass(Pipe.class.getClassLoader(), generator.generate(), generator.getClassName());
             logger.info("Generated: " + generator.getClassName());
         }
@@ -310,5 +309,9 @@ public final class Pipe {
      */
     public static Gson gson() {
         return getInstance().getGson();
+    }
+
+    public static String getClientVersion() {
+        return Pipe.class.getPackage().getImplementationVersion();
     }
 }

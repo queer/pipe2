@@ -53,7 +53,7 @@ public final class Agent {
         if(!versions.containsKey(propertyVersion)) {
             throw new IllegalArgumentException("Invalid version passed!");
         }
-        Pipe.getInstance().setVersion(versions.get(propertyVersion));
+        Pipe.getInstance().setGameVersion(versions.get(propertyVersion));
 
         Pipe.getLogger().info("Reading class mappings!");
 
@@ -68,7 +68,7 @@ public final class Agent {
 
         Pipe.getLogger().info("Adding transformers!");
 
-        for(final Injector injector : Pipe.getInstance().getVersion().getInjectors()) {
+        for(final Injector injector : Pipe.getInstance().getGameVersion().getInjectors()) {
             inst.addTransformer(injector);
             Pipe.getLogger().info("Added Injector: " + injector.getClassToInject().getDeobfuscatedName() + " : " + injector.getClassToInject().getObfuscatedName());
         }
@@ -77,7 +77,7 @@ public final class Agent {
         // It's sad that we have to do this, but for some reason, the instrumentation agent
         // doesn't see these classes when we try to do shit, so we have to forcibly load them
         // so that they get changed.
-        if(Pipe.getInstance().getVersion() instanceof Version1_9_X) {
+        if(Pipe.getInstance().getGameVersion() instanceof Version1_9_X) {
             try {
                 Class.forName(ClassMap.getClassByName("EntityRenderer").getObfuscatedName());
                 Class.forName(ClassMap.getClassByName("RenderGlobal").getObfuscatedName());
@@ -89,7 +89,7 @@ public final class Agent {
 
         Pipe.getLogger().info("Attempting to redefine classes!");
         try {
-            for(final Redefiner r : Pipe.getInstance().getVersion().getRedefiners()) {
+            for(final Redefiner r : Pipe.getInstance().getGameVersion().getRedefiners()) {
                 inst.redefineClasses(r.redefine());
             }
         } catch(ClassNotFoundException | UnmodifiableClassException e) {

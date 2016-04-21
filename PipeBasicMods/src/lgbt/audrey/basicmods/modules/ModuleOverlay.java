@@ -4,7 +4,6 @@ import lgbt.audrey.pipe.Pipe;
 import lgbt.audrey.pipe.event.Listener;
 import lgbt.audrey.pipe.event.events.Keypress;
 import lgbt.audrey.pipe.event.events.Render2D;
-import lgbt.audrey.pipe.event.events.Tick;
 import lgbt.audrey.pipe.plugin.Plugin;
 import lgbt.audrey.pipe.plugin.module.BasicModule;
 import lgbt.audrey.pipe.plugin.module.Module;
@@ -30,8 +29,6 @@ import java.util.stream.Collectors;
 public class ModuleOverlay extends BasicModule {
     private boolean enabled = true;
 
-    private int counter;
-
     public ModuleOverlay(final Plugin plugin) {
         super(plugin, "Overlay", "Informational overlay");
     }
@@ -48,6 +45,7 @@ public class ModuleOverlay extends BasicModule {
             }
         });
         Pipe.eventBus().register(getPlugin(), new Listener<Render2D>() {
+            // TODO: Render2D ptt
             @Override
             @SuppressWarnings("ConstantConditions")
             public void event(final Render2D render2D) {
@@ -57,14 +55,13 @@ public class ModuleOverlay extends BasicModule {
                 final Collection<String> displayList = new ArrayList<>();
                 displayList.add("MC " + Helper.getMinecraftVersion() + (Pipe.getInstance().isInDebugMode() ? " DEBUG" : ""));
                 // See maven-jar-plugin <configuration> block in pom.xml
-                displayList.add("Pipe v" + Pipe.class.getPackage().getImplementationVersion());
+                displayList.add("Pipe v" + Pipe.getClientVersion());
                 if(Pipe.getInstance().isInDebugMode()) {
                     final Vec3 playerVec = Helper.getEntityVec(Helper.getPlayer());
                     displayList.add("Position: " + (int) playerVec.x() + ", " + (int) playerVec.y() + ", " + (int) playerVec.z());
 
                     final Vec2 rot = Helper.getEntityRotation(Helper.getPlayer());
                     displayList.add("Rotation: " + (int) rot.x() + ", " + (int) rot.y());
-                    displayList.add("Counter: " + counter);
                 }
 
                 final List<Plugin> plugins = Pipe.getInstance().getPluginManager().getPlugins();
@@ -124,24 +121,6 @@ public class ModuleOverlay extends BasicModule {
                                     yOffset += Helper.getFontHeight();
                                 }
                             }
-                        }
-                    }
-                }
-            }
-        });
-
-        // Debug info for rendering debug overlays on entities
-        // @see https://audrey.lgbt/i/U6k0i3sD.png
-        Pipe.eventBus().register(getPlugin(), new Listener<Tick>() {
-            @SuppressWarnings("ConstantConditions")
-            @Override
-            public void event(final Tick event) {
-                counter = 0;
-                //noinspection Convert2streamapi
-                for(final Object o : Helper.getLoadedEntities()) {
-                    if(!Helper.getPlayer().equals(o)) {
-                        if(EntityHelper.getDistanceFromMouse(o) <= 90) {
-                            ++counter;
                         }
                     }
                 }
