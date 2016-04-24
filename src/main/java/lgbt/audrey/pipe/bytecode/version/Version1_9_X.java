@@ -13,6 +13,7 @@ import lgbt.audrey.pipe.bytecode.v1_9_X.injectors.*;
  * @author audrey
  * @since 12/18/15.
  */
+@SuppressWarnings("OverlyCoupledClass")
 public class Version1_9_X implements Version {
     @Override
     public String getVersion() {
@@ -23,6 +24,7 @@ public class Version1_9_X implements Version {
     public Injector[] getInjectors() {
         return new Injector[] {
                 new BlockEntityInjector(ClassMap.getClassByName("BlockEntity")),
+                new BlockSoulSandInjector(ClassMap.getClassByName("BlockSoulSand")),
                 new EntityRendererInjector(ClassMap.getClassByName("EntityRenderer")),
                 //new GuiChatInjector(ClassMap.getClassByName("GuiChat")),
                 new GuiIngameInjector(ClassMap.getClassByName("GuiIngame")),

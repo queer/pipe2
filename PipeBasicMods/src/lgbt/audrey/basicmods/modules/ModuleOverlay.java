@@ -67,8 +67,8 @@ public class ModuleOverlay extends BasicModule {
                 final List<Plugin> plugins = Pipe.getInstance().getPluginManager().getPlugins();
                 for(@NonNull final Plugin plugin : plugins) {
                     displayList.addAll(plugin.getProvidedModules().stream()
-                            .filter(Module::isEnabled)
-                            .filter(Module::isStatusShown)
+                            .filter(m -> m.isEnabled() || Pipe.getInstance().isInDebugMode())
+                            .filter(m -> m.isStatusShown() || Pipe.getInstance().isInDebugMode())
                             .map(module ->
                                     (Pipe.getInstance().isInDebugMode() ? module.getPlugin().getName().toLowerCase().replace(" ", "") + ':' : "")
                                             + (Pipe.getInstance().isInDebugMode() ? module.getName().toLowerCase().replace(" ", "") : module.getName())
