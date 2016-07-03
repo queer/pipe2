@@ -8,6 +8,7 @@ import lgbt.audrey.pipe.bytecode.Redefiner;
 import lgbt.audrey.pipe.bytecode.Version;
 import lgbt.audrey.pipe.bytecode.map.ClassMap;
 import lgbt.audrey.pipe.bytecode.map.MappedClass;
+import lgbt.audrey.pipe.bytecode.version.Version1_10_X;
 import lgbt.audrey.pipe.bytecode.version.Version1_9_X;
 
 import java.io.File;
@@ -35,6 +36,8 @@ public final class Agent {
     static {
         versions.put("1_9_X", new Version1_9_X());
         versions.put("1.9.X", new Version1_9_X());
+        versions.put("1_10_X", new Version1_10_X());
+        versions.put("1.10.X", new Version1_10_X());
     }
 
     private Agent() {
@@ -77,7 +80,8 @@ public final class Agent {
         // It's sad that we have to do this, but for some reason, the instrumentation agent
         // doesn't see these classes when we try to do shit, so we have to forcibly load them
         // so that they get changed.
-        if(Pipe.getInstance().getGameVersion() instanceof Version1_9_X) {
+        if(Pipe.getInstance().getGameVersion() instanceof Version1_9_X
+                || Pipe.getInstance().getGameVersion() instanceof Version1_10_X) {
             try {
                 Class.forName(ClassMap.getClassByName("EntityRenderer").getObfuscatedName());
                 Class.forName(ClassMap.getClassByName("RenderGlobal").getObfuscatedName());

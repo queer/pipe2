@@ -6,7 +6,6 @@ import lgbt.audrey.pipe.event.events.Keypress;
 import lgbt.audrey.pipe.event.events.Render2D;
 import lgbt.audrey.pipe.plugin.Plugin;
 import lgbt.audrey.pipe.plugin.module.BasicModule;
-import lgbt.audrey.pipe.plugin.module.Module;
 import lgbt.audrey.pipe.util.GLRenderer;
 import lgbt.audrey.pipe.util.Keybind;
 import lgbt.audrey.pipe.util.Vec2;
@@ -67,9 +66,11 @@ public class ModuleOverlay extends BasicModule {
                 final List<Plugin> plugins = Pipe.getInstance().getPluginManager().getPlugins();
                 for(@NonNull final Plugin plugin : plugins) {
                     displayList.addAll(plugin.getProvidedModules().stream()
+                            .filter(m -> !m.equals(ModuleOverlay.this)) // Never show this because it'll be obvious if it's borked
                             .filter(m -> m.isEnabled() || Pipe.getInstance().isInDebugMode())
                             .filter(m -> m.isStatusShown() || Pipe.getInstance().isInDebugMode())
                             .map(module ->
+                                    // This is so ugly :(
                                     (Pipe.getInstance().isInDebugMode() ? module.getPlugin().getName().toLowerCase().replace(" ", "") + ':' : "")
                                             + (Pipe.getInstance().isInDebugMode() ? module.getName().toLowerCase().replace(" ", "") : module.getName())
                                             + ' ' + (!module.getStatus().isEmpty() ? '(' + module.getStatus() + "\247r)" : ""))

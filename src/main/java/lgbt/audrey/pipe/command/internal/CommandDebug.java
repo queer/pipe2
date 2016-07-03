@@ -39,7 +39,7 @@ public class CommandDebug implements CommandExecutor {
                     break;
             }
         } else {
-            ChatHelper.log("Usage: ", "--<enable|disable|toggle>");
+            ChatHelper.log("Usage: ", "--<enable|disable|toggle|screen>");
         }
         return true;
     }

@@ -1,4 +1,4 @@
-package lgbt.audrey.pipe.bytecode.v1_9_X.injectors;
+package lgbt.audrey.pipe.bytecode.v1_10_X.injectors;
 
 import lgbt.audrey.pipe.bytecode.Injector;
 import lgbt.audrey.pipe.bytecode.map.MappedClass;
