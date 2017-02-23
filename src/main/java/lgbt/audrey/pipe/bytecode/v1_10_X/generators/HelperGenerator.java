@@ -19,7 +19,7 @@ import static org.objectweb.asm.Opcodes.*;
  * @author c
  * @since 5/20/15
  */
-@SuppressWarnings({"unused", "Duplicates"})
+@SuppressWarnings({"unused", "Duplicates", "OptionalGetWithoutIsPresent"})
 public class HelperGenerator implements Generator {
     public byte[] generate() {
         final ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
@@ -612,7 +612,9 @@ public class HelperGenerator implements Generator {
             mv.visitTypeInsn(NEW, packetClientTabComplete.getObfuscatedName());
             mv.visitInsn(DUP);
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitMethodInsn(INVOKESPECIAL, packetClientTabComplete.getObfuscatedName(), "<init>", "(Ljava/lang/String;)V", false);
+            mv.visitInsn(ACONST_NULL);
+            mv.visitInsn(ICONST_0);
+            mv.visitMethodInsn(INVOKESPECIAL, packetClientTabComplete.getObfuscatedName(), "<init>", "(Ljava/lang/String;" + blockPos.getDescription() + "Z)V", false);
             mv.visitMethodInsn(INVOKESTATIC, "lgbt/audrey/pipe/util/helpers/Helper", "sendPacket", "(Ljava/lang/Object;)V", false);
             mv.visitInsn(RETURN);
             mv.visitMaxs(5, 5);

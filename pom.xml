@@ -172,6 +172,25 @@
             <classifier>javadoc</classifier>
         </dependency>
 
+        <!-- Netty -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.0.33.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.0.33.Final</version>
+            <classifier>sources</classifier>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.0.33.Final</version>
+            <classifier>javadoc</classifier>
+        </dependency>
+
         <!-- JUnit -->
         <dependency>
             <groupId>junit</groupId>

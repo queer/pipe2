@@ -1,9 +1,6 @@
 package lgbt.audrey.pipe.util.helpers;
 
 import lgbt.audrey.pipe.event.events.ChatMessage;
-import lgbt.audrey.pipe.util.Vec2;
-import lgbt.audrey.pipe.util.Vec3;
-import lgbt.audrey.pipe.event.events.ChatMessage;
 import lgbt.audrey.pipe.gui.GuiModule;
 import lgbt.audrey.pipe.gui.GuiScreen;
 import lgbt.audrey.pipe.util.Vec2;

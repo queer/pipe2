@@ -28,7 +28,7 @@ public final class GLRenderer {
      * The {@link Tessellator} to be used for rendering. By default, this is a
      * {@link VAOTessellator}.
      */
-    private static final Tessellator tess = new VAOTessellator(16777216);
+    private static final Tessellator tess = new VAOTessellator(512);
 
     private static final FloatBuffer modelview = BufferUtils.createFloatBuffer(16);
     private static final FloatBuffer projection = BufferUtils.createFloatBuffer(16);

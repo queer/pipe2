@@ -26,7 +26,7 @@ public class Version1_10_X implements Version {
                 new BlockEntityInjector(ClassMap.getClassByName("BlockEntity")),
                 new BlockSoulSandInjector(ClassMap.getClassByName("BlockSoulSand")),
                 new EntityRendererInjector(ClassMap.getClassByName("EntityRenderer")),
-                //new GuiChatInjector(ClassMap.getClassByName("GuiChat")),
+                new GuiChatInjector(ClassMap.getClassByName("GuiChat")),
                 new GuiIngameInjector(ClassMap.getClassByName("GuiIngame")),
                 new GuiMainMenuInjector(ClassMap.getClassByName("GuiMainMenu")),
                 new MinecraftInjector(ClassMap.getClassByName("Minecraft")),

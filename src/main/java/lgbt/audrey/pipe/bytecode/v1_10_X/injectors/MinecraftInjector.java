@@ -18,7 +18,7 @@ import java.util.List;
  * @author c
  * @since 4/30/15
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "OptionalGetWithoutIsPresent"})
 public class MinecraftInjector extends Injector {
     public MinecraftInjector(final MappedClass classToInject) {
         super(classToInject);
